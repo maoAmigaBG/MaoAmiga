@@ -23,8 +23,8 @@
             <div id="creature_info">
                 <div class="creature_info">
                     <div>
-                        <h1>Iguana-azul</h1>
-                        <h2>Cyclura lewisi</h2>
+                        <h1>Tulipa</h1>
+                        <h2>Tulipa linifolia</h2>
                     </div>
                     <div>
                         <h3>Gimnosperm</h3>

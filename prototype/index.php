@@ -35,20 +35,49 @@
                     </div>
                     <div class="aditional_info">
                         <div class="card_info">
-                            <h4>Nível de ameaça:</h4>
-                            <p>5/10</p>
-                        </div>
-                        <div class="card_info">
-                            <h4>Nível de estinção:</h4>
-                            <p>5/10</p>
+                            <h4>Tamanho:</h4>
+                            <p>30 cm</p>
                         </div>
                         <div class="card_info">
                             <h4>Classe:</h4>
                             <p>Réptil</p>
                         </div>
                         <div class="card_info">
-                            <h4>Local de residência:</h4>
-                            <p>random_country</p>
+                            <h4>Habitat:</h4>
+                            <p>Árvores</p>
+                        </div>
+                        <div class="card_info">
+                            <h4>Nível de extinção:</h4>
+                            <p>Não avaliado</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class="card" href="plant.php">
+                <div class="card_img">
+                    <img src="https://static.revistahaus.com.br/revistahaus/2021/05/14161950/tulipas-destaque.jpg" alt="">
+                </div>
+                <div class="card_desc">
+                    <div class="main_desc">
+                        <h2>Tulipa</h2>
+                        <h3>Tulipa linifolia</h3> <!--nome científico-->
+                    </div>
+                    <div class="aditional_info">
+                        <div class="card_info">
+                            <h4>Tamanho:</h4>
+                            <p>30 cm</p>
+                        </div>
+                        <div class="card_info">
+                            <h4>Classe:</h4>
+                            <p>Gimnosperm</p>
+                        </div>
+                        <div class="card_info">
+                            <h4>Habitat:</h4>
+                            <p>Margem de rios</p>
+                        </div>
+                        <div class="card_info">
+                            <h4>Nível de extinção:</h4>
+                            <p>Não avaliado</p>
                         </div>
                     </div>
                 </div>
