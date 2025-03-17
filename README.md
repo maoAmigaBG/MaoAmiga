@@ -1,4 +1,4 @@
-# laravel post crud
+# laravel crud
 
 ## important commands
 
