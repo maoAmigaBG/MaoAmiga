@@ -18,3 +18,5 @@
     php artisan make:migration create_(table_name - needs to be lowerCase and in plural)_table
     php artisan make:controller PostController //any name you want
     php artisan make:model Post //it will only work if the table name match to the rules right above
+
+### [Link Site Structure Details](https://docs.google.com/document/d/1FWcbp_qDZkQp7sDV3BfmPScvaI3Z2ZUhExloz5RWcHA/edit?usp=sharing) 
