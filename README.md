@@ -2,7 +2,7 @@
 
 ## about the view files
 
-    every file endpoint in views must have its name ending with ".blade.php" to allow it to be founded by the laravel routes
+every file endpoint in views must have its name ending with ".blade.php" to allow it to be founded by the laravel routes
 
 ## laravel crud
 
