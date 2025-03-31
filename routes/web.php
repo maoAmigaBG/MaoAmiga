@@ -1,12 +1,19 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Models\Ong;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return view("index");
+        $posts = Post::all();
+        $ongs = Ong::orderBy('created_at', 'desc')->take(5)->get();
+        return view("index", [
+            "posts" => $posts,
+            "ongs" => $ongs,
+        ]);
     }
     return redirect("login");
 });
