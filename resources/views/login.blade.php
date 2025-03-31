@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,13 @@
 <body>
     <!--só construi o html para testar backend-->
     <h1>Login</h1>
+    @if ($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    @endif
     <form action="/auth_login" method="post">
         @csrf
         <div>
@@ -16,8 +23,8 @@
             <input type="email" name="email" id="email">
         </div>
         <div>
-            <label for="senha">Senha</label>
-            <input type="senha" name="senha" id="senha">
+            <label for="password">Senha</label>
+            <input type="password" name="password" id="password">
         </div>
         <button type="submit">Submit</button>
     </form>
