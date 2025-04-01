@@ -24,3 +24,19 @@ Every file endpoint in views must have its name ending with ".blade.php" to allo
     php artisan make:migration create_(table_name - needs to be lowerCase and in plural)_table
     php artisan make:controller PostController //any name you want
     php artisan make:model Post //it will only work if the table name match to the rules right above
+
+#### how to manually insert data in a table
+##### user laravel tinker
+    php artisan tinker
+
+##### with the tinker opened, use the common commands
+    use App\Models\{model_name};
+    Ong_type::create([
+        "field_name" => "field_value"
+    ]) //used to single inserts
+    Ong_type::insert([
+        ["field_name" => "field_value"],
+        ["field_name" => "field_value"],
+        ["field_name" => "field_value"],
+        ["field_name" => "field_value"],
+    ]) //used to insert in series
