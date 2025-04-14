@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
+    return view('app');
+});
+
+
+/* Route::get('/', function () {
     if (Auth::check()) {
         $posts = Post::all();
         $ongs = Ong::orderBy('created_at', 'desc')->take(5)->get();
@@ -27,4 +32,4 @@ Route::get("logon", function () {
 
 Route::get("/logout", [UserController::class, "logout"]);
 Route::post("/auth_login", [UserController::class, "login"]);
-Route::post("/auth_logon", [UserController::class, "register"]);
+Route::post("/auth_logon", [UserController::class, "register"]); */
