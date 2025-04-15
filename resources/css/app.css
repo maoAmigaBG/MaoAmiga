@@ -425,8 +425,88 @@ body {
 .progress-bar .progress {
     min-height: 100%;
     padding: 5px;
-    background: linear-gradient(90deg, rgba(191, 59, 247, 1) 0%, rgba(223, 157, 251, 1) 100%);
+    background-color: #BF3BF7;
     color: #F6F6FA;
     vertical-align: middle;
     font-family: 'Poppins', 'Arial';
+}
+
+.ong-grid {
+    width: 50%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10, 1fr);
+    gap: 15px;
+}
+
+.ong-grid .ong-card {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #F6F6FA;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.ong-card .profile-image {
+    min-width: 250px;
+}
+
+.ong-card .profile-image img {
+    height: 250px;
+    width: 250px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius:  0 25px 0 0;
+}
+
+.ong-card .body {
+    position: relative;
+    min-height: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ong-card .body .ong-title {
+    padding: 10px;
+    font-family: 'Poppins', 'Arial';
+    font-size: 24px;
+    font-weight: 600;
+    color: #BF3BF7;
+}
+
+.ong-card .body .ong-info, .ong-card .body .contributions {
+    padding: 5px 10px;
+    font-family: 'Poppins', 'Arial';
+}
+
+.ong-card .body .contributions {
+    font-size: 15px;
+    color: #696969;
+}
+
+.ong-card .body .donate-now {
+    position: absolute;
+    justify-self: center;
+    bottom: 0;
+    left: 0;
+    width: 95%;
+    padding: 10px;
+    margin: 10px;
+    background-color: #BF3BF7;
+    font-family: 'Poppins', 'Arial';
+    font-size: 24px;
+    font-weight: 600;
+    color: #F6F6FA;
+    text-align: center;
+    border-radius: 10px;
+    transition: all .3s ease;
+}
+
+.ong-card .body .donate-now:hover {
+    background-color: #620f80;
+    transform: scale(1.02);
 }

@@ -11,10 +11,10 @@
   
         <div class="sidebar-content">
           <ul class="lists">
-            <li class="list"><a href="#" class="nav-link"><i class="fas fa-home"></i><span class="link">Home</span></a></li>
-            <li class="list"><a href="#" class="nav-link"><i class="fas fa-hand-holding-heart"></i><span class="link">ONGs</span></a></li>
+            <li class="list"><a href="/" class="nav-link"><i class="fas fa-home"></i><span class="link">Home</span></a></li>
+            <li class="list"><a href="/ong" class="nav-link"><i class="fas fa-hand-holding-heart"></i><span class="link">ONGs</span></a></li>
             <li class="list"><a href="#" class="nav-link"><i class="fas fa-map-marked-alt"></i><span class="link">Mapa</span></a></li>
-            <li class="list"><a href="#" class="nav-link"><i class="fas fa-info-circle"></i><span class="link">Sobre Nós</span></a></li>
+            <li class="list"><a href="/sobre" class="nav-link"><i class="fas fa-info-circle"></i><span class="link">Sobre Nós</span></a></li>
             <li class="list"><a href="#" class="nav-link"><i class="fas fa-envelope"></i><span class="link">Contato</span></a></li>
           </ul>
   

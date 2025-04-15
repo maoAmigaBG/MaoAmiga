@@ -7,9 +7,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
-    return view('app');
+    return view('index');
 });
 
+Route::get('/ong', function () {
+    return view('Ong');
+});
+
+Route::get('/sobre', function () {
+    return view('about');
+});
 
 /* Route::get('/', function () {
     if (Auth::check()) {
