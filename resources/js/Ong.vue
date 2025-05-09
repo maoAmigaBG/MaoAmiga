@@ -1,5 +1,7 @@
 <template>
-    <h1 class="section-title">ONGs Disponíveis</h1>
+    <div class="scroller-spacer">
+        <h1 class="section-title">ONGs Disponíveis</h1>
+    </div>
     <div class="ong-grid">
         <OngCard v-for="(n, i) in 10"/>
     </div>

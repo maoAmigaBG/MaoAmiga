@@ -27,7 +27,7 @@ html {
 
 body {
     min-height: 100vh;
-    background-color: #E4E4F1;
+    background-color: #F6F6FA;
 
 }
 
@@ -151,11 +151,22 @@ body {
     padding: 112px 20px 10px;
 }
 
+.scroller-spacer {
+    align-self: flex-start;
+    margin-left: calc(25%);
+    padding: 15px 0 10px 10px;
+}
+
 .section-title {
+    align-self: flex-start;
     font-family: 'Poppins', 'Arial';
     font-weight: 600;
     font-size: 24px;
     color: #696969;
+    padding-bottom: 10px;
+}
+
+.scroller .section-title {
     padding-bottom: 20px;
 }
 
@@ -243,6 +254,7 @@ body {
     width: calc(25% - 10px);
     padding: 15px;
     background-color: #F6F6FA;
+    border-left: 3px solid #E5E4E2;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #BF3BF7 transparent;
@@ -265,6 +277,8 @@ body {
     right: auto;
     left: 0;
     padding: 10px;
+    border: none;
+    border-right: 3px solid #E5E4E2;
     scrollbar-width: none;
 }
 
