@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-    import DefaultHeader from './components/DefaultHeader.vue';
-    import Scroller from './components/Scroller.vue';
-    import CampaignCard from './components/CampaignCard.vue';
-    import RankCard from './components/RankCard.vue';
+    import DefaultHeader from '../Components/DefaultHeader.vue';
+    import Scroller from '../Components/Scroller.vue';
+    import CampaignCard from '../Components/CampaignCard.vue';
+    import RankCard from '../Components/RankCard.vue';
 </script>

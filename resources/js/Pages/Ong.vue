@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-    import OngCard from './components/OngCard.vue'
+    import OngCard from '../Components/OngCard.vue'
 </script>

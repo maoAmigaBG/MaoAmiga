@@ -1,21 +1,21 @@
 <?php
 
-use App\Models\Ong;
-use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Middleware\HandleInertiaRequests;
+use Inertia\Inertia;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::middleware(HandleInertiaRequests::class)->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Home');
+    });
 
-Route::get('/ong', function () {
-    return view('Ong');
-});
+    Route::get('/ong', function () {
+        return Inertia::render('Ong');
+    });
 
-Route::get('/sobre', function () {
-    return view('about');
+    Route::get('/sobre', function () {
+        return Inertia::render('Sobre');
+    });
 });
 
 /* Route::get('/', function () {
