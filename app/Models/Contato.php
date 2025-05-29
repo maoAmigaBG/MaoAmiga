@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ong_carrousel extends Model {
+class Contato extends Model {
     protected $fillable = [
-        "name",
-        "ong_id"
+        'nome',
+        'tipo',
+        'ong_id',
     ];
 }

@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model {
+class Campanha extends Model {
     protected $fillable = [
         'nome',
+        'tipo',
         'descricao',
+        'materiais',
+        'meta',
+        'foto',
         'ong_id',
     ];
 }

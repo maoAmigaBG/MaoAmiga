@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model {
+class Post_like extends Model {
     protected $fillable = [
-        'nome',
-        'descricao',
-        'ong_id',
+        'user_id',
+        'post_id',
     ];
 }

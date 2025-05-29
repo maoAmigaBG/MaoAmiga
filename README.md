@@ -13,6 +13,9 @@ Every file endpoint in views must have its name ending with ".blade.php" to allo
 
 #### create or refresh the database
     php artisan migrate
+    php artisan migrate:fresh
+    php artisan migrate:rollback //retorna à ultima alteração de banco
+    php artisan make:migration add_alert_to_notes_table //alter the table addin fields
 
 #### install all the dependecies
     composer install
@@ -40,3 +43,35 @@ Every file endpoint in views must have its name ending with ".blade.php" to allo
         ["field_name" => "field_value"],
         ["field_name" => "field_value"],
     ]) //used to insert in series
+
+### Seeder
+
+    php artisan make:seeder NoteSeeder //cria uma seeder da tabela
+    php artisan db:seed //seed the db with the seeders data (before making the steps rith bellow)
+    php artisan migrate:fresh --seed //restart the db data from scratch and auto seed
+
+#### Seeder data
+
+    public function run(): void {
+        DB::table("notes")->insert([
+            [
+                "title" => "teste",
+                "texto" => "teste",
+            ],
+            [
+                "title" => "teste1",
+                "texto" => "teste1",
+            ]
+        ]);
+    }
+
+### change laravel error lang
+
+    composer require laravel-lang/lang --dev
+    php artisan lang:add pt_BR
+
+### change lang
+
+    composer require laravel-lang/lang --dev
+    php artisan lang:publish //extract lang from vendor
+    php artisan vendor:publish --tag=laravel-pt-br-localization

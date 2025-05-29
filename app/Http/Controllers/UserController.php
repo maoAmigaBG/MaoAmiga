@@ -6,34 +6,57 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
-    public function login(Request $request) {
+    public function login() {
+        return view("user.login");
+    }
+    public function logon() {
+        return view("user.logon");
+    }
+    public function auth_login(Request $request) {
         $request_data = $request->validate([
-            "email" => ["required"],
+            "email" => ["required", "email"],
             "password" => ["required"],
         ]);
+        $user = User::where("email", "=", $request_data["email"])->first();
+        if (empty($user)) {
+            return redirect()->route("user.login")->withErrors([
+                "Login" => "Email não encontrado"
+            ])->withInput([
+                "email" => $request_data["email"],
+                "password" => $request_data["password"],
+            ]);
+        }
+        if (!Hash::check($request_data["password"], $user["password"])) {
+            return redirect()->route("user.login")->withErrors([
+                "Senha" => "Senha incorreta"
+            ])->withInput([
+                "email" => $request_data["email"],
+                "password" => $request_data["password"],
+            ]);
+        }
         if (Auth::attempt(["email" => $request_data["email"], "password" => $request_data["password"]])) {
             $request->session()->regenerate();
         }
-        return redirect("/");
+        return redirect()->route("index");
+    }
+    public function auth_logon(UserRequest $request) {
+        $request_data = $request->validated();
+        if ($request->hasFile("foto")) {
+            $path = $request->file("foto")->store('profiles', 'public');
+            $request_data["foto"] = $path;
+        }
+        $request_data["password"] = Hash::make($request_data["password"]);
+        $user = User::create($request_data);
+        Auth::login($user);
+        return redirect()->route("index");
     }
     public function logout() {
         Auth::logout();
-        return redirect("/");
-    }
-    public function register(Request $request) {
-        $request_data = $request->validate([
-            "email" => ["required", "email", Rule::unique("users", "email")],
-            "password" => ["required"],
-            "name" => ["required", "min:5"],
-            "birth_date" => ["required"]
-        ]);
-        $request_data["password"] = bcrypt($request_data["password"]);
-        $request_data["level"] = 1;
-        $user = User::create($request_data);
-        Auth::login($user);
-        return redirect("/");
+        return redirect()->route("index");
     }
 }

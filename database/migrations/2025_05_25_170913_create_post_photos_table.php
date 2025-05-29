@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members', function (Blueprint $table) {
+        Schema::create('post_photos', function (Blueprint $table) {
             $table->id();
-            $table->integer("member_level")->default(1);
-            $table->boolean("anonymous")->default(false);
-            $table->decimal("donate_amount", total: 10, places: 2);
-            $table->foreignId("user_id")->constrained();
-            $table->foreignId("ong_id")->constrained();
+            $table->string("nome");
+            $table->foreignId("post_id")->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members');
+        Schema::dropIfExists('post_photos');
     }
 };

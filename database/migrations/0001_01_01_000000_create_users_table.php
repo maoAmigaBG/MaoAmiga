@@ -17,12 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->text('descricao')->nullable();
+            $table->date('data_nasc')->nullable();
+            $table->string('foto')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->date("birth_date");
-            $table->longText("description")->nullable();
-            $table->integer("level")->default(1);
-            $table->string("photo")->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -38,8 +37,6 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
-            $table->integer("level")->default(1);
-            $table->string("photo")->nullable();
         });
     }
 

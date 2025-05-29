@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ong_carrousels', function (Blueprint $table) {
+        Schema::create('membros', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
+            $table->integer("nivel");
+            $table->boolean("anonimo");
+            $table->foreignId("user_id")->constrained();
             $table->foreignId("ong_id")->constrained();
             $table->timestamps();
         });
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ong_carrousels');
+        Schema::dropIfExists('membros');
     }
 };

@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ong_types', function (Blueprint $table) {
+        Schema::create('campanhas', function (Blueprint $table) {
             $table->id();
-            $table->string("name")->unique();
+            $table->string("nome");
+            $table->enum("tipo", ["Doação", "Informação"]);
+            $table->text("descricao");
+            $table->text("materiais");
+            $table->decimal("meta", 8, 2);
+            $table->string("foto");
+            $table->foreignId("ong_id")->constrained();
             $table->timestamps();
         });
     }
@@ -23,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ong_types');
+        Schema::dropIfExists('campanhas');
     }
 };

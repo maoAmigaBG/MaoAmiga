@@ -18,25 +18,22 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
     });
 });
 
-/* Route::get('/', function () {
-    if (Auth::check()) {
-        $posts = Post::all();
-        $ongs = Ong::orderBy('created_at', 'desc')->take(5)->get();
-        return view("index", [
-            "posts" => $posts,
-            "ongs" => $ongs,
-        ]);
-    }
-    return redirect("login");
-});
+//alessandro, essas são as rotas de authentication (deixei junto os uses de controllers):
 
-Route::get("login", function () {
-    return view("login");
-});
-Route::get("logon", function () {
-    return view("logon");
-});
+/*
+use App\Http\Controllers\OngController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
-Route::get("/logout", [UserController::class, "logout"]);
-Route::post("/auth_login", [UserController::class, "login"]);
-Route::post("/auth_logon", [UserController::class, "register"]); */
+Route::get("/", [OngController::class, "index"])->name("index"); // não sei se assim fica bom para ti, faça como quiser
+
+Route::prefix("/user")->group(function() {
+    Route::get("/login", [UserController::class, "login"])->name("user.login");
+    Route::get("/logon", [UserController::class, "logon"])->name("user.logon");
+    Route::get("/logout", [UserController::class, "logout"])->name("user.logout");
+});
+Route::prefix("/auth")->group(function() {
+    Route::post("/login", [UserController::class, "auth_login"])->name("auth.login");
+    Route::post("/logon", [UserController::class, "auth_logon"])->name("auth.logon");
+});
+*/
