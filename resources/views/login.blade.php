@@ -16,15 +16,15 @@
             @endforeach
         </ul>
     @endif
-    <form action="/auth_login" method="post">
+    <form action="{{route("auth.login")}}" method="post">
         @csrf
         <div>
             <label for="email">Email</label>
-            <input type="email" name="email" id="email">
+            <input type="email" name="email" id="email" value="{{ old("email") }}">
         </div>
         <div>
             <label for="password">Senha</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password" value="{{ old("password") }}">
         </div>
         <button type="submit">Submit</button>
     </form>
