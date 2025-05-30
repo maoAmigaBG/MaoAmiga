@@ -22,14 +22,8 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
 
 
 Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function() {
-    Route::get("/login", function () {
-        return Inertia::render('User/Login');
-    });
-
-    Route::get("/logon", function (){
-        return Inertia::render('User/Logon');
-    });
-
+    Route::get("/login", [UserController::class, "login"])->name("login");
+    Route::get("/logon", [UserController::class, "logon"])->name("logon");
 });
 
 Route::prefix("/auth")->group(function() {

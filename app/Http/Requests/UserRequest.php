@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
             "name" => ["required", "min:5"],
             "email" => ["required", "email", Rule::unique("users", "email")],
             "password" => ["required", Password::min(8)->letters()->numbers()],
-            "data_nasc" => ["required", "date", "before:today"],
+            "data_nasc" => ["nullable", "date", "before:today"],
             'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }

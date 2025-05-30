@@ -13,10 +13,10 @@ use Inertia\Inertia;
 
 class UserController extends Controller {
     public function login() {
-        return view("user.login");
+        return Inertia::render('User/Login');
     }
     public function logon() {
-        return view("user.logon");
+        return Inertia::render('User/Logon');
     }
     public function auth_login(Request $request) {
         $request_data = $request->validate([
@@ -47,14 +47,12 @@ class UserController extends Controller {
     }
     public function auth_logon(UserRequest $request) {
         $request_data = $request->validated();
-        dd($request_data);
         if ($request->hasFile("foto")) {
             $path = $request->file("foto")->store('profiles', 'public');
             $request_data["foto"] = $path;
         }
         $request_data["password"] = Hash::make($request_data["password"]);
         $user = User::create($request_data);
-        dd($user);
         Auth::login($user);
 
         return Inertia::location(route('index'));
