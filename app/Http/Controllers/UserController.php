@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UserController extends Controller {
     public function login() {
@@ -42,21 +43,24 @@ class UserController extends Controller {
         if (Auth::attempt(["email" => $request_data["email"], "password" => $request_data["password"]])) {
             $request->session()->regenerate();
         }
-        return redirect()->route("index");
+        return Inertia::location(route('index'));
     }
     public function auth_logon(UserRequest $request) {
         $request_data = $request->validated();
+        dd($request_data);
         if ($request->hasFile("foto")) {
             $path = $request->file("foto")->store('profiles', 'public');
             $request_data["foto"] = $path;
         }
         $request_data["password"] = Hash::make($request_data["password"]);
         $user = User::create($request_data);
+        dd($user);
         Auth::login($user);
-        return redirect()->route("index");
+
+        return Inertia::location(route('index'));
     }
     public function logout() {
         Auth::logout();
-        return redirect()->route("index");
+        return Inertia::location(route('index'));
     }
 }

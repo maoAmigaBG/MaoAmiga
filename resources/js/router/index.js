@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../Pages/Home.vue';
 import Sobre from '../Pages/Sobre.vue';
 import Ong from '../Pages/Ong.vue';
+import UserLogin from '../Pages/User/Login.vue';
+import UserLogon from '../Pages/User/Logon.vue';
 
 const siteName = ' - Mão Amiga';
 
@@ -25,6 +27,16 @@ const routes = [
         component: Ong,
         meta: { title: 'ONGs'}
     },
+    {
+        path: '/user/login',
+        name: 'user.login',
+        component: UserLogin,
+    },
+    {
+        path: '/user/logon',
+        name: 'user.logon',
+        component: UserLogon,
+    }
 ];
 
 const router = createRouter({
