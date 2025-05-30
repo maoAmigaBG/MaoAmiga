@@ -4,6 +4,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import Layout from './Layouts/Layout.vue';
 import '../css/app.css';
 import router from './router';
+import showToast from './showToast';
 
 createInertiaApp({
     resolve: (name) =>

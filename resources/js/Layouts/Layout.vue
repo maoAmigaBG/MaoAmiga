@@ -21,4 +21,5 @@
     import Scroller from '../Components/Scroller.vue';
     import CampaignCard from '../Components/CampaignCard.vue';
     import RankCard from '../Components/RankCard.vue';
+    import Toast from '../Components/ToastModal.vue';
 </script>

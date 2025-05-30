@@ -18,6 +18,10 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
     Route::get('/sobre', function () {
         return Inertia::render('Sobre');
     });
+
+    Route::get('/mapa', function () {
+        return Inertia::render('Mapa');
+    });
 });
 
 
@@ -29,7 +33,7 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
 Route::prefix("/auth")->group(function() {
     Route::post("/login", [UserController::class, "auth_login"])->name("auth.login");
     Route::post("/logon", [UserController::class, "auth_logon"])->name("auth.logon");
-    Route::post("/logout", [UserController::class, "logout"])->name("auth.logout");
+    Route::get("/logout", [UserController::class, "logout"])->name("auth.logout");
 });
 
 //alessandro, essas são as rotas de authentication (deixei junto os uses de controllers):

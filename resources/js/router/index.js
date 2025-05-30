@@ -5,6 +5,7 @@ import Sobre from '../Pages/Sobre.vue';
 import Ong from '../Pages/Ong.vue';
 import UserLogin from '../Pages/User/Login.vue';
 import UserLogon from '../Pages/User/Logon.vue';
+import Mapa from '../Pages/Mapa.vue';
 
 const siteName = ' - Mão Amiga';
 
@@ -36,7 +37,13 @@ const routes = [
         path: '/user/logon',
         name: 'user.logon',
         component: UserLogon,
-    }
+    },
+    {
+        path: '/mapa',
+        name: 'Mapa',
+        component: Mapa,
+        meta: { title: 'Mapa'}
+    },
 ];
 
 const router = createRouter({
