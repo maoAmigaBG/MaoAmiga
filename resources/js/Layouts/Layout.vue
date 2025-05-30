@@ -1,7 +1,7 @@
 <template>
   <DefaultHeader />
 
-  <Scroller class="left">
+  <Scroller class="left left-0 right-auto border-l-0 border-r-[3px] border-[#E5E4E2]">
     <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">Maiores Doadores</h2>
     <RankCard v-for="(n, i) in 10" :key="i" :index="i" />
   </Scroller>
@@ -11,7 +11,7 @@
     <CampaignCard v-for="i in 5" :key="i" :index="i" />
   </Scroller>
 
-  <div class="container flex flex-col items-center min-h-screen pt-[112px] pb-2 px-5">
+  <div class="container flex flex-col items-center min-h-screen pt-[112px] pb-2 px-5 bg-slate-50">
     <router-view />
   </div>
 </template>
@@ -25,12 +25,10 @@ import Toast from '../Components/ToastModal.vue';
 </script>
 
 <style scoped>
-/* CUSTOM FONTS (if not in tailwind.config.js) */
 .font-poppins {
   font-family: 'Poppins', Arial, sans-serif;
 }
 
-/* Hide scrollbar for left scroller (if needed) */
 .scroller.left {
   scrollbar-width: none;
 }

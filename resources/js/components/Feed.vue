@@ -1,5 +1,5 @@
 <template>
-  <div class="feed relative w-1/2 p-5 font-sans bg-[#F6F6FA] border-b-2 border-[#E5E4E2]">
+  <div class="feed relative w-1/2 p-5 font-poppins bg-slate-50 border-b-2 border-[#E5E4E2]">
     <div class="head flex justify-between p-2.5">
       <div class="user flex items-center gap-2.5">
         <div class="profile-img">
@@ -12,7 +12,7 @@
       </div>
       <span class="edit flex items-center text-[28px]"><i class="fa-solid fa-ellipsis"></i></span>
     </div>
-    <div class="photo my-2 rounded-[7px_40px_7px_82px] overflow-hidden">
+    <div class="photo my-4 rounded-[7px_40px_7px_92px] overflow-hidden">
       <img src="@/assets/puppy.jpg" alt="Africano caçando cachorro" />
     </div>
     <div class="action-buttons w-1/3 flex justify-between items-center text-[28px] my-2 mb-4">
