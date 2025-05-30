@@ -20,9 +20,9 @@ class OngSeeder extends Seeder
                 "lat" => "-29.1652079",
                 "log" => "-51.559487",
                 "endereco" => "R. Livramento, 48 - Bairro Juventude, Bento Gonçalves",
-                "tipo" => "Ambiental",
                 "banner" => "",
                 "foto" => "",
+                "ong_type_id" => 1,
             ],
             [
                 "nome" => "Tamanduás prateados",
@@ -31,9 +31,9 @@ class OngSeeder extends Seeder
                 "lat" => "-29.1688186",
                 "log" => "-51.5692994",
                 "endereco" => "R. Avelino Luiz Zat, 95 - Fenavinho, Bento Gonçalves",
-                "tipo" => "Animais",
                 "banner" => "",
                 "foto" => "",
+                "ong_type_id" => 2,
             ],
         ]);
     }

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             UserSeeder::class,
+            Ong_typeSeeder::class,
             OngSeeder::class,
             ContatoSeeder::class,
         ]);
