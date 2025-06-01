@@ -13,7 +13,7 @@
         class="w-full object-cover object-center rounded-[7px_30px_7px_7px]" />
       <div
         class="progress-bar absolute bottom-4 left-1/2 w-[90%] h-[25px] flex items-center bg-[#E5E4E2] border-4 border-[#F6F6FA] rounded-[7px] transform -translate-x-1/2 overflow-hidden">
-        <span class="progress min-h-full px-1.5 bg-[#BF3BF7] text-[#F6F6FA] align-middle font-poppins"
+        <span class="progress min-h-full px-1.5 bg-purple-800 text-[#F6F6FA] align-middle font-poppins"
           style="width: 90%">90%</span>
       </div>
     </div>

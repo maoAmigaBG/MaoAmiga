@@ -1,35 +1,82 @@
 <template>
-    <div class="login-wrapper">
-        <h1 class="login-title">Login</h1>
-        <form @submit.prevent="submit">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input v-model="form.email" type="email" id="email" name="email" required>
+    <div class="auth-background relative min-w-screen min-h-screen flex justify-center items-center p-10 bg-no-repeat bg-right bg-cover overflow-x-hidden"
+        :style="{ backgroundImage: `url('${bgSvg}')` }">
+        <div class="login-wrapper absolute top-0 bottom-0 left-0 w-1/2 h-full flex flex-col p-10 bg-transparent">
+            <div class="header flex justify-start justify-self-start top-0">
+                <span class="logo text-3xl text-purple-900 font-bold">Logo</span>
             </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input v-model="form.password" type="password" id="password" name="password" required>
+            <div class="body flex grow justify-center items-center px-4 py-2">
+                <div class="w-3/5 h-3/4">
+                    <span class="lead font-bold font-poppins text-gray-500">Comece aqui sua jornada para ajudar
+                        pessoas!</span>
+                    <h1 class="main-title font-bold font-poppins text-purple-800 text-3xl pb-8">Entre na Causa em Foco
+                    </h1>
+
+                    <form class="login-form w-full" @submit.prevent="submit">
+                        <div class="flex flex-col items-center w-full gap-8">
+                            <div class="form-group relative w-full max-w-md">
+                                <input
+                                    class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
+                                    v-model="form.email" type="email" id="email" name="email" required>
+                                <label
+                                    class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
+                                    for="email">Email</label>
+                            </div>
+                            <div class="form-group relative w-full max-w-md">
+                                <input
+                                    class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
+                                    v-model="form.password" type="password" id="password" name="password" required>
+                                <label
+                                    class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
+                                    for="password">Senha</label>
+                            </div>
+                            <button type="submit"
+                                class="w-full h-[50px] p-2 font-lg font-bold text-purple-50 bg-purple-800 rounded-md cursor-pointer hover:bg-purple-700 transition">Entrar</button>
+                        </div>
+                    </form>
+
+                    <div class="separator flex items-center my-6">
+                        <div class="flex-grow border-t-2 border-gray-500"></div>
+                        <span class="mx-4 text-gray-500 text-sm">ou entre com</span>
+                        <div class="flex-grow border-t-2 border-gray-500"></div>
+                    </div>
+
+                    <div class="social-btn flex justify-center gap-4">
+                        <button class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
+                            <i class="fa-brands fa-instagram text-3xl text-purple-800"></i>
+                        </button>
+                        <button class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
+                            <i class="fa-brands fa-google text-3xl text-purple-800"></i>
+                        </button>
+                        <button class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
+                            <i class="fa-brands fa-apple text-3xl text-purple-800"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div v-if="Object.keys(errors).length" class="errors">
-                <ul>
-                    <li v-for="(error, key) in errors" :key="key">{{ error }}</li>
-                </ul>
-            </div>
-            <button type="submit" class="submit-btn">Entrar</button>
-        </form>
+        </div>
     </div>
 </template>
 
+<style scoped>
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 50px #faf5ff inset !important;
+    box-shadow: 0 0 0 50px #faf5ff inset !important;
+    -webkit-text-fill-color: #6d28d9 !important;
+}
+</style>
+
 <script setup>
-import { reactive } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import EmptyLayout from '../../Layouts/EmptyLayout.vue'
+import bgSvg from '../../../assets/bg.svg'
 
 defineOptions({
     layout: EmptyLayout,
 })
-
-const { errors } = usePage().props
 
 const form = useForm({
     email: '',
@@ -40,75 +87,3 @@ function submit() {
     form.post('/auth/login')
 }
 </script>
-
-<style scoped>
-* {
-    font-family: 'Poppins', 'arial';
-}
-
-.login-wrapper {
-    max-width: 400px;
-    margin: 80px auto;
-    padding: 32px 24px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-}
-
-.login-title {
-    text-align: center;
-    margin-bottom: 24px;
-    font-size: 2rem;
-    color: #6f42c1;
-    font-weight: 700;
-}
-
-.form-group {
-    margin-bottom: 18px;
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 6px;
-    color: #333;
-    font-weight: 600;
-}
-
-input[type="email"],
-input[type="password"] {
-    padding: 8px 10px;
-    border-radius: 5px;
-    border: 1px solid #bbb;
-    font-size: 1rem;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 10px 0;
-    background: #6f42c1;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.submit-btn:hover {
-    background: #563d7c;
-}
-
-.errors {
-    margin-bottom: 16px;
-    color: #d32f2f;
-    font-size: 0.96rem;
-}
-
-.errors ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-</style>
