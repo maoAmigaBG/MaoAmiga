@@ -14,6 +14,7 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
     Route::prefix("/ong")->group(function() {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
+        Route::get('/page/{ong}', [OngController::class, "page"])->name("ong.page");
     });
 
 });
@@ -22,6 +23,7 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
 Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function() {
     Route::get("/login", [UserController::class, "login"])->name("login");
     Route::get("/logon", [UserController::class, "logon"])->name("logon");
+    Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
 });
 
 Route::prefix("/auth")->group(function() {
