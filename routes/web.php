@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeneralController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\HandleInertiaRequests;
 use Inertia\Inertia;
@@ -7,21 +8,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OngController;
 
 Route::middleware(HandleInertiaRequests::class)->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Home');
-    })->name('index');
+    Route::get('/', [GeneralController::class,'index'])->name('index');
+    Route::get('/sobre', [GeneralController::class, "about"])->name("about");
 
-    Route::get('/ong', function () {
-        return Inertia::render('Ong');
+    Route::prefix("/ong")->group(function() {
+        Route::get('/list', [OngController::class, "index"])->name("ong.index");
+        Route::get('/map', [OngController::class, "map"])->name("ong.map");
     });
 
-    Route::get('/sobre', function () {
-        return Inertia::render('Sobre');
-    });
-
-    Route::get('/mapa', function () {
-        return Inertia::render('Mapa');
-    });
 });
 
 

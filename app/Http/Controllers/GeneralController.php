@@ -6,11 +6,11 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class OngController extends Controller {
+class GeneralController extends Controller {
     function index() {
-        return Inertia::render('Ong');
+        return Inertia::render('Home');
     }
-    function map() {
-        return Inertia::render('Mapa');
+    function about() {
+        return Inertia::render('Sobre');
     }
 }
