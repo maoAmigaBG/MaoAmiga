@@ -24,6 +24,12 @@ class DatabaseSeeder extends Seeder
             Ong_typeSeeder::class,
             OngSeeder::class,
             ContatoSeeder::class,
+            CampaignSeeder::class,
+            PostSeeder::class,
+            Post_photoSeeder::class,
+            Post_likeSeeder::class,
+            MembroSeeder::class,
+            Membro_doacaoSeeder::class,
         ]);
     }
 }

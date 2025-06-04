@@ -7,4 +7,4 @@
 
 ## ideias / sugestões
 
-- package que permita utilizar route() em vue file
+- package que permita utilizar route() em vue filex'

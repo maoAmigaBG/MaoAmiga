@@ -9,15 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('campanhas', function (Blueprint $table) {
             $table->id();
             $table->string("nome");
-            $table->enum("tipo", ["Doação", "Informação"]);
+            $table->enum("tipo", ["doacao", "informacao"]);
             $table->text("descricao");
             $table->text("materiais");
-            $table->decimal("meta", 8, 2);
+            $table->decimal("meta", 8, 2)->nullable();
             $table->string("foto");
             $table->foreignId("ong_id")->constrained();
             $table->timestamps();

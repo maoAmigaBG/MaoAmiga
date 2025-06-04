@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('membros_doacoes', function (Blueprint $table) {
             $table->id();
             $table->decimal("doacao", 8, 2);
-            $table->foreignId("user_id")->constrained();
-            $table->foreignId("ong_id")->constrained();
+            $table->foreignId("membro_id")->constrained();
             $table->foreignId("campanha_id")->constrained();
             $table->timestamps();
         });
