@@ -1,6 +1,6 @@
 <template>
   <div
-    class="ranking-card w-full min-h-[60px] flex flex-1 items-center justify-between gap-2.5 p-2.5 font-poppins border-b-2 border-[#E4E4F1] overflow-hidden transition-all duration-300 hover:shadow-md hover:scale-105">
+    class="ranking-card w-full min-h-[60px] flex flex-1 items-center justify-between gap-2 p-4 font-poppins border-b-2 border-[#E4E4F1] overflow-hidden transition-all duration-300 hover:shadow-md hover:scale-105">
     <span v-if="index <= 2"
       class="rank podium h-full flex items-center justify-center w-[56px] text-lg font-semibold text-purple-800">
       <img :src="medalImages[index]" :alt="`Medal ${index + 1}`" class="max-w-[40px]" />

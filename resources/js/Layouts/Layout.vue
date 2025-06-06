@@ -8,7 +8,7 @@
           <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">
             Maiores Doadores
           </h2>
-          <div class="flex flex-col h-full justify-between gap-2 py-8">
+          <div class="flex flex-col justify-between gap-2 py-4">
             <RankCard v-for="(n, i) in 10" :key="i" :index="i" />
           </div>
         </Scroller>
