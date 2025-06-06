@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\MembroController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\HandleInertiaRequests;
 use Inertia\Inertia;
@@ -19,6 +20,7 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
 
 });
 
+Route::get("/membro/{user}", [MembroController::class, "ongs_relation"])->name("membro_relacao");
 
 Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function() {
     Route::get("/login", [UserController::class, "login"])->name("login");
@@ -37,6 +39,5 @@ Route::prefix("/auth")->group(function() {
 /*
 
 Route::get("/", [OngController::class, "index"])->name("index"); // não sei se assim fica bom para ti, faça como quiser
-
 
 */

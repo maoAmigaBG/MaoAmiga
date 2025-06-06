@@ -64,7 +64,13 @@ class UserController extends Controller {
     public function profile(User $user) {
         return Inertia::render('User/Profile', [
             "user" => $user,
-            "own_profile" => Auth::check() && Auth::user()->id == $user->id // verify if the user is accessing his own profile
+            "own_profile" => Auth::check() && Auth::user()->id == $user->id
         ]);
+    }
+    public function edit_profile(User $user){
+        return Inertia::render('User/EditProfile', [
+            "user" => $user,
+            "own_profile" => Auth::check() && Auth::user()->id == $user->id
+        ]); 
     }
 }
