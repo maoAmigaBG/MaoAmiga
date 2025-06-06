@@ -14,7 +14,7 @@
 
                     <form class="login-form w-full" @submit.prevent="submit">
                         <div class="flex flex-col items-center w-full gap-8">
-                            <div class="form-group relative w-full max-w-md">
+                            <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
                                     v-model="form.email" type="email" id="email" name="email" required>
@@ -22,7 +22,7 @@
                                     class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
                                     for="email">Email</label>
                             </div>
-                            <div class="form-group relative w-full max-w-md">
+                            <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
                                     v-model="form.password" type="password" id="password" name="password" required>

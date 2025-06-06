@@ -14,7 +14,7 @@
 
                     <form class="login-form w-full" @submit.prevent="submit">
                         <div class="flex flex-col items-center w-full gap-5">
-                            <div class="form-group relative w-full max-w-md">
+                            <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
                                     v-model="form.name" type="text" id="name" name="name" required>
@@ -22,7 +22,7 @@
                                     class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
                                     for="email">Nome</label>
                             </div>
-                            <div class="form-group relative w-full max-w-md">
+                            <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
                                     v-model="form.email" type="email" id="email" name="email" required>
@@ -30,7 +30,7 @@
                                     class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
                                     for="password">E-mail</label>
                             </div>
-                            <div class="form-group relative w-full max-w-md">
+                            <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
                                     v-model="form.password" type="password" id="password" name="password" required>
@@ -38,7 +38,7 @@
                                     class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
                                     for="password">Senha</label>
                             </div>
-                            <div class="form-group relative w-full max-w-md">
+                            <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
                                     v-model="form.password_confirmation" type="password" id="password_confirmation" name="password_confirmation" required>

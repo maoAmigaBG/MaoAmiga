@@ -1,27 +1,43 @@
 <template>
   <DefaultHeader />
 
-  <Scroller class="left left-0 right-auto border-l-0 border-r-[3px] border-[#E5E4E2]">
-    <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">Maiores Doadores</h2>
-    <RankCard v-for="(n, i) in 10" :key="i" :index="i" />
-  </Scroller>
+  <div class="flex flex-row min-h-screen bg-slate-50">
+    <div class="w-[25%] border-r-2 border-[#E5E4E2]">
+      <div class="sticky top-[91px]">
+        <Scroller class="left h-[calc(100vh-91px)]">
+          <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">
+            Maiores Doadores
+          </h2>
+          <div class="flex flex-col h-full justify-between gap-2 py-8">
+            <RankCard v-for="(n, i) in 10" :key="i" :index="i" />
+          </div>
+        </Scroller>
+      </div>
+    </div>
 
-  <Scroller>
-    <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">Campanhas</h2>
-    <CampaignCard v-for="i in 5" :key="i" :index="i" />
-  </Scroller>
+    <div class="flex-1 flex flex-col self-center min-h-screen w-1/2 pt-[112px] pb-2">
+      <router-view />
+    </div>
 
-  <div class="container flex flex-col items-center min-h-screen pt-[112px] pb-2 px-5 bg-slate-50">
-    <router-view />
+    <div class="w-[25%] border-l-2 border-[#E5E4E2]">
+      <div class="sticky top-[91px]">
+        <Scroller class="h-[calc(100vh-91px)]">
+          <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">Campanhas</h2>
+          <div class="flex flex-col gap-y-4">
+            <CampaignCard v-for="i in 5" :key="i" :index="i" />
+          </div>
+        </Scroller>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import DefaultHeader from '../Components/DefaultHeader.vue';
-import Scroller from '../Components/Scroller.vue';
-import CampaignCard from '../Components/CampaignCard.vue';
-import RankCard from '../Components/RankCard.vue';
-import Toast from '../Components/ToastModal.vue';
+import DefaultHeader from '../components/DefaultHeader.vue';
+import Scroller from '../components/Scroller.vue';
+import CampaignCard from '../components/CampaignCard.vue';
+import RankCard from '../components/RankCard.vue';
+import Toast from '../components/ToastModal.vue';
 </script>
 
 <style scoped>
@@ -32,6 +48,7 @@ import Toast from '../Components/ToastModal.vue';
 .scroller.left {
   scrollbar-width: none;
 }
+
 .scroller.left::-webkit-scrollbar {
   display: none;
 }

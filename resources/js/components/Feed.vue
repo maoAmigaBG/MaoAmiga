@@ -1,5 +1,5 @@
 <template>
-  <div class="feed relative w-1/2 p-5 font-poppins bg-slate-50 border-b-2 border-[#E5E4E2]">
+  <div class="feed relative w-full p-5 font-poppins bg-slate-50 border-b-2 border-[#E5E4E2]">
     <div class="head flex justify-between p-2.5">
       <div class="user flex items-center gap-2.5">
         <div class="profile-img">
@@ -29,6 +29,6 @@
 
 <script>
 export default {
-    name: 'Feed'
+  name: 'Feed'
 }
 </script>
