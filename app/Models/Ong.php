@@ -12,8 +12,11 @@ class Ong extends Model {
         'lat',
         'log',
         'endereco',
-        'tipo',
         'banner',
         'foto',
+        'ong_type_id',
     ];
+    public function members() {
+        return  $this->hasMany(Membro::class);
+    }
 }
