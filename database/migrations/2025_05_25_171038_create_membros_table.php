@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('membros', function (Blueprint $table) {
             $table->id();
-            $table->integer("nivel");
-            $table->boolean("anonimo");
+            $table->boolean("nivel")->default(false);
+            $table->boolean("anonimo")->default(false);
             $table->foreignId("user_id")->constrained();
             $table->foreignId("ong_id")->constrained();
             $table->timestamps();

@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\GeneralController;
-use App\Http\Controllers\MembroController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\HandleInertiaRequests;
 use Inertia\Inertia;
-use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OngController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MembroController;
+use App\Http\Controllers\GeneralController;
+use App\Http\Middleware\HandleInertiaRequests;
 
 Route::middleware(HandleInertiaRequests::class)->group(function () {
     Route::get('/', [GeneralController::class,'index'])->name('index');
@@ -16,6 +16,10 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
         Route::get('/page/{ong}', [OngController::class, "page"])->name("ong.page");
+        Route::get('/members/{ong}', [OngController::class, "members"])->name("ong.members");
+        Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
+        Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
+        Route::get('/contacts/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
     });
 
 });
@@ -33,11 +37,3 @@ Route::prefix("/auth")->group(function() {
     Route::post("/logon", [UserController::class, "auth_logon"])->name("auth.logon");
     Route::get("/logout", [UserController::class, "logout"])->name("auth.logout");
 });
-
-//alessandro, essas são as rotas de authentication (deixei junto os uses de controllers):
-
-/*
-
-Route::get("/", [OngController::class, "index"])->name("index"); // não sei se assim fica bom para ti, faça como quiser
-
-*/

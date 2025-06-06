@@ -26,12 +26,12 @@ class Membro_doacaoSeeder extends Seeder
             [
                 "doacao" => 1550.5,
                 "membro_id" => 3,
-                "campanha_id" => 2,
+                "campanha_id" => 3,
             ],
             [
                 "doacao" => 250.75,
                 "membro_id" => 4,
-                "campanha_id" => 2,
+                "campanha_id" => 3,
             ],
         ]);
     }

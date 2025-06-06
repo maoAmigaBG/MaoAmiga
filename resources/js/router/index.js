@@ -23,7 +23,7 @@ const routes = [
         meta: { title: 'Sobre'}
     },
     {
-        path: '/ong',
+        path: '/ong/list',
         name: 'ONGs',
         component: Ong,
         meta: { title: 'ONGs'}
@@ -39,7 +39,7 @@ const routes = [
         component: UserLogon,
     },
     {
-        path: '/mapa',
+        path: '/ong/map',
         name: 'Mapa',
         component: Mapa,
         meta: { title: 'Mapa'}

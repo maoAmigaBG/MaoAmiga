@@ -24,25 +24,16 @@ class Membro extends Model
                 ->get();
         }
 
-        return Membro::select([
-                'membros.id',
-                'membros.nivel',
-                'membros.anonimo',
-                'membros.user_id',
-                'membros.ong_id',
-            ])
+        return Membro::select(['membros.id', 'membros.nivel', 'membros.anonimo', 'membros.user_id', 'membros.ong_id'])
             ->selectRaw("SUM(doacao) as donate_amount")
             ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
             ->where("membros.ong_id", $ong_id)
-            ->groupBy(
-                'membros.id',
-                'membros.nivel',
-                'membros.anonimo',
-                'membros.user_id',
-                'membros.ong_id'
-            )
+            ->groupBy('membros.id','membros.nivel','membros.anonimo','membros.user_id','membros.ong_id')
             ->orderByDesc("donate_amount")
             ->limit(10)
             ->get();
+    }
+    static function members_amount($ong_id) {
+        return Membro::where("ong_id", $ong_id)->get()->count();
     }
 }

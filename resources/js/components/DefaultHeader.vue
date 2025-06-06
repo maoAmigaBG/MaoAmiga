@@ -24,13 +24,13 @@
             </a>
           </li>
           <li class="list list-none">
-            <a href="ong/list" class="nav-link flex items-center p-[10px] mb-[10px] rounded-[7px] no-underline transition-all duration-300 hover:bg-purple-800 text-gray-600 hover:text-purple-50">
+            <a href="/ong/list" class="nav-link flex items-center p-[10px] mb-[10px] rounded-[7px] no-underline transition-all duration-300 hover:bg-purple-800 text-gray-600 hover:text-purple-50">
               <i class="fas fa-hand-holding-heart mr-[15px] text-[25px]"></i>
               <span class="link font-poppins text-[18px] font-semibold">ONGs</span>
             </a>
           </li>
           <li class="list list-none">
-            <a href="ong/map" class="nav-link flex items-center p-[10px] mb-[10px] rounded-[7px] no-underline transition-all duration-300 hover:bg-purple-800 text-gray-600 hover:text-purple-50">
+            <a href="/ong/map" class="nav-link flex items-center p-[10px] mb-[10px] rounded-[7px] no-underline transition-all duration-300 hover:bg-purple-800 text-gray-600 hover:text-purple-50">
               <i class="fas fa-map-marked-alt mr-[15px] text-[25px]"></i>
               <span class="link font-poppins text-[18px] font-semibold">Mapa</span>
             </a>

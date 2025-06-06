@@ -14,25 +14,25 @@ class MembroSeeder extends Seeder
     public function run(): void {
         DB::table("membros")->insert([
             [
-                "nivel" => 1,
+                "nivel" => true,
                 "anonimo" => true,
                 "user_id" => 1,
                 "ong_id" => 1,
             ],
             [
-                "nivel" => 2,
+                "nivel" => false,
                 "anonimo" => true,
                 "user_id" => 2,
                 "ong_id" => 1,
             ],
             [
-                "nivel" => 1,
+                "nivel" => true,
                 "anonimo" => true,
                 "user_id" => 2,
                 "ong_id" => 2,
             ],
             [
-                "nivel" => 2,
+                "nivel" => false,
                 "anonimo" => true,
                 "user_id" => 1,
                 "ong_id" => 2,
