@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Membro extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
-        'nivel',
+        'admin',
         'anonimo',
+        'ativo',
         'user_id',
         'ong_id',
     ];
-    static function ranking($ong_id = null)
+    public static function ranking($ong_id = null)
     {
         if (empty($ong_id)) {
             return Membro::select('membros.user_id')
@@ -33,7 +37,11 @@ class Membro extends Model
             ->limit(10)
             ->get();
     }
-    static function members_amount($ong_id) {
+    public static function members_amount($ong_id) {
         return Membro::where("ong_id", $ong_id)->get()->count();
+    }
+    public static function date_formater($date) {
+        Carbon::setLocale('pt_BR');
+        return Carbon::parse($date)->translatedFormat('d \d\e F \d\e Y');
     }
 }

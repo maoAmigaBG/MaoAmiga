@@ -29,6 +29,8 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
     Route::get("/logon", [UserController::class, "logon"])->name("logon");
     Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
     Route::get("/relations/{user}", [MembroController::class, "ong_relations"])->name("user.relations");
+    Route::get("/relations/destroy/{user}", [MembroController::class, "destroy"])->name("user.relations.destroy");
+    Route::get("/relations/trash", [MembroController::class, "trash"])->name("user.relations.trash")->middleware("auth");
 });
 
 Route::prefix("/auth")->group(function() {

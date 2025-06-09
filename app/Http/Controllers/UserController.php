@@ -74,7 +74,7 @@ class UserController extends Controller {
             ]);
         }
         return redirect()->back()->withErrors([
-            "Permissão negada" => Auth::check() ? "Você não possui permissão de alterar dados desse perfil" :  "Realize login antes de alterar uma conta"
+            "Acesso negado" => Auth::check() ? "Você não possui permissão de alterar dados desse perfil" :  "Realize login antes de alterar uma conta"
         ]);
     }
 }

@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('membros', function (Blueprint $table) {
+        Schema::create('admin_pedidos', function (Blueprint $table) {
             $table->id();
-            $table->boolean("admin")->default(false);
-            $table->boolean("anonimo")->default(false);
-            $table->boolean("ativo")->default(true);
-            $table->foreignId("user_id")->constrained();
-            $table->foreignId("ong_id")->constrained();
+            $table->foreignId("membro_id")->constrained();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('membros');
+        Schema::dropIfExists('admin_pedidos');
     }
 };

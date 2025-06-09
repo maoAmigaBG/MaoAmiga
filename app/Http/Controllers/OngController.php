@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contato;
-use App\Models\Membro;
+use Carbon\Carbon;
 use App\Models\Ong;
+use App\Models\Post;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Membro;
+use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
-use App\Models\Post;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OngController extends Controller {
     function index() {
@@ -28,6 +29,10 @@ class OngController extends Controller {
             "ong" => $ong,
             "ong_type" => Ong_type::where("id", $ong->ong_type_id)->get(),
             "members_amount" => Membro::members_amount($ong->id),
+            "date_formater" => function ($date) {
+                    $date = Carbon::parse($date);
+                    return $date->translatedFormat("d \d\e F \d\e Y");
+                },
         ];
     }
     public function members(Ong $ong) {
