@@ -24,12 +24,11 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
 
 });
 
-Route::get("/membro/{user}", [MembroController::class, "ongs_relation"])->name("membro_relacao");
-
 Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function() {
     Route::get("/login", [UserController::class, "login"])->name("login");
     Route::get("/logon", [UserController::class, "logon"])->name("logon");
     Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
+    Route::get("/relations/{user}", [MembroController::class, "ong_relations"])->name("user.relations");
 });
 
 Route::prefix("/auth")->group(function() {

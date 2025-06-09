@@ -68,9 +68,13 @@ class UserController extends Controller {
         ]);
     }
     public function edit_profile(User $user){
-        return Inertia::render('User/EditProfile', [
-            "user" => $user,
-            "own_profile" => Auth::check() && Auth::user()->id == $user->id
-        ]); 
+        if (Auth::check() && Auth::user()->id == $user->id) {
+            return Inertia::render('User/EditProfile', [
+                "user" => $user,
+            ]);
+        }
+        return redirect()->back()->withErrors([
+            "Permissão negada" => Auth::check() ? "Você não possui permissão de alterar dados desse perfil" :  "Realize login antes de alterar uma conta"
+        ]);
     }
 }
