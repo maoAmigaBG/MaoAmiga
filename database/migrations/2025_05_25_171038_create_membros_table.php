@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean("admin")->default(false);
             $table->boolean("anonimo")->default(false);
             $table->boolean("ativo")->default(true);
+            $table->boolean("owner")->default(false);
             $table->foreignId("user_id")->constrained();
             $table->foreignId("ong_id")->constrained();
             $table->timestamps();

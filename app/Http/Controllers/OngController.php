@@ -38,11 +38,11 @@ class OngController extends Controller {
     public function members(Ong $ong) {
         return [
             "ong" => $ong,
-            "members" => Membro::select([ 'membros.id', 'membros.nivel', 'membros.anonimo', 'membros.user_id', 'membros.ong_id', ])
+            "members" => Membro::select([ 'membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id', ])
                 ->selectRaw("SUM(doacao) as donate_amount")
                     ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
                     ->where("membros.ong_id", $ong->id)
-                    ->groupBy('membros.id', 'membros.nivel', 'membros.anonimo', 'membros.user_id', 'membros.ong_id')
+                    ->groupBy('membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id')
                     ->orderByDesc("donate_amount")
                     ->get(),
             "members_amount" => Membro::members_amount($ong->id),
