@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CampaignController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OngController;
@@ -15,11 +16,15 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
     Route::prefix("/ong")->group(function() {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
+        Route::get('/map_location/{lat}/{lng}', [OngController::class, "map_location"])->name("ong.map_location");
         Route::get('/page/{ong}', [OngController::class, "page"])->name("ong.page");
         Route::get('/members/{ong}', [OngController::class, "members"])->name("ong.members");
         Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
         Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
         Route::get('/contacts/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
+    });
+    Route::prefix("/campaign")->group(function() {
+        Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
     });
 
 });
@@ -30,7 +35,7 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
     Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
     Route::get("/relations/{user}", [MembroController::class, "ong_relations"])->name("user.relations");
     Route::get("/relations/destroy/{user}", [MembroController::class, "destroy"])->name("user.relations.destroy");
-    Route::get("/relations/trash", [MembroController::class, "trash"])->name("user.relations.trash")->middleware("auth");
+    Route::get("/relations/trash", [MembroController::class, "trash"])->name("user.relations.trash");
 });
 
 Route::prefix("/auth")->group(function() {

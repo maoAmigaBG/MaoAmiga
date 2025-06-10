@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("subtitulo")->nullable();
             $table->text("descricao");
             $table->decimal("lat", 10, 7);
-            $table->decimal("log", 10, 7);
+            $table->decimal("lng", 10, 7);
             $table->string("endereco");
             $table->string("banner")->nullable();
             $table->string("foto")->nullable();

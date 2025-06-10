@@ -12,6 +12,7 @@ use App\Models\Campanha;
 use App\Models\Ong_type;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class OngController extends Controller {
     function index() {
@@ -24,15 +25,28 @@ class OngController extends Controller {
     function map() {
         return Inertia::render('Mapa');
     }
+    function map_location($lat, $lng, $radius = 10, $theme_list = null) {
+        $ongs = Ong::select(["ongs.id","ongs.nome","ongs.subtitulo","ongs.descricao","ongs.lat","ongs.lng","ongs.endereco","ongs.banner","ongs.foto","ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get();
+        $possible_locations = [];
+        foreach ($ongs as $ong) {
+            $response = Http::get("http://router.project-osrm.org/route/v1/driving/$lng,$lat;$ong->lng,$ong->lat?overview=false")['routes'][0]['distance'];
+            if ($response < $radius*1000) {
+                if (!empty($theme_list) && in_array($ong->type, $theme_list)) {
+                    $possible_locations[] = $ong;
+                } else if (empty($theme_list)) {
+                    $possible_locations[] = $ong;
+                }
+            }
+        }
+        return [
+            "ongs" => $possible_locations,
+        ];
+    }
     public function page(Ong $ong) {
         return [
             "ong" => $ong,
             "ong_type" => Ong_type::where("id", $ong->ong_type_id)->get(),
             "members_amount" => Membro::members_amount($ong->id),
-            "date_formater" => function ($date) {
-                    $date = Carbon::parse($date);
-                    return $date->translatedFormat("d \d\e F \d\e Y");
-                },
         ];
     }
     public function members(Ong $ong) {
