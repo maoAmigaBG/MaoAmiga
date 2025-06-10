@@ -22,6 +22,7 @@ class OngController extends Controller {
                 ->get(),
         ]);
     }
+
     function map() {
         return Inertia::render('Mapa');
     }
@@ -42,12 +43,13 @@ class OngController extends Controller {
             "ongs" => $possible_locations,
         ];
     }
-    public function page(Ong $ong) {
-        return [
+    public function page($ong) {
+        $ong = Ong::find($ong);
+        return Inertia::render("OngProfile", [
             "ong" => $ong,
             "ong_type" => Ong_type::where("id", $ong->ong_type_id)->get(),
             "members_amount" => Membro::members_amount($ong->id),
-        ];
+        ]);
     }
     public function members(Ong $ong) {
         return [

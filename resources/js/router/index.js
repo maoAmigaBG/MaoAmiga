@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../Pages/Home.vue';
 import Sobre from '../Pages/Sobre.vue';
 import Ong from '../Pages/Ong.vue';
+import OngProfile from '../Pages/OngProfile.vue';
 import UserLogin from '../Pages/User/Login.vue';
 import UserLogon from '../Pages/User/Logon.vue';
 import Mapa from '../Pages/Mapa.vue';
@@ -27,6 +28,12 @@ const routes = [
         name: 'ONGs',
         component: Ong,
         meta: { title: 'ONGs'}
+    },
+    {
+        path: '/ong/profile/:ong',
+        name: 'Ong',
+        component: OngProfile,
+        meta: { title: 'ONG'}
     },
     {
         path: '/user/login',

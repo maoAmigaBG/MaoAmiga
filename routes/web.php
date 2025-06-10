@@ -17,8 +17,8 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
         Route::get('/map_location/{lat}/{lng}', [OngController::class, "map_location"])->name("ong.map_location");
-        Route::get('/page/{ong}', [OngController::class, "page"])->name("ong.page");
         Route::get('/members/{ong}', [OngController::class, "members"])->name("ong.members");
+        Route::get('/profile/{ong}', [OngController::class, "page"])->name("ong.profile");
         Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
         Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
         Route::get('/contacts/{ong}', [OngController::class, "contacts"])->name("ong.contacts");

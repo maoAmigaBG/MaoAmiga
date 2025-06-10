@@ -8,14 +8,14 @@
           <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">
             Maiores Doadores
           </h2>
-          <div class="flex flex-col justify-between gap-2 py-4">
+          <div class="flex flex-col h-full justify-between gap-4 py-2">
             <RankCard v-for="(n, i) in 10" :key="i" :index="i" />
           </div>
         </Scroller>
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col self-center min-h-screen w-1/2 pt-[112px] pb-2">
+    <div class="flex-1 flex flex-col self-center min-h-screen w-1/2 pt-[91px] pb-2">
       <router-view />
     </div>
 

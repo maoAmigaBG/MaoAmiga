@@ -1,5 +1,5 @@
 <template>
-  <section class="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-md mt-12">
+  <section class="max-w-4xl mx-4 p-8 bg-white rounded-lg shadow-md my-12">
     <h1 class="text-4xl font-extrabold text-gray-800 mb-8">Sobre Nós</h1>
 
     <p class="mb-6 text-lg text-gray-700 leading-relaxed">
