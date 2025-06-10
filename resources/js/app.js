@@ -3,7 +3,6 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import Layout from './Layouts/Layout.vue';
 import '../css/app.css';
-import router from './router';
 import showToast from './showToast';
 
 createInertiaApp({
@@ -18,7 +17,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(router)
+            //.use(router)
             .mount(el);
     },
 });

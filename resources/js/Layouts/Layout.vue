@@ -16,7 +16,7 @@
     </div>
 
     <div class="flex-1 flex flex-col self-center min-h-screen w-1/2 pt-[91px] pb-2">
-      <router-view />
+      <slot></slot>
     </div>
 
     <div class="w-[25%] border-l-2 border-[#E5E4E2]">
