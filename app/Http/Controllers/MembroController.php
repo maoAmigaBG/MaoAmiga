@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Membro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class MembroController extends Controller
 {
@@ -16,10 +17,10 @@ class MembroController extends Controller
             ->join('ong_types', 'ong_types.id', '=', 'ongs.ong_type_id')
             ->where('user_id', $user->id)
             ->get();
-        return [
+        return Inertia::render('Profile/User/OngsRelations', [
             "ong_relations" => $relations->isEmpty() ? null : $relations,
             "date_example" => Membro::date_formater("2025-02-08"),
-        ];
+        ]);
     }
     public function destroy(Membro $membro) {
         $this->authorize("delete", $membro);

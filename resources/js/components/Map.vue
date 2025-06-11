@@ -37,6 +37,4 @@ const props = defineProps({
     attribution: { type: String, default: '&copy; OpenStreetMap contributors' },
 })
 
-
-
 </script>
