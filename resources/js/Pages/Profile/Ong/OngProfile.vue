@@ -34,7 +34,7 @@
 
 <script setup>
 import bg from '@/assets/puppy.jpg';
-import ParallaxBanner from '../components/ParallaxBanner.vue';
+import ParallaxBanner from '../../../components/ParallaxBanner.vue';
 
 const props = defineProps({ 
     ong: Object,
