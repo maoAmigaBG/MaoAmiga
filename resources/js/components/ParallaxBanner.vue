@@ -1,8 +1,8 @@
 <template>
-    <div class="parallax-banner w-full h-[35vh] relative overflow-hidden flex items-center justify-center" :style="{
+    <div class="parallax-banner w-full h-[40vh] relative overflow-hidden flex" :style="{
          backgroundImage: `url('${bg}')`}"
         >
-        <div class="z-10 text-white text-4xl font-bold drop-shadow-lg text-center">
+        <div class="z-10 flex-1">
             <slot></slot>
         </div>
     </div>
