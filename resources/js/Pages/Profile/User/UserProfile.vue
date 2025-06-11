@@ -3,7 +3,7 @@
 
     <div class="flex flex-col items-center gap-4">
       <img class="w-60 h-55 rounded-md object-cover border"
-        :src="'https://i.pinimg.com/736x/b7/a7/7b/b7a77b0fdac3256310750c2217230edc.jpg'" alt="Foto do usuário" />
+        :src="'/storage/' + props.user.foto" alt="Foto do usuário" />
       <!-- Quando arrumarmos as fts -->
       <!-- :src="props.user.foto ? props.user.foto : 'alguma foto padrao'" alt="Foto do usuário" /> -->
       <MenuUserProfile />
