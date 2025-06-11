@@ -47,7 +47,8 @@ class OngController extends Controller {
         return Inertia::render("Profile/Ong/OngProfile", [
             "ong" => $ong,
             "ong_type" => Ong_type::find($ong->ong_type_id),
-            "members_amount" => Membro::members_amount($ong->id)
+            "members_amount" => Membro::members_amount($ong->id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get()
         ]);
     }
     public function members(Ong $ong) {
