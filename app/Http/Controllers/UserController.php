@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Inertia\Inertia;
 
 class UserController extends Controller {
     public function login() {
@@ -62,9 +63,12 @@ class UserController extends Controller {
         return Inertia::location(route('login'));
     }
     public function profile(User $user) {
+        Carbon::setLocale('pt_BR');
+        $user["format_data"] = isset($user["created_at"]) ? Carbon::parse($user["created_at"])->translatedFormat('d \d\e F \d\e Y') : null;
+        $user["age"] = isset($user["data_nasc"]) ? Carbon::parse($user["data_nasc"])->age : null;
         return Inertia::render('Profile/User/UserProfile', [
             "user" => $user,
-            "own_profile" => Auth::check() && Auth::user()->id == $user->id
+            "own_profile" => Auth::check() && Auth::user()->id == $user->id,
         ]);
     }
     public function edit_profile(User $user){

@@ -15,11 +15,11 @@
 
       <div class="flex items-center gap-2 text-gray-700 mt-2">
         <span>📅</span>
-        <span>Aqui desde: {{ props.user.created_at }}</span>
+        <span>Aqui desde: {{ props.user.format_data }}</span>
       </div>
       <div class="flex items-center gap-2 text-gray-700">
         <span>⏳</span>
-        <span>Idade: {{ idade }} anos</span>
+        <span>Idade: {{ props.user.age }} anos</span>
       </div>
 
       <div class="mt-4">
