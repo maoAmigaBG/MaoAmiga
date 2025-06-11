@@ -3,7 +3,7 @@
     <h2 class="text-3xl font-bold mb-6 text-gray-800 border-b pb-2">Editar Perfil</h2>
 
     <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6">
-      <img class="w-28 h-28 rounded-lg object-cover border" :src="form.foto"
+      <img class="w-28 h-28 rounded-lg object-cover border" :src="form.foto ? '/storage/' + form.foto : 'https://i.pinimg.com/736x/b7/a7/7b/b7a77b0fdac3256310750c2217230edc.jpg'"
         alt="Foto do usuário" />
       <div class="w-full">
         <label class="block text-sm font-medium mb-1 text-gray-700">URL da Foto</label>
