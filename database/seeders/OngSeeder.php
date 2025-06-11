@@ -20,8 +20,8 @@ class OngSeeder extends Seeder
                 "lat" => "-29.1652079",
                 "lng" => "-51.559487",
                 "endereco" => "R. Livramento, 48 - Bairro Juventude, Bento Gonçalves",
-                "banner" => "ongs/turtle_profile.jpeg",
-                "foto" => "ongs/turtle_banner.jpg",
+                "banner" => "ongs/turtle_banner.jpg",
+                "foto" => "ongs/turtle_profile.jpeg",
                 "ong_type_id" => 1,
             ],
             [
@@ -31,8 +31,8 @@ class OngSeeder extends Seeder
                 "lat" => "-29.1688186",
                 "lng" => "-51.5692994",
                 "endereco" => "R. Avelino Luiz Zat, 95 - Fenavinho, Bento Gonçalves",
-                "banner" => "ongs/tamandua_profile.jpg",
-                "foto" => "ongs/tamandua_banner.jpg",
+                "banner" => "ongs/tamandua_banner.jpg",
+                "foto" => "ongs/tamandua_profile.jpg",
                 "ong_type_id" => 2,
             ],
         ]);
