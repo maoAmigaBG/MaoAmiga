@@ -34,7 +34,7 @@ class Admin_pedidoController extends Controller
         $member = Membro::where("ong_id", $ong->id)->where("user_id", Auth::user()->id)->first();
         Admin_pedido::create([
             "ong_id" => $ong->id,
-            "membro_id" => $member->i,
+            "membro_id" => $member->id,
         ]);
         return redirect()->route("relations.edit", [
             "user" => $member->user_id,

@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
@@ -75,22 +76,22 @@ class UserController extends Controller {
         ]);
     }
     public function edit_profile(User $user){
-        if (Auth::user()->id == $user->id) {
-            return Inertia::render('Profile/User/EditProfile', [
-                "user" => $user,
+        if (Gate::denies("update", $user)) {
+            return redirect()->route("user.profile", [
+                "user" => $user->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
         }
-        return redirect()->route("user.profile", [
-            "user" => $user->id,
-        ])->withErrors([
-            "Acesso negado" => "Você não possui permissão para editar este perfil"
+        return Inertia::render('Profile/User/EditProfile', [
+            "user" => $user,
         ]);
     }
     public function update(Request $request) {
         $user = User::find($request->id);
-        if (!Auth::user()->id == $user->id) {
+        if (Gate::denies("update", $user)) {
             return redirect()->route("user.profile", [
-                "user" => Auth::user()->id,
+                "user" => $user->id,
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
@@ -103,9 +104,9 @@ class UserController extends Controller {
         ]);
     }
     public function destroy(User $user) {
-        if (!Auth::user()->id == $user->id && !Auth::user()->id == 1) {
+        if (Gate::denies("delete", $user)) {
             return redirect()->route("user.profile", [
-                "user" => Auth::user()->id,
+                "user" => $user->id,
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
