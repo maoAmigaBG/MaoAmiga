@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
-    public function login() {
-        return Inertia::render('User/Login');
+    public function login($redirect = null) {
+        return Inertia::render('User/Login', [
+            "redirect" => $redirect,
+        ]);
     }
     public function logon() {
         return Inertia::render('User/Logon');
@@ -44,7 +46,7 @@ class UserController extends Controller {
         if (Auth::attempt(["email" => $request_data["email"], "password" => $request_data["password"]])) {
             $request->session()->regenerate();
         }
-        return Inertia::location(route('index'));
+        return $request["redirect"] ? redirect()->route($request["redirect"]) : redirect()->route("index");
     }
     public function auth_logon(UserRequest $request) {
         $request_data = $request->validated();

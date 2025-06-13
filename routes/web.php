@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CampaignController;
+use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OngController;
@@ -11,7 +12,7 @@ use App\Http\Middleware\HandleInertiaRequests;
 
 Route::middleware(HandleInertiaRequests::class)->group(function () {
     Route::get('/', [GeneralController::class,'index'])->name('index');
-    Route::get('/sobre', [GeneralController::class, "about"])->name("about");
+    Route::get('/sobre', [GeneralController::class, "about"])->name("about")->middleware(LoginVerifyer::class);
 
     Route::prefix("/ong")->group(function() {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
@@ -31,7 +32,7 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
 
 
 Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function() {
-    Route::get("/login", [UserController::class, "login"])->name("login");
+    Route::get("/login/{redirect?}", [UserController::class, "login"])->name("login");
     Route::get("/logon", [UserController::class, "logon"])->name("logon");
     Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
     Route::get("/profile/{user}/edit", [UserController::class, "edit_profile"])->name("user.editprofile");

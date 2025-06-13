@@ -13,6 +13,7 @@
                     </h1>
 
                     <form class="login-form w-full" @submit.prevent="submit">
+                    <input type="hidden" id="redirect" name="redirect" :value="form.redirect">
                         <div class="flex flex-col items-center w-full gap-8">
                             <div class="form-group relative w-full">
                                 <input
@@ -81,6 +82,7 @@ defineOptions({
 const form = useForm({
     email: '',
     password: '',
+    redirect: usePage().props.redirect,
 })
 
 function submit() {
