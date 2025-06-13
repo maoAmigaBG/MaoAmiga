@@ -34,7 +34,7 @@ class MembroPolicy
      * Determine whether the user can update the model.
      */
     public function update(User $user, Membro $membro): bool {
-        return true;
+        return $user->id == $membro->user_id;
     }
 
     /**

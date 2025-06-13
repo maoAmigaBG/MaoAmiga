@@ -3,7 +3,7 @@
 
     <div class="flex flex-col items-center gap-4">
       <img class="w-60 h-55 rounded-md object-cover border"
-        :src="'https://i.pinimg.com/736x/b7/a7/7b/b7a77b0fdac3256310750c2217230edc.jpg'" alt="Foto do usuário" />
+        :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg " alt="Foto do usuário" />
       <MenuUserProfile />
     </div>
 
@@ -37,9 +37,11 @@
 
 <script setup>
 import MenuUserProfile from '../../../components/MenuUserProfile.vue'
+import defaultUserImg from '@/assets/default_user.jpg';
 
 const props = defineProps({
-  ong_relations: Array
+  ong_relations: Array,
+  user: Object,
 })
 
 function formatarData(data) {
