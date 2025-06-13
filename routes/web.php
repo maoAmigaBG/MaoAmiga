@@ -24,7 +24,14 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
         Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
         Route::get('/contacts/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
-        Route::get('/requests/{ong}', [Admin_pedidoController::class, "index"])->name("ong.requests")->middleware(LoginVerifyer::class);
+        Route::middleware(LoginVerifyer::class)->group(function () {
+            Route::get('/requests/{ong}', [Admin_pedidoController::class, "index"])->name("ong.requests");
+            Route::get('/create', [OngController::class, "create"])->name("ong.create");
+            Route::post('/store', [OngController::class, "store"])->name("ong.store");
+            Route::get('/edit/{ong}', [OngController::class, "edit"])->name("ong.edit");
+            Route::post('/update', [OngController::class, "update"])->name("ong.update");
+            Route::get('/destroy/{ong}', [OngController::class, "destroy"])->name("ong.destroy");
+        });
     });
     Route::prefix("/campaign")->group(function() {
         Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
