@@ -49,6 +49,7 @@ class UserController extends Controller {
         return $request["redirect"] ? redirect()->route($request["redirect"]) : redirect()->route("index");
     }
     public function auth_logon(UserRequest $request) {
+        $request->merge(['is_update' => false]);
         $request_data = $request->validated();
         if ($request->hasFile("foto")) {
             $path = $request->file("foto")->store('profiles', 'public');
@@ -80,9 +81,36 @@ class UserController extends Controller {
             ]);
         }
         return redirect()->route("user.profile", [
-            "user" => Auth::user()->id,
+            "user" => $user->id,
         ])->withErrors([
             "Acesso negado" => "Você não possui permissão para editar este perfil"
         ]);
+    }
+    public function update(Request $request) {
+        $user = User::find($request->id);
+        if (!Auth::user()->id == $user->id) {
+            return redirect()->route("user.profile", [
+                "user" => Auth::user()->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
+        }
+        $request->merge(['is_update' => true]);
+        $request_data = $request->validated();
+        $user->update($request_data);
+        return redirect()->route("user.profile", [
+            "user" => $user->id,
+        ]);
+    }
+    public function destroy(User $user) {
+        if (!Auth::user()->id == $user->id && !Auth::user()->id == 1) {
+            return redirect()->route("user.profile", [
+                "user" => Auth::user()->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
+        }
+        $user->delete();
+        return Auth::user()->id == $user->id ? redirect()->route("logout") : redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);
     }
 }
