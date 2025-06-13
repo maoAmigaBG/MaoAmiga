@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             Post_likeSeeder::class,
             MembroSeeder::class,
             Membro_doacaoSeeder::class,
+            Admin_pedidoSeeder::class,
         ]);
     }
 }

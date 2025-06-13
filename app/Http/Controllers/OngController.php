@@ -11,7 +11,10 @@ use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
 use Illuminate\Http\Request;
+use App\Http\Requests\OngRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 
 class OngController extends Controller {
@@ -101,5 +104,62 @@ class OngController extends Controller {
             "ong" => $ong,
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
         ];
+    }
+    public function create() {
+    }
+    public function store(OngRequest $request) {
+        $request_data = $request->validated();
+        $ong = Ong::create($request_data);
+        Membro::create([
+            "admin" => true,
+            "anonimo" => false,
+            "user_id" => Auth::user()->id,
+            "ong_id" => $ong->id,
+        ]);
+        return redirect()->route("ong.profile", [
+            "ong" => $ong->id,
+        ]);
+    }
+    public function edit(Ong $ong) {
+        if (Gate::denies("update", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
+        }
+        return [
+            "ong" => $ong,
+        ];
+    }
+    public function update(OngRequest $request) {
+        $ong = Ong::where("id", $request->id)->first();
+        if (Gate::denies("update", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
+        }
+        $request_data = $request->validated();
+        $ong->update($request_data);
+        return redirect()->route("ong.profile",[
+            "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Perfil de ong alterado com sucesso",
+        ]);
+    }
+    public function destroy(Ong $ong) {
+        if (Gate::denies("delete", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
+        }
+        $ong->delete();
+        return redirect()->route("index")->with([
+            "Sucesso" => "Perfil de ong excluído",
+        ]);
     }
 }

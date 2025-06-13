@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin_pedido;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\User;
@@ -24,9 +25,9 @@ class MembroController extends Controller
             "ong_relations" => $relations->isEmpty() ? null : $relations,
         ]);
     }
-    public function edit($member_id) {
-        $member = Membro::where("id", $member_id)->first();
-        if (Gate::denies("update", $member)) {
+    public function edit($membro_id) {
+        $membro = Membro::where("id", $membro_id)->first();
+        if (Gate::denies("update", $membro)) {
             return redirect()->route("user.relations", [
                 "user" => Auth::user(),
             ])->withErrors([
@@ -34,28 +35,62 @@ class MembroController extends Controller
             ]);
         }
         return [
-            "member" => $member,
+            "member" => $membro,
             "ong" => Ong::select(["ongs.id","ongs.nome","ongs.subtitulo","ongs.descricao","ongs.lat","ongs.lng","ongs.endereco","ongs.banner","ongs.foto","ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get(),
-            "user" => User::where("id", $member->user_id)->first(),
+            "user" => User::where("id", $membro->user_id)->first(),
         ];
     }
     public function update(Request $request) {
-        $member = Membro::where("id", $request->id)->first();
-        if (Gate::denies("update", $member)) {
+        $membro = Membro::where("id", $request->id)->first();
+        if (Gate::denies("update", $membro)) {
             return redirect()->route("user.relations", [
                 "user" => Auth::user(),
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
         }
-        $member->update($request->all());
+        $membro->update($request->all());
         return redirect()->route("user.relations", [
-            "user" => $member->user_id
+            "user" => $membro->user_id
+        ]);
+    }
+    public function request_aprove(Membro $membro) {
+        if (Gate::denies("admin", $membro)) {
+            return redirect()->route("relations.edit", [
+                "user" => Auth::user()->id
+            ]);
+        }
+        $admin_pedido = Admin_pedido::where("membro_id", $membro->id)->where("ong_id", $membro->ong_id)->first();
+        $admin_pedido->delete();
+        $membro->update([
+            "admin" => true
+        ]);
+        return redirect()->route("ong.requests", [
+            "ong" => $membro->ong_id,
         ]);
     }
     public function destroy(Membro $membro) {
-        $this->authorize("delete", $membro);
+        if (Gate::denies("delete", $membro)) {
+            return redirect()->route("user.relations", [
+                "user" => Auth::user(),
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
+        }
         $membro->delete();
+        return redirect()->route("user.relations", [
+            "user" => $membro->user_id,
+        ]);
+    }
+    public function restore(Membro $membro) {
+        if (Gate::denies("delete", $membro)) {
+            return redirect()->route("user.relations", [
+                "user" => Auth::user(),
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
+        }
+        $membro->restore();
         return redirect()->route("user.relations", [
             "user" => $membro->user_id,
         ]);

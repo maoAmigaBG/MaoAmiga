@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('admin_pedidos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("ong_id")->constrained();
             $table->foreignId("membro_id")->constrained();
             $table->timestamps();
         });
