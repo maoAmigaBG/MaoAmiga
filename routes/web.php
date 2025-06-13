@@ -35,9 +35,9 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
     Route::get("/login/{redirect?}", [UserController::class, "login"])->name("login");
     Route::get("/logon", [UserController::class, "logon"])->name("logon");
     Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
-    Route::get("/profile/{user}/edit", [UserController::class, "edit_profile"])->name("user.editprofile");
+    Route::get("/profile/{user}/edit", [UserController::class, "edit_profile"])->name("user.editprofile")->middleware(LoginVerifyer::class);
     Route::get("/relations/{user}", [MembroController::class, "ong_relations"])->name("user.relations");
-    Route::get("/relations/destroy/{user}", [MembroController::class, "destroy"])->name("user.relations.destroy");
+    Route::get("/relations/destroy/{user}", [MembroController::class, "destroy"])->name("user.relations.destroy")->middleware(LoginVerifyer::class);
     Route::get("/relations/trash", [MembroController::class, "trash"])->name("user.relations.trash");
 });
 
