@@ -27,8 +27,8 @@ class OngRequest extends FormRequest
             "descricao" => ["nullable","max:5000"],
             "cep" => ["required"],
             "endereco" => ["required"],
-            "banner" => ["nullble", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            "foto" => ["nullble", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            "banner" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             "ong_type_id" => ["required"],
             "ong_new_type" => ["required"],
         ];

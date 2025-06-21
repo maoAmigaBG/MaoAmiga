@@ -8,6 +8,7 @@ use App\Models\Admin_pedido;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class Admin_pedidoController extends Controller
 {
@@ -15,8 +16,10 @@ class Admin_pedidoController extends Controller
      * Display a listing of the resource.
      */
     public function index(Ong $ong) {
-        if (empty(Membro::where("ong_id", $ong->id)->where("user_id", Auth::user()->id)->where("admin", true)->first())) {
-            return redirect()->back()->withErrors([
+        if (Gate::denies("view", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para acessar esta página",
             ]);
         }
@@ -31,6 +34,13 @@ class Admin_pedidoController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(Ong $ong) {
+        if (Gate::denies("view", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para realizar esta ação",
+            ]);
+        }
         $member = Membro::where("ong_id", $ong->id)->where("user_id", Auth::user()->id)->first();
         Admin_pedido::create([
             "ong_id" => $ong->id,
@@ -78,8 +88,14 @@ class Admin_pedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Admin_pedido $admin_pedido) {
+        $ong = Ong::where("id", $admin_pedido["ong_id"]);
+        if (Gate::denies("delete", $admin_pedido)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para realizar esta ação",
+            ]);
+        }
     }
 }

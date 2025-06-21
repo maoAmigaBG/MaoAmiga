@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin_pedidoController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\PostController;
 use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,14 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
     });
     Route::prefix("/campaign")->group(function() {
         Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
+        Route::get('/create/{ong}', [CampaignController::class, "create"])->name("campaign.create");
+        Route::post('/store', [CampaignController::class, "store"])->name("campaign.store");
+        Route::get('/delete/{campanha}', [CampaignController::class, "destroy"])->name("campaign.destroy");
+    });
+    Route::prefix("/campaign")->group(function() {
+        Route::get('/create/{ong}', [PostController::class, "create"])->name("post.create");
+        Route::post('/store', [PostController::class, "store"])->name("post.store");
+        Route::get('/delete/{post}', [PostController::class, "destroy"])->name("post.destroy");
     });
 
 });
@@ -51,7 +60,8 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
             Route::get("/request_aprove/{user}", [MembroController::class, "request_aprove"])->name("relations.request_aprove");
             Route::get("/destroy/{user}", [MembroController::class, "destroy"])->name("relations.destroy");
             Route::get("/restore/{user}", [MembroController::class, "restore"])->name("relations.restore");
-            Route::get("/request/create/{ong}", [Admin_pedidoController::class, "create"])->name("relations.create.destroy");
+            Route::get("/request/create/{ong}", [Admin_pedidoController::class, "create"])->name("relations.create");
+            Route::get("/request/destroy/{admin_pedido}", [Admin_pedidoController::class, "destroy"])->name("relations.destroy");
         });
     });
     Route::get("/login/{redirect?}", [UserController::class, "login"])->name("login");

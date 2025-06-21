@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             ContatoSeeder::class,
             CampaignSeeder::class,
             PostSeeder::class,
-            Post_photoSeeder::class,
             Post_likeSeeder::class,
             MembroSeeder::class,
             Membro_doacaoSeeder::class,

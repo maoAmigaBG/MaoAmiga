@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Admin_pedido extends Model {
     protected $fillable = [
+        "ong_id",
         "membro_id",
     ];
 }

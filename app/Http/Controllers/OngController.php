@@ -76,16 +76,10 @@ class OngController extends Controller {
                         ->selectRaw('COUNT(*)')
                         ->whereColumn('post_likes.post_id', 'posts.id');
                 }, 'likes_num')
-                ->selectRaw('GROUP_CONCAT(post_photos.nome) as photos')
-                ->leftJoin("post_photos", "post_photos.post_id", "=", "posts.id")
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->orderByDesc("posts.created_at")
                 ->get()
-                ->map(function ($post) {
-                    $post->photos = $post->photos ? explode(',', $post->photos) : [];
-                    return $post;
-                }),
         ];
     }
     public function campaigns(Ong $ong) {

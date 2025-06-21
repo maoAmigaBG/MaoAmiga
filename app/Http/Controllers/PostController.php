@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Ong;
+use App\Models\Post;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+
+class PostController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Ong $ong) {
+        if (Gate::denies("create", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar esta ong"
+            ]);
+        }
+        return [
+            "ong_id" => $ong->id,
+        ];
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $ong = Ong::where("id", $request["ong_id"])->first();
+        if (Gate::denies("create", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar esta ong"
+            ]);
+        }
+        $request_data = $request->validate([
+            "nome" => ["required"],
+            "descricao" => ["required"],
+            "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            "ong_id" => ["required"],
+        ]);
+        Post::create($request_data);
+        return redirect()->route("ong.posts", [
+            "ong" => $ong->id
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Post $post)
+    {
+        $ong = Ong::where("id", $post["ong_id"])->first();
+        if (Gate::denies("delete", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar esta ong"
+            ]);
+        }
+        $post->delete();
+        return redirect()->route("ong.posts", [
+            "ong" => $ong->id
+        ]);
+    }
+}
