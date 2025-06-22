@@ -16,8 +16,14 @@ class LoginVerifyer
      */
     public function handle(Request $request, Closure $next): Response {
         if (!Auth::check()) {
+            $data_list = [];
+            $data = $request->route()->parameters();
+            foreach ($data as $value) {
+                $data_list[] = $value["id"];
+            }
             return redirect()->route("login", [
-                "redirect" => request()->route()->getName()
+                "redirect" => request()->route()->getName(),
+                "data_list" => urlencode(json_encode($data_list)),
             ]);
         }
         return $next($request);

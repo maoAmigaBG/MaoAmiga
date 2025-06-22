@@ -14,6 +14,7 @@
 
                     <form class="login-form w-full" @submit.prevent="submit">
                     <input type="hidden" id="redirect" name="redirect" :value="form.redirect">
+                    <input type="hidden" id="data_list" name="data_list" :value="form.data_list">
                         <div class="flex flex-col items-center w-full gap-8">
                             <div class="form-group relative w-full">
                                 <input
@@ -83,6 +84,7 @@ const form = useForm({
     email: '',
     password: '',
     redirect: usePage().props.redirect,
+    data_list: usePage().props.data_list,
 })
 
 function submit() {
