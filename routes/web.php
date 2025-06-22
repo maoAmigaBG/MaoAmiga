@@ -40,10 +40,12 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::post('/store', [CampaignController::class, "store"])->name("campaign.store");
         Route::get('/delete/{campanha}', [CampaignController::class, "destroy"])->name("campaign.destroy");
     });
-    Route::prefix("/campaign")->group(function() {
+    Route::prefix("/post")->group(function() {
         Route::get('/create/{ong}', [PostController::class, "create"])->name("post.create");
         Route::post('/store', [PostController::class, "store"])->name("post.store");
         Route::get('/delete/{post}', [PostController::class, "destroy"])->name("post.destroy");
+        Route::get('/like/{post}', [Admin_pedidoController::class, "create"])->name("post.like");
+        Route::get('/deslike/{post_like}', [Admin_pedidoController::class, "destroy"])->name("post.deslike");
     });
 
 });
