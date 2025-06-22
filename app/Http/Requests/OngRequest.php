@@ -29,8 +29,8 @@ class OngRequest extends FormRequest
             "endereco" => ["required"],
             "banner" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            "ong_type_id" => ["required"],
-            "ong_new_type" => ["required"],
+            "ong_type" => ["required"],
+            "ong_new_type" => ["nullable"],
         ];
     }
 }

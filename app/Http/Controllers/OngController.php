@@ -100,9 +100,18 @@ class OngController extends Controller {
         ];
     }
     public function create() {
+        return [
+            "ong_types" => Ong_type::all(),
+        ];
     }
     public function store(OngRequest $request) {
         $request_data = $request->validated();
+        if ($request_data["ong_type"] == 0) {
+            $type = Ong_type::create([
+                "nome" => $request_data["ong_new_type"],
+            ]);
+            $request_data["ong_type"] = $type->id;
+        }
         $ong = Ong::create($request_data);
         Membro::create([
             "admin" => true,

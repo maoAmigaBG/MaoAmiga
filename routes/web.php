@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin_pedidoController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PostController;
 use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
@@ -24,7 +25,12 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/profile/{ong}', [OngController::class, "page"])->name("ong.profile");
         Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
         Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
-        Route::get('/contacts/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
+        Route::prefix("/contacts")->group(function() {
+            Route::get('/list/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
+            Route::get('/create/{ong}', [ContatoController::class, "create"])->name("contacts.create");
+            Route::post('/store', [ContatoController::class, "store"])->name("contacts.store");
+            Route::get('/delete/{contato}', [ContatoController::class, "destroy"])->name("contacts.destroy");
+        });
         Route::middleware(LoginVerifyer::class)->group(function () {
             Route::get('/requests/{ong}', [Admin_pedidoController::class, "index"])->name("ong.requests");
             Route::get('/create', [OngController::class, "create"])->name("ong.create");
