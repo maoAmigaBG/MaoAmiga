@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Report;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\Post;
@@ -51,7 +52,8 @@ class OngController extends Controller {
             "ong" => $ong,
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "members_amount" => Membro::members_amount($ong->id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get()
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ]);
     }
     public function members(Ong $ong) {
@@ -65,6 +67,9 @@ class OngController extends Controller {
                     ->orderByDesc("donate_amount")
                     ->get(),
             "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function posts(Ong $ong) {
@@ -79,7 +84,11 @@ class OngController extends Controller {
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->orderByDesc("posts.created_at")
-                ->get()
+                ->get(),
+            "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function campaigns(Ong $ong) {
@@ -91,12 +100,19 @@ class OngController extends Controller {
                 ->where("ong_id", $ong->id)
                 ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
                 ->get(),
+            "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function contacts(Ong $ong) {
         return [
             "ong" => $ong,
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function create() {

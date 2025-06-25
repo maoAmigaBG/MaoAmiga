@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string("nome");
             $table->string("subtitulo")->nullable();
             $table->text("descricao");
-            $table->decimal("lat", 10, 7);
-            $table->decimal("lng", 10, 7);
+            $table->decimal("lat", 10, 7)->nullable();
+            $table->decimal("lng", 10, 7)->nullable();
             $table->string("endereco");
             $table->string("banner")->nullable();
             $table->string("foto")->nullable();
