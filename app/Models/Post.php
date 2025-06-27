@@ -9,6 +9,7 @@ class Post extends Model {
     protected $fillable = [
         'nome',
         'descricao',
+        'foto',
         'ong_id',
     ];
     public function ong()

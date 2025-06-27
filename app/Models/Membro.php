@@ -12,7 +12,6 @@ class Membro extends Model
     protected $fillable = [
         'admin',
         'anonimo',
-        'ativo',
         'user_id',
         'ong_id',
     ];
@@ -29,19 +28,12 @@ class Membro extends Model
                 ->get();
         }
 
-        return Membro::select([
-            'membros.id',
-            'membros.nivel',
-            'membros.anonimo',
-            'membros.user_id',
-            'membros.ong_id',
-            'users.name'
-        ])
+        return Membro::select(['membros.id', 'membros.nivel', 'membros.anonimo', 'membros.user_id', 'membros.ong_id'])
             ->selectRaw("SUM(doacao) as donate_amount")
             ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
             ->join('users', 'membros.user_id', '=', 'users.id')
             ->where("membros.ong_id", $ong_id)
-            ->groupBy('membros.id', 'membros.nivel', 'membros.anonimo', 'membros.user_id', 'membros.ong_id', 'users.name')
+            ->groupBy('membros.id','membros.nivel','membros.anonimo','membros.user_id','membros.ong_id')
             ->orderByDesc("donate_amount")
             ->limit(10)
             ->get();

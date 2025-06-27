@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Report;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\Post;
@@ -11,7 +12,10 @@ use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
 use Illuminate\Http\Request;
+use App\Http\Requests\OngRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 
 class OngController extends Controller {
@@ -48,7 +52,8 @@ class OngController extends Controller {
             "ong" => $ong,
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "members_amount" => Membro::members_amount($ong->id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get()
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ]);
     }
     public function members(Ong $ong) {
@@ -62,6 +67,9 @@ class OngController extends Controller {
                     ->orderByDesc("donate_amount")
                     ->get(),
             "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function posts(Ong $ong) {
@@ -73,16 +81,14 @@ class OngController extends Controller {
                         ->selectRaw('COUNT(*)')
                         ->whereColumn('post_likes.post_id', 'posts.id');
                 }, 'likes_num')
-                ->selectRaw('GROUP_CONCAT(post_photos.nome) as photos')
-                ->leftJoin("post_photos", "post_photos.post_id", "=", "posts.id")
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->orderByDesc("posts.created_at")
-                ->get()
-                ->map(function ($post) {
-                    $post->photos = $post->photos ? explode(',', $post->photos) : [];
-                    return $post;
-                }),
+                ->get(),
+            "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function campaigns(Ong $ong) {
@@ -94,12 +100,85 @@ class OngController extends Controller {
                 ->where("ong_id", $ong->id)
                 ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
                 ->get(),
+            "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
     }
     public function contacts(Ong $ong) {
         return [
             "ong" => $ong,
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "members_amount" => Membro::members_amount($ong->id),
+            "ong_type" => Ong_type::find($ong->ong_type_id),
+            "reports" => Report::where("ong_id", $ong->id)->get(),
         ];
+    }
+    public function create() {
+        return [
+            "ong_types" => Ong_type::all(),
+        ];
+    }
+    public function store(OngRequest $request) {
+        $request_data = $request->validated();
+        if ($request_data["ong_type"] == 0) {
+            $type = Ong_type::create([
+                "nome" => $request_data["ong_new_type"],
+            ]);
+            $request_data["ong_type"] = $type->id;
+        }
+        $ong = Ong::create($request_data);
+        Membro::create([
+            "admin" => true,
+            "anonimo" => false,
+            "user_id" => Auth::user()->id,
+            "ong_id" => $ong->id,
+        ]);
+        return redirect()->route("ong.profile", [
+            "ong" => $ong->id,
+        ]);
+    }
+    public function edit(Ong $ong) {
+        if (Gate::denies("update", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
+        }
+        return [
+            "ong" => $ong,
+        ];
+    }
+    public function update(OngRequest $request) {
+        $ong = Ong::where("id", $request->id)->first();
+        if (Gate::denies("update", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
+        }
+        $request_data = $request->validated();
+        $ong->update($request_data);
+        return redirect()->route("ong.profile",[
+            "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Perfil de ong alterado com sucesso",
+        ]);
+    }
+    public function destroy(Ong $ong) {
+        if (Gate::denies("delete", $ong)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $ong->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
+        }
+        $ong->delete();
+        return redirect()->route("index")->with([
+            "Sucesso" => "Perfil de ong excluído",
+        ]);
     }
 }

@@ -10,11 +10,15 @@ use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
-    public function login() {
-        return Inertia::render('User/Login');
+    public function login($redirect = null, $data_list = null) {
+        return Inertia::render('User/Login', [
+            "redirect" => $redirect,
+            "data_list" => $data_list,
+        ]);
     }
     public function logon() {
         return Inertia::render('User/Logon');
@@ -44,9 +48,14 @@ class UserController extends Controller {
         if (Auth::attempt(["email" => $request_data["email"], "password" => $request_data["password"]])) {
             $request->session()->regenerate();
         }
-        return Inertia::location(route('index'));
+        if ($request["redirect"]) {
+            $data_list = json_decode(urldecode($request["data_list"]), true);
+            return $data_list ? redirect()->route($request["redirect"], $data_list) : redirect()->route($request["redirect"]);
+        }
+        return redirect()->route("index");
     }
     public function auth_logon(UserRequest $request) {
+        $request->merge(['is_update' => false]);
         $request_data = $request->validated();
         if ($request->hasFile("foto")) {
             $path = $request->file("foto")->store('profiles', 'public');
@@ -72,13 +81,42 @@ class UserController extends Controller {
         ]);
     }
     public function edit_profile(User $user){
-        if (Auth::check() && Auth::user()->id == $user->id) {
-            return Inertia::render('Profile/User/EditProfile', [
-                "user" => $user,
+        if (Gate::denies("update", $user)) {
+            return redirect()->route("user.profile", [
+                "user" => $user->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
         }
-        return redirect()->back()->withErrors([
-            "Acesso negado" => Auth::check() ? "Você não possui permissão de alterar dados desse perfil" :  "Realize login antes de alterar uma conta"
+        return Inertia::render('Profile/User/EditProfile', [
+            "user" => $user,
         ]);
+    }
+    public function update(Request $request) {
+        $user = User::find($request->id);
+        if (Gate::denies("update", $user)) {
+            return redirect()->route("user.profile", [
+                "user" => $user->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
+        }
+        $request->merge(['is_update' => true]);
+        $request_data = $request->validated();
+        $user->update($request_data);
+        return redirect()->route("user.profile", [
+            "user" => $user->id,
+        ]);
+    }
+    public function destroy(User $user) {
+        if (Gate::denies("delete", $user)) {
+            return redirect()->route("user.profile", [
+                "user" => $user->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
+        }
+        $user->delete();
+        return Auth::user()->id == $user->id ? redirect()->route("logout") : redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);
     }
 }

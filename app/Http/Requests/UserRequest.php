@@ -23,12 +23,14 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $action_rule = $this->input('is_update', false) ? "required" : "nullable";
         return [
             "name" => ["required", "min:5"],
             "email" => ["required", "email", Rule::unique("users", "email")],
-            "password" => ["required", Password::min(8)->letters()->numbers()],
-            "data_nasc" => ["nullable", "date", "before:today"],
-            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            "password" => ["required", Password::min(8)->letters()->numbers(), ($this->input('is_update', false) ? "" : "confirmed")],
+            "descricao" => ["nullable"],
+            "data_nasc" => [$action_rule, "date", "before:today"],
+            'foto' => [$action_rule, 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 }
