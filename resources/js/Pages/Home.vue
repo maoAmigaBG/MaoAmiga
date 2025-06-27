@@ -1,6 +1,7 @@
 <template>
   <Feeds>
-    <Feed v-for="post in posts" :key="post.id" :ongName="post.nome" :ongImage="post.foto" :addr="post.endereco" :time="post.created_at" :postPhotos="post.photos" :description="post.descricao"/>
+    <Feed v-for="post in posts" :key="post.id" :ongName="post.ong.nome" :ongImage="post.ong.foto" :addr="post.ong.endereco"
+      :time="post.created_at" :foto="post.foto" :description="post.descricao" />
   </Feeds>
 </template>
 

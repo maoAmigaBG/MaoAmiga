@@ -5,7 +5,7 @@
         <div class="profile-img">
           <img :src="'/storage/' + ongImage" alt="" class="h-[70px] w-[70px] object-cover object-center rounded-full" />
         </div>
-        <div class="info w-1/2">
+        <div class="info w-3/4">
           <h3 class="font-semibold">{{ ongName }}</h3>
           <small class="truncate w-full block">{{ addr }}</small>
           <small v-if="time">{{ formattedTime }}</small>
@@ -14,9 +14,9 @@
       <span class="edit flex items-center text-[28px]"><i class="fa-solid fa-ellipsis"></i></span>
     </div>
 
-    <template v-if="postPhotos && postPhotos.length && postPhotos[0].nome">
+    <template v-if="foto">
       <div class="photo my-4 rounded-[7px_40px_7px_92px] overflow-hidden">
-        <img :src="'/storage/' + postPhotos[0].nome" alt="" />
+        <img :src="'/storage/' + foto" alt="" />
       </div>
       <div class="action-buttons w-1/3 flex justify-between items-center text-[28px] my-2 mb-4">
         <i class="fa-regular fa-heart"></i>
@@ -28,7 +28,7 @@
     <div class="caption mb-2"><b>{{ ongName }}</b> {{ description }}</div>
 
     <div
-      v-if="!postPhotos || !postPhotos.length || !postPhotos[0].nome"
+      v-if="!foto"
       class="action-buttons w-1/3 flex justify-between items-center text-[28px] my-4"
     >
       <i class="fa-regular fa-heart"></i>
@@ -46,7 +46,7 @@ const props = defineProps({
   ongImage: String,
   addr: String,
   time: String,
-  postPhotos: Array,
+  foto: String, 
   description: String,
 })
 
