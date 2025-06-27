@@ -24,13 +24,53 @@ class Membro_doacaoSeeder extends Seeder
                 "campanha_id" => 1,
             ],
             [
-                "doacao" => 1550.5,
+                "doacao" => 550,
                 "membro_id" => 3,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 4,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 5,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 6,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 7,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 8,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 9,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 550,
+                "membro_id" => 10,
+                "campanha_id" => 1,
+            ],
+            [
+                "doacao" => 1550.5,
+                "membro_id" => 11,
                 "campanha_id" => 3,
             ],
             [
                 "doacao" => 250.75,
-                "membro_id" => 4,
+                "membro_id" => 12,
                 "campanha_id" => 3,
             ],
         ]);
