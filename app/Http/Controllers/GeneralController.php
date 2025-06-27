@@ -14,7 +14,7 @@ use App\Http\Controllers\Controller;
 class GeneralController extends Controller {
     function index() {
         return Inertia::render('Home', [
-            "posts" => Post::orderBy("created_at", "asc")->with('ong', 'photos')->limit(20)->get(),
+            "posts" => Post::orderBy("created_at", "asc")->limit(20)->get(),
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
