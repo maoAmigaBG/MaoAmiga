@@ -9,7 +9,7 @@
             Maiores Doadores
           </h2>
           <div class="flex flex-col h-full justify-between gap-4 py-2">
-            <RankCard v-for="(n, i) in 10" :key="i" :index="i" />
+            <RankCard v-for="(membro, i) in ranking" :key="membro.user_id || i" :index="i" :membro="membro" />
           </div>
         </Scroller>
       </div>
@@ -24,7 +24,7 @@
         <Scroller class="h-[calc(100vh-91px)]">
           <h2 class="section-title font-poppins font-semibold text-2xl text-gray-600 pb-5 self-start">Campanhas</h2>
           <div class="flex flex-col gap-y-4">
-            <CampaignCard v-for="i in 5" :key="i" :index="i" />
+            <CampaignCard v-for="(campanha, i) in campaigns" :key="campanha.id || i" :index="i" :campanha="campanha" />
           </div>
         </Scroller>
       </div>
@@ -38,18 +38,10 @@ import Scroller from '../components/Scroller.vue';
 import CampaignCard from '../components/CampaignCard.vue';
 import RankCard from '../components/RankCard.vue';
 import Toast from '../components/ToastModal.vue';
+
+const { ranking, campaigns } = defineProps({
+  posts: Array,
+  ranking: Array,
+  campaigns: Array
+})
 </script>
-
-<style scoped>
-.font-poppins {
-  font-family: 'Poppins', Arial, sans-serif;
-}
-
-.scroller.left {
-  scrollbar-width: none;
-}
-
-.scroller.left::-webkit-scrollbar {
-  display: none;
-}
-</style>

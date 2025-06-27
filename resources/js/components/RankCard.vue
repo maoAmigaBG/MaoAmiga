@@ -14,28 +14,22 @@
           class="w-[50px] h-[50px] object-cover object-center border border-[#F6F6FA] rounded-full" />
       </div>
       <div class="points-wrapper flex flex-col gap-0.5">
-        <span class="user font-semibold text-purple-800">@raaaaaaa</span>
-        <span class="quantity">R$ 10.000,00</span>
+        <span class="user font-semibold text-purple-800">{{ membro.name }}</span>
+        <span class="quantity">R$ {{ membro.donate_amount }}</span>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import medal1 from '@/assets/medal1.png'
 import medal2 from '@/assets/medal2.png'
 import medal3 from '@/assets/medal3.png'
 
-export default {
-  name: 'RankCard',
-  props: {
-    index: Number,
-  },
+const { index, membro } = defineProps({
+  index: Number,
+  membro: Object
+})
 
-  data() {
-    return {
-      medalImages: [medal1, medal2, medal3]
-    }
-  }
-}
+const medalImages = [medal1, medal2, medal3]
 </script>
