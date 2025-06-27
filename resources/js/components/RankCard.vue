@@ -10,8 +10,7 @@
     </span>
     <div class="body w-full flex items-center gap-2.5">
       <div class="profile-image w-fit h-fit border-[3px] border-purple-800 rounded-full">
-        <img src="@/assets/puppy.jpg" alt="Africano Caçando Cachorro"
-          class="w-[50px] h-[50px] object-cover object-center border border-[#F6F6FA] rounded-full" />
+        <img :src="membro.foto ? '/storage/' + membro.foto : defaultUserImg " class="w-[50px] h-[50px] object-cover object-center border border-[#F6F6FA] rounded-full" />
       </div>
       <div class="points-wrapper flex flex-col gap-0.5">
         <span class="user font-semibold text-purple-800">{{ membro.name }}</span>
@@ -25,6 +24,7 @@
 import medal1 from '@/assets/medal1.png'
 import medal2 from '@/assets/medal2.png'
 import medal3 from '@/assets/medal3.png'
+import defaultUserImg from '@/assets/default_user.jpg';
 
 const { index, membro } = defineProps({
   index: Number,
