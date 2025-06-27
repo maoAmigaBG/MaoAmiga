@@ -12,7 +12,7 @@
       >
         <span class="text-xl">{{ item.icon }}</span>
         <span class="text-sm">{{ item.label }}</span>
-      </li>
+    </li>
     </ul>
   </div>
 </template>
@@ -20,17 +20,21 @@
 <script setup>
 import { ref } from 'vue'
 
-
 const selected = ref('detalhes')
 
 const menu = [
-  { label: 'Detalhes da conta', route: 'user.profile', icon: '🏠' },
-  { label: 'Gerenciar conta', route: 'user.editprofile', icon: '👤' },
+  { label: 'Detalhes da conta', route: 'user/profile/', icon: '🏠' },
+  { label: 'Gerenciar conta', route: 'user/profile/{:id}/edit', icon: '👤' },
   { label: 'ONGs relacionada', route: 'user.relations', icon: '🌍' },
-  { label: 'Sair da conta', route: 'auth.logout', icon: '↩️' }
+  { label: 'Sair da conta', route: 'user/logout', icon: '↩️' }
 ]
 
 function selectItem(routeName) {
   selected.value = routeName
 }
+
+const props = defineProps({
+  user: Object
+});
+
 </script>

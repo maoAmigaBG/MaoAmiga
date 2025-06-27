@@ -66,7 +66,7 @@ const form = ref({
 })
 
 const idade = computed(() => {
-  if (!form.value.dataNascimento) return 0
+  if (!props.user.data_nasc) return 0
   const nascimento = new Date(form.value.dataNascimento)
   const hoje = new Date()
   let anos = hoje.getFullYear() - nascimento.getFullYear()

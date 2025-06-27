@@ -37,7 +37,7 @@ class CampaignSeeder extends Seeder
                 "descricao" => "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!",
                 "materiais" => "",
                 "meta" => 15500,
-                "foto" => "campaigns/tamandua_campaign.jpg",
+                "foto" => "campaigns/tamandua_campaign.png",
                 "ong_id" => 2,
             ],
             [
@@ -46,7 +46,7 @@ class CampaignSeeder extends Seeder
                 "descricao" => "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!",
                 "materiais" => "<ul><li>lorem ipsum</li><li>terno para tartarugas</li><li>pantufa para tartarugas</li><li>óculos de sol para tartarugas</li><li>fone de ouvido intraauricular para tartarugas</li></ul>",
                 "meta" => null,
-                "foto" => "campaigns/tamandua_campaign.jpg",
+                "foto" => "campaigns/tamandua_campaign.png",
                 "ong_id" => 2,
             ],
         ]);

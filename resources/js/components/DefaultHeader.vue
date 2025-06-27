@@ -9,7 +9,7 @@
       <div class="menu-icon-wrapper">
         <i class="fas fa-bars inline-block relative h-8 w-8 text-[#F6F6FA] text-[32px] cursor-pointer"></i>
       </div>
-      <span class="logo-name text-[#F6F6FA] text-[38px] font-bold font-poppins cursor-pointer select-none">Logo</span>
+      <img src="@/assets/logo_header.png" alt="Logo" class="h-16">
     </div>
     <aside
       :class="['sidebar fixed top-[91px] left-0 max-h-[90vh] h-full w-[calc(25%-10px)] p-[10px_20px] bg-[#F6F6FA] border-none border-r-4 border-[#E5E4E2] shadow-[10px_0_10px_-4px_rgba(0,0,0,0.2)] transition-all duration-300 z-[1]', { 'sidebar-open': sidebarOpen }]"

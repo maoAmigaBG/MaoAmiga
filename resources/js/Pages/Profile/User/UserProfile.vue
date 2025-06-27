@@ -6,7 +6,7 @@
         :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg " alt="Foto do usuário" />
       <!-- Quando arrumarmos as fts -->
       <!-- :src="props.user.foto ? props.user.foto : 'alguma foto padrao'" alt="Foto do usuário" /> -->
-      <MenuUserProfile />
+      <MenuUserProfile :user= props.user />
     </div>
 
     <div class="flex flex-col gap-2 flex-1">
