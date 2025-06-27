@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin_pedido;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Membro;
+use App\Models\Campanha;
+use App\Models\Admin_pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +24,8 @@ class MembroController extends Controller
         return Inertia::render('Profile/User/OngsRelations', [
             "user" => $user,
             "ong_relations" => $relations->isEmpty() ? null : $relations,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     public function edit($membro_id) {
@@ -38,6 +41,8 @@ class MembroController extends Controller
             "member" => $membro,
             "ong" => Ong::select(["ongs.id","ongs.nome","ongs.subtitulo","ongs.descricao","ongs.lat","ongs.lng","ongs.endereco","ongs.banner","ongs.foto","ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get(),
             "user" => User::where("id", $membro->user_id)->first(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function update(Request $request) {
@@ -51,13 +56,13 @@ class MembroController extends Controller
         }
         $membro->update($request->all());
         return redirect()->route("user.relations", [
-            "user" => $membro->user_id
+            "user" => $membro->user_id,
         ]);
     }
     public function request_aprove(Membro $membro) {
         if (Gate::denies("admin", $membro)) {
             return redirect()->route("relations.edit", [
-                "user" => Auth::user()->id
+                "user" => Auth::user()->id,
             ]);
         }
         $admin_pedido = Admin_pedido::where("membro_id", $membro->id)->where("ong_id", $membro->ong_id)->first();
@@ -98,6 +103,8 @@ class MembroController extends Controller
     public function trash() {
         return [
             "members" => Membro::onlyTrashed()->where("user_id", Auth::user()->id)->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 }

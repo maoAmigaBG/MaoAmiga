@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ong;
+use App\Models\Membro;
 use App\Models\Campanha;
 use Illuminate\Http\Request;
 use App\Models\Membros_doacoe;
@@ -15,6 +16,8 @@ class CampaignController extends Controller {
             "campaign" => $campanha,
             "ong" => Ong::where("id", $campanha->ong_id)->get(),
             "donate_amount" => Membros_doacoe::selectRaw("SUM(doacao) as donation_amount")->where("campanha_id", $campanha->id)->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function create(Ong $ong) {
@@ -26,7 +29,9 @@ class CampaignController extends Controller {
             ]);
         }
         return [
-            "ong_id" => $ong->id
+            "ong_id" => $ong->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function store(Request $request) {
@@ -47,7 +52,12 @@ class CampaignController extends Controller {
             'foto' => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'ong_id' => ["required"],
         ]);
-        Campanha::create($request_data);
+        $ong = Campanha::create($request_data);
+        return redirect()->route("ong.profile", [
+            "ong" => $ong->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+        ]);
     }
     public function show(string $id) {
         //

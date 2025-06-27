@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ong;
+use App\Models\Membro;
 use App\Models\Contato;
+use App\Models\Campanha;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +43,8 @@ class ContatoController extends Controller
         return [
             "contacts_list" => $possible_contacts,
             "ong_id" => $ong->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 

@@ -20,6 +20,9 @@ class GeneralController extends Controller {
         ]);
     }
     function about() {
-        return Inertia::render('Sobre');
+        return Inertia::render('Sobre',[
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+        ]);
     }
 }

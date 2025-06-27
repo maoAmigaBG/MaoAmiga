@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Ong;
 use App\Models\Post;
+use App\Models\Membro;
+use App\Models\Campanha;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -31,6 +33,8 @@ class PostController extends Controller
         }
         return [
             "ong_id" => $ong->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 
@@ -55,7 +59,7 @@ class PostController extends Controller
         ]);
         Post::create($request_data);
         return redirect()->route("ong.posts", [
-            "ong" => $ong->id
+            "ong" => $ong->id,
         ]);
     }
 
@@ -98,7 +102,9 @@ class PostController extends Controller
         }
         $post->delete();
         return redirect()->route("ong.posts", [
-            "ong" => $ong->id
+            "ong" => $ong->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
 }

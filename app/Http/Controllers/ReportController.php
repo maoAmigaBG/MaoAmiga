@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ong;
+use App\Models\Membro;
 use App\Models\Report;
+use App\Models\Campanha;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +25,8 @@ class ReportController extends Controller
         return [
             "ong" => $ong,
             "user" => Auth::user(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 

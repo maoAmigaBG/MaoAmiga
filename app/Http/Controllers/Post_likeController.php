@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Membro;
+use App\Models\Campanha;
 use App\Models\Post_like;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,6 +35,8 @@ class Post_likeController extends Controller
         ]);
         return [
             "like_id" => $like->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 

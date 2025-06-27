@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Membro;
+use App\Models\Campanha;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRequest;
@@ -78,6 +80,8 @@ class UserController extends Controller {
         return Inertia::render('Profile/User/UserProfile', [
             "user" => $user,
             "own_profile" => Auth::check() && Auth::user()->id == $user->id,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     public function edit_profile(User $user){
@@ -90,6 +94,8 @@ class UserController extends Controller {
         }
         return Inertia::render('Profile/User/EditProfile', [
             "user" => $user,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     public function update(Request $request) {

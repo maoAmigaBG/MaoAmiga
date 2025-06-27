@@ -24,11 +24,16 @@ class OngController extends Controller {
             "ongs" => Ong::orderBy("created_at", "asc")
                 ->limit(20)
                 ->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
 
     function map() {
-        return Inertia::render('Mapa');
+        return Inertia::render('Mapa', [
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+        ]);
     }
     function map_location($lat, $lng, $radius = 10, $theme_list = null) {
         $ongs = Ong::select(["ongs.id","ongs.nome","ongs.subtitulo","ongs.descricao","ongs.lat","ongs.lng","ongs.endereco","ongs.banner","ongs.foto","ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get();
@@ -45,6 +50,8 @@ class OngController extends Controller {
         }
         return [
             "ongs" => $possible_locations,
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function page(Ong $ong) {
@@ -54,6 +61,8 @@ class OngController extends Controller {
             "members_amount" => Membro::members_amount($ong->id),
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
             "reports" => Report::where("ong_id", $ong->id)->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     public function members(Ong $ong) {
@@ -70,6 +79,8 @@ class OngController extends Controller {
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
             "reports" => Report::where("ong_id", $ong->id)->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function posts(Ong $ong) {
@@ -89,6 +100,8 @@ class OngController extends Controller {
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
             "reports" => Report::where("ong_id", $ong->id)->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function campaigns(Ong $ong) {
@@ -104,6 +117,7 @@ class OngController extends Controller {
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
             "reports" => Report::where("ong_id", $ong->id)->get(),
+            "ranking" => Membro::ranking(),
         ];
     }
     public function contacts(Ong $ong) {
@@ -113,11 +127,15 @@ class OngController extends Controller {
             "members_amount" => Membro::members_amount($ong->id),
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "reports" => Report::where("ong_id", $ong->id)->get(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function create() {
         return [
             "ong_types" => Ong_type::all(),
+            "ranking" => Membro::ranking(),
+            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function store(OngRequest $request) {
