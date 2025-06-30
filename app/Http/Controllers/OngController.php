@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Report;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\Post;
 use Inertia\Inertia;
 use App\Models\Membro;
+use App\Models\Report;
 use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\OngRequest;
 use App\Http\Controllers\Controller;
@@ -138,6 +139,33 @@ class OngController extends Controller {
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
+    public function adress_provider($cep) {
+        $cep = str_replace("-", "", $cep);
+        $url = "https://cep.awesomeapi.com.br/json/$cep";
+        $response = Http::withOptions(['verify' => false])->get($url);
+        return $response->json();
+        /*
+        // response example
+        {
+            "cep": "95700206",
+            "address_type": "Avenida",
+            "address_name": "Osvaldo Aranha",
+            "address": "Avenida Osvaldo Aranha",
+            "state": "RS",
+            "district": "Juventude da Enologia",
+            "lat": "-29.164745",
+            "lng": "-51.521011",
+            "city": "Bento Gonçalves",
+            "city_ibge": "4302105",
+            "ddd": "54"
+        }
+            ou
+        {
+            "code":"not_found",
+            "message":"O CEP 95700201 nao foi encontrado"
+        }
+        */
+    }
     public function store(OngRequest $request) {
         $request_data = $request->validated();
         if ($request_data["ong_type"] == 0) {
@@ -146,6 +174,36 @@ class OngController extends Controller {
             ]);
             $request_data["ong_type"] = $type->id;
         }
+        $api_key = env("GEOAPIFY_API_KEY");
+        $adress = $request["endereco"] ." ". $request["instituicao"] ." ". $request["cep"];
+        $url = "https://api.geoapify.com/v1/geocode/search";
+        $response = Http::withOptions(['verify' => false])->get($url, [
+            "text" => $adress,
+            "apiKey" => $api_key,
+        ]);
+        $coordinates = [
+            "lat" => null,
+            "lng" => null,
+        ];
+        if (isset($response["features"])) {
+            $coordinates["lat"] = $response["features"][0]["properties"]["lat"];
+            $coordinates["lng"] = $response["features"][0]["properties"]["lon"];
+        } else {
+            return redirect()->route("ong.create")->withInput($request_data)->withErrors([
+                "Não encontrado" => "Endereço inserido não encontrado"
+            ]);
+        }
+        $request_data = [
+            'nome' => $request_data["nome"],
+            'subtitulo' => $request_data["subtitulo"],
+            'descricao' => $request_data["descricao"],
+            'lat' => $coordinates["lat"],
+            'log' => $coordinates["lon"],
+            'endereco' => $request_data["endereco"],
+            'banner' => $request_data["banner"],
+            'foto' => $request_data["foto"],
+            'ong_type_id' => $request_data["ong_type_id"],
+        ];
         $ong = Ong::create($request_data);
         Membro::create([
             "admin" => true,

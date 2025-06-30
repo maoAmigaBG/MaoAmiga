@@ -39,6 +39,7 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
             Route::post('/update', [OngController::class, "update"])->name("ong.update");
             Route::get('/destroy/{ong}', [OngController::class, "destroy"])->name("ong.destroy");
         });
+        Route::get('/adress_provider/{cep}', [OngController::class, "adress_provider"])->name("ong.adress_provider");
     });
     Route::prefix("/campaign")->group(function() {
         Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
