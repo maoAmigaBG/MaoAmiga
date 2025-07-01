@@ -166,28 +166,20 @@ class OngController extends Controller {
         }
         */
     }
-    public function store(OngRequest $request) {
-        $request_data = $request->validated();
-        if ($request_data["ong_type"] == 0) {
-            $type = Ong_type::create([
-                "nome" => $request_data["ong_new_type"],
-            ]);
-            $request_data["ong_type"] = $type->id;
-        }
+    public function coordinates_api($adress, $request_data) {
+        $coordinates = [
+            "lat" => null,
+            "lon" => null,
+        ];
         $api_key = env("GEOAPIFY_API_KEY");
-        $adress = $request["endereco"] ." ". $request["instituicao"] ." ". $request["cep"];
         $url = "https://api.geoapify.com/v1/geocode/search";
         $response = Http::withOptions(['verify' => false])->get($url, [
             "text" => $adress,
             "apiKey" => $api_key,
         ]);
-        $coordinates = [
-            "lat" => null,
-            "lng" => null,
-        ];
         if (isset($response["features"])) {
             $coordinates["lat"] = $response["features"][0]["properties"]["lat"];
-            $coordinates["lng"] = $response["features"][0]["properties"]["lon"];
+            $coordinates["lon"] = $response["features"][0]["properties"]["lon"];
         } else {
             return redirect()->route("ong.create")->withInput($request_data)->withErrors([
                 "Não encontrado" => "Endereço inserido não encontrado"
@@ -204,6 +196,18 @@ class OngController extends Controller {
             'foto' => $request_data["foto"],
             'ong_type_id' => $request_data["ong_type_id"],
         ];
+        return $request_data;
+    }
+    public function store(OngRequest $request) {
+        $request_data = $request->validated();
+        if ($request_data["ong_type"] == 0) {
+            $type = Ong_type::create([
+                "nome" => $request_data["ong_new_type"],
+            ]);
+            $request_data["ong_type"] = $type->id;
+        }
+        $adress = $request["endereco"] ." ". $request["instituicao"] ." ". $request["cep"];
+        $request_data = $this->coordinates_api($adress, $request_data);
         $ong = Ong::create($request_data);
         Membro::create([
             "admin" => true,
@@ -237,6 +241,14 @@ class OngController extends Controller {
             ]);
         }
         $request_data = $request->validated();
+        if ($request_data["ong_type"] == 0) {
+            $type = Ong_type::create([
+                "nome" => $request_data["ong_new_type"],
+            ]);
+            $request_data["ong_type"] = $type->id;
+        }
+        $adress = $request["endereco"] ." ". $request["instituicao"] ." ". $request["cep"];
+        $request_data = $this->coordinates_api($adress, $request_data);
         $ong->update($request_data);
         return redirect()->route("ong.profile",[
             "ong" => $ong->id,
