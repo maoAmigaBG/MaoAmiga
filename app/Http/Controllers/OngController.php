@@ -178,8 +178,12 @@ class OngController extends Controller {
             "apiKey" => $api_key,
         ]);
         if (isset($response["features"])) {
-            $coordinates["lat"] = $response["features"][0]["properties"]["lat"];
-            $coordinates["lon"] = $response["features"][0]["properties"]["lon"];
+            foreach ($response["features"] as $item) {
+                if (isset($item["properties"]["name"])) {
+                    $coordinates["lat"] = $item["properties"]["lat"];
+                    $coordinates["lon"] = $item["properties"]["lon"];
+                }
+            }
         } else {
             return redirect()->route("ong.create")->withInput($request_data)->withErrors([
                 "Não encontrado" => "Endereço inserido não encontrado"
