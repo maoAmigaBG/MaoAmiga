@@ -19,8 +19,8 @@ class Post extends Model {
     public function likes(): HasMany {
         return $this->hasMany(Post_like::class);
     }
-    public function getWithLikes() {
+    static public function getWithLikes() {
         $user_id = Auth::check() ? Auth::user()->id : 0;
-        $posts = Post::withExists(['likes as liked' => function ($query) use ($user_id) {$query->where('user_id', $user_id);}])->orderBy("created_at", "asc")->with('ong')->limit(20)->get();
+        return $posts = self::withExists(['likes as liked' => function ($query) use ($user_id) {$query->where('user_id', $user_id);}])->orderBy("created_at", "asc")->with('ong');
     }
 }
