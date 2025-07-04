@@ -21,10 +21,17 @@ use Illuminate\Support\Facades\Http;
 
 class OngController extends Controller {
     function index() {
+        $ongs = Ong::orderBy("created_at", "asc")
+        ->limit(20)
+        ->get();
+
+        $ongs->transform(function ($ong) {
+            $ong->membersAmount = Membro::members_amount($ong->id);
+            return $ong;
+        });
+
         return Inertia::render('Ong', [
-            "ongs" => Ong::orderBy("created_at", "asc")
-                ->limit(20)
-                ->get(),
+            "ongs" => $ongs,
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);

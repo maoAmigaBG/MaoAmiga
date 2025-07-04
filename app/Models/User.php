@@ -53,4 +53,7 @@ class User extends Authenticatable
         Carbon::setLocale('pt_BR');
         return Carbon::parse($date)->translatedFormat('d \d\e F \d\e Y');
     }
+    public function likes() {
+        return $this->hasMany(Post_like::class);
+    }
 }
