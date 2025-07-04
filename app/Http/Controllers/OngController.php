@@ -71,31 +71,6 @@ class OngController extends Controller {
             "reports" => Report::where("ong_id", $ong->id)->get(),
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get(),
-            "is_adm" => Ong::is_adm($ong),
-        ]);
-    }
-    public function members(Ong $ong) {
-        return [
-            "ong" => $ong,
-            "members" => Membro::select([ 'membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id', ])
-                ->selectRaw("SUM(doacao) as donate_amount")
-                    ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
-                    ->where("membros.ong_id", $ong->id)
-                    ->groupBy('membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id')
-                    ->orderByDesc("donate_amount")
-                    ->get(),
-            "members_amount" => Membro::members_amount($ong->id),
-            "ong_type" => Ong_type::find($ong->ong_type_id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get(),
-            "reports" => Report::where("ong_id", $ong->id)->get(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get(),
-            "is_adm" => Ong::is_adm($ong),
-        ];
-    }
-    public function posts(Ong $ong) {
-        return [
-            "ong" => $ong,
             "posts" => Post::getWithLikes()->select(["posts.id", "posts.nome", "posts.descricao",])
                 ->selectSub(function ($query) {
                     $query->from('post_likes')
@@ -105,6 +80,30 @@ class OngController extends Controller {
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->get(),
+            "ong_campaigns" => Campanha::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
+                ->selectRaw("SUM(doacao) as donation_amount")
+                ->join("membros_doacoes", "membros_doacoes.campanha_id", "=", "campanhas.id")
+                ->where("campanhas.ong_id", $ong->id)
+                ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
+                ->get(),
+            "members" => Membro::select([ 'membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id', ])
+                ->selectRaw("SUM(doacao) as donate_amount")
+                    ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
+                    ->where("membros.ong_id", $ong->id)
+                    ->groupBy('membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id')
+                    ->orderByDesc("donate_amount")
+                    ->get(),
+            "is_adm" => Ong::is_adm($ong),
+        ]);
+    }
+    public function members(Ong $ong) {
+        return [
+            "ong" => $ong,
+        ];
+    }
+    public function posts(Ong $ong) {
+        return [
+            "ong" => $ong,
             "members_amount" => Membro::members_amount($ong->id),
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
@@ -117,12 +116,6 @@ class OngController extends Controller {
     public function campaigns(Ong $ong) {
         return [
             "ong" => $ong,
-            "campaigns" => Campanha::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
-                ->selectRaw("SUM(doacao) as donation_amount")
-                ->join("membros_doacoes", "membros_doacoes.campanha_id", "=", "campanhas.id")
-                ->where("ong_id", $ong->id)
-                ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
-                ->get(),
             "members_amount" => Membro::members_amount($ong->id),
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "contacts" => Contato::where("ong_id", $ong->id)->get(),
