@@ -16,7 +16,7 @@ class GeneralController extends Controller {
 
     function index() {
         return Inertia::render('Home', [
-            "posts" => Post::getWithLikes(),
+            "posts" => Post::getWithLikes()->limit(20)->get(),
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);

@@ -94,7 +94,7 @@ class OngController extends Controller {
     public function posts(Ong $ong) {
         return [
             "ong" => $ong,
-            "posts" => Post::select(["posts.id", "posts.nome", "posts.descricao",])
+            "posts" => Post::getWithLikes()->select(["posts.id", "posts.nome", "posts.descricao",])
                 ->selectSub(function ($query) {
                     $query->from('post_likes')
                         ->selectRaw('COUNT(*)')
@@ -102,7 +102,6 @@ class OngController extends Controller {
                 }, 'likes_num')
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
-                ->orderByDesc("posts.created_at")
                 ->get(),
             "members_amount" => Membro::members_amount($ong->id),
             "ong_type" => Ong_type::find($ong->ong_type_id),
