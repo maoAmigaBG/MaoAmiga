@@ -11,8 +11,6 @@ use App\Models\Report;
 use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Requests\OngRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
