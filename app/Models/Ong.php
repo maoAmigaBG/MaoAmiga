@@ -29,6 +29,7 @@ class Ong extends Model {
         return Carbon::parse($date)->translatedFormat('d \d\e F \d\e Y');
     }
     static public function is_adm($ong) {
-        return Membro::where("user_id", Auth::user()->id)->where("ong_id", $ong->id)->where("admin", true)->first();
+        $user_id = Auth::check() ? Auth::user()->id : 0;
+        return Membro::where("user_id", $user_id)->where("ong_id", $ong->id)->where("admin", true)->first();
     }
 }
