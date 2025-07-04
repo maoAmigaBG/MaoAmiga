@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\Auth;
 class GeneralController extends Controller {
 
     function index() {
-        $user_id = Auth::check() ? Auth::user()->id : 0;
-        $posts = Post::withExists(['likes as liked' => function ($query) use ($user_id) {$query->where('user_id', $user_id);}])->orderBy("created_at", "asc")->with('ong')->limit(20)->get();
         return Inertia::render('Home', [
-            "posts" => $posts,
+            "posts" => Post::getWithLikes(),
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
