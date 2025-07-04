@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string("foto")->nullable();
             $table->foreignId("ong_type_id")->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
