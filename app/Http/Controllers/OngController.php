@@ -185,6 +185,8 @@ class OngController extends Controller {
         ]);
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Ong inserida com sucesso",
         ]);
     }
     public function edit(Ong $ong) {
@@ -221,7 +223,7 @@ class OngController extends Controller {
         return redirect()->route("ong.profile",[
             "ong" => $ong->id,
         ])->with([
-            "Sucesso" => "Perfil de ong alterado com sucesso",
+            "Sucesso" => "Ong alterada com sucesso",
         ]);
     }
     public function destroy(Ong $ong) {
@@ -234,7 +236,7 @@ class OngController extends Controller {
         }
         $ong->delete();
         return redirect()->route("index")->with([
-            "Sucesso" => "Perfil de ong excluído",
+            "Sucesso" => "Ong excluída",
         ]);
     }
 }

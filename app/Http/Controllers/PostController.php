@@ -56,6 +56,8 @@ class PostController extends Controller
         Post::create($request_data);
         return redirect()->route("ong.posts", [
             "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Post inserido com sucesso",
         ]);
     }
 
@@ -100,6 +102,8 @@ class PostController extends Controller
         $post->update($request_data);
         return redirect()->route("ong.profile", [
             "ong" => $post->ong_id,
+        ])->with([
+            "Sucesso" => "Post editado com sucesso",
         ]);
     }
 
@@ -121,6 +125,8 @@ class PostController extends Controller
             "ong" => $ong->id,
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+        ])->with([
+            "Sucesso" => "Post excluído com sucesso",
         ]);
     }
 }

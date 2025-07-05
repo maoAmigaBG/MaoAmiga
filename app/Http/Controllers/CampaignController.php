@@ -50,6 +50,8 @@ class CampaignController extends Controller {
             "ong" => $ong->id,
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+        ])->with([
+            "Sucesso" => "Campanha inserida com sucesso",
         ]);
     }
     public function show(string $id) {
@@ -81,6 +83,8 @@ class CampaignController extends Controller {
         $campanha->update($request_data);
         return redirect()->route("campaign.index", [
             "campanha" => $campanha->id,
+        ])->with([
+            "Sucesso" => "Campanha editada com sucesso",
         ]);
     }
     public function destroy(string $id) {
@@ -96,6 +100,8 @@ class CampaignController extends Controller {
         $campanha->delete();
         return redirect()->route("ong.profile", [
             "ong" => $ong_id,
+        ])->with([
+            "Sucesso" => "Campanha excluída com sucesso",
         ]);
     }
 }

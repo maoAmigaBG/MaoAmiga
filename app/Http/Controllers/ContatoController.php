@@ -68,6 +68,8 @@ class ContatoController extends Controller
         Contato::create($request_data);
         return redirect()->route("ong.contacts", [
             "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Contato inserido com sucesso",
         ]);
     }
 
@@ -110,6 +112,8 @@ class ContatoController extends Controller
         $contato->delete();
         return redirect()->route("ong.contacts", [
             "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Contato excluído com sucesso",
         ]);
     }
 }

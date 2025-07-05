@@ -67,7 +67,9 @@ class UserController extends Controller {
         $user = User::create($request_data);
         Auth::login($user);
 
-        return Inertia::location(route('index'));
+        return Inertia::location(route('index'))->with([
+            "Sucesso" => "Perfil criado com sucesso, bem vindo!",
+        ]);
     }
     public function logout() {
         Auth::logout();
@@ -98,7 +100,7 @@ class UserController extends Controller {
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
-    public function update(Request $request) {
+    public function update(UserRequest $request) {
         $user = User::find($request->id);
         if (Gate::denies("update", $user)) {
             return redirect()->route("user.profile", [
@@ -112,6 +114,8 @@ class UserController extends Controller {
         $user->update($request_data);
         return redirect()->route("user.profile", [
             "user" => $user->id,
+        ])->with([
+            "Sucesso" => "Perfil editado com sucesso",
         ]);
     }
     public function destroy(User $user) {
@@ -121,6 +125,9 @@ class UserController extends Controller {
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
+        }
+        if (Auth::user()->id == $user->id) {
+            Auth::logout();
         }
         $user->delete();
         return Auth::user()->id == $user->id ? redirect()->route("logout") : redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);

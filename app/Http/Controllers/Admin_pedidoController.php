@@ -97,5 +97,9 @@ class Admin_pedidoController extends Controller
                 "Acesso negado" => "Você não possui permissão para realizar esta ação",
             ]);
         }
+        $admin_pedido->delete();
+        return redirect()->route("ong.profile", [
+            "ong" => $ong->id,
+        ]);
     }
 }

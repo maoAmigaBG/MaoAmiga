@@ -40,7 +40,9 @@ class ReportController extends Controller
             "ong_id" => ["required"],
         ]);
         Report::create($request_data);
-        return redirect()->route("index");
+        return redirect()->route("index")->with([
+            "Sucesso" => "Report enviado com sucesso",
+        ]);
     }
 
     /**

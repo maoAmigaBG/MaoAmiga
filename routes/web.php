@@ -41,13 +41,17 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
         Route::middleware(LoginVerifyer::class)->group(function () {
             Route::get('/create/{ong}', [CampaignController::class, "create"])->name("campaign.create");
+            Route::get('/edit/{ong}', [CampaignController::class, "edit"])->name("campaign.edit");
+            Route::post('/update', [CampaignController::class, "update"])->name("campaign.update");
             Route::post('/store', [CampaignController::class, "store"])->name("campaign.store");
             Route::get('/delete/{campanha}', [CampaignController::class, "destroy"])->name("campaign.destroy");
         });
     });
     Route::prefix("/post")->group(function() {
         Route::get('/create/{ong}', [PostController::class, "create"])->name("post.create");
+        Route::get('/edit/{ong}', [PostController::class, "edit"])->name("post.edit");
         Route::post('/store', [PostController::class, "store"])->name("post.store");
+        Route::post('/update', [PostController::class, "update"])->name("post.update");
         Route::get('/delete/{post}', [PostController::class, "destroy"])->name("post.destroy");
         Route::get('/like/{post}', [PostController::class, "create"])->name("post.like");
         Route::get('/deslike/{post_like}', [PostController::class, "destroy"])->name("post.deslike");
