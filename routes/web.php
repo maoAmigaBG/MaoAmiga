@@ -21,12 +21,8 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
         Route::get('/map_location/{lat}/{lng}', [OngController::class, "map_location"])->name("ong.map_location");
-        Route::get('/members/{ong}', [OngController::class, "members"])->name("ong.members");
         Route::get('/profile/{ong}', [OngController::class, "page"])->name("ong.profile");
-        Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
-        Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
         Route::prefix("/contacts")->group(function() {
-            Route::get('/list/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
             Route::get('/create/{ong}', [ContatoController::class, "create"])->name("contacts.create");
             Route::post('/store', [ContatoController::class, "store"])->name("contacts.store");
             Route::get('/delete/{contato}', [ContatoController::class, "destroy"])->name("contacts.destroy");

@@ -96,45 +96,6 @@ class OngController extends Controller {
             "is_adm" => Ong::is_adm($ong),
         ]);
     }
-    public function members(Ong $ong) {
-        return [
-            "ong" => $ong,
-        ];
-    }
-    public function posts(Ong $ong) {
-        return [
-            "ong" => $ong,
-            "members_amount" => Membro::members_amount($ong->id),
-            "ong_type" => Ong_type::find($ong->ong_type_id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get(),
-            "reports" => Report::where("ong_id", $ong->id)->get(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get(),
-            "is_adm" => Ong::is_adm($ong),
-        ];
-    }
-    public function campaigns(Ong $ong) {
-        return [
-            "ong" => $ong,
-            "members_amount" => Membro::members_amount($ong->id),
-            "ong_type" => Ong_type::find($ong->ong_type_id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get(),
-            "reports" => Report::where("ong_id", $ong->id)->get(),
-            "ranking" => Membro::ranking(),
-            "is_adm" => Ong::is_adm($ong),
-        ];
-    }
-    public function contacts(Ong $ong) {
-        return [
-            "ong" => $ong,
-            "contacts" => Contato::where("ong_id", $ong->id)->get(),
-            "members_amount" => Membro::members_amount($ong->id),
-            "ong_type" => Ong_type::find($ong->ong_type_id),
-            "reports" => Report::where("ong_id", $ong->id)->get(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
-        ];
-    }
     public function create() {
         return [
             "ong_types" => Ong_type::all(),
