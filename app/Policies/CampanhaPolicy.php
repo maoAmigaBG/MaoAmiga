@@ -39,7 +39,8 @@ class CampanhaPolicy
      */
     public function update(User $user, Campanha $campanha): bool
     {
-        return false;
+        $member = Membro::where("ong_id", $campanha->ong_id)->where("user_id", $user->id)->where("admin", true);
+        return !empty($member);
     }
 
     /**

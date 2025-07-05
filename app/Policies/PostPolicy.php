@@ -38,9 +38,9 @@ class PostPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Post $post): bool
-    {
-        return false;
+    public function update(User $user, Post $post): bool {
+        $member = Membro::where("ong_id", $post->ong_id)->where("user_id", $user->id)->where("admin", true);
+        return !empty($member);
     }
 
     /**

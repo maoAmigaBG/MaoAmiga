@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CampaignRequest;
 use App\Models\Ong;
 use App\Models\Membro;
 use App\Models\Campanha;
@@ -34,7 +35,7 @@ class CampaignController extends Controller {
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ];
     }
-    public function store(Request $request) {
+    public function store(CampaignRequest $request) {
         $ong = Ong::where("id", $request["ong_id"]);
         if (Gate::denies("create", $ong)) {
             return redirect()->route("ong.profile", [
@@ -43,15 +44,7 @@ class CampaignController extends Controller {
                 "Acesso negado" => "Você não possui permissão para editar esta ong"
             ]);
         }
-        $request_data = $request->validate([
-            'nome' => ["required"],
-            'tipo' => ["required"],
-            'descricao' => ["required"],
-            'materiais' => ["nullable"],
-            'meta' => ["nullable"],
-            'foto' => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'ong_id' => ["required"],
-        ]);
+        $request_data = $request->validated();
         $ong = Campanha::create($request_data);
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
@@ -62,11 +55,33 @@ class CampaignController extends Controller {
     public function show(string $id) {
         //
     }
-    public function edit(string $id) {
-        // creio que não precisa
+    public function edit(Campanha $campanha) {
+        if (Gate::denies("update", $campanha)) {
+            return redirect()->route("campaign.index", [
+                "campanha" => $campanha->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta campanha"
+            ]);
+        }
+        return [
+            "ong" => Ong::find($campanha->id),
+            "campanha" => $campanha,
+        ];
     }
-    public function update(Request $request, string $id) {
-        //
+    public function update(CampaignRequest $request) {
+        $campanha = Campanha::find($request["id"]);
+        if (Gate::denies("update", $campanha)) {
+            return redirect()->route("campaign.index", [
+                "campanha" => $campanha->id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para alterar esta campanha"
+            ]);
+        }
+        $request_data = $request->validated();
+        $campanha->update($request_data);
+        return redirect()->route("campaign.index", [
+            "campanha" => $campanha->id,
+        ]);
     }
     public function destroy(string $id) {
         $campanha = Campanha::where("id", $id)->first();
