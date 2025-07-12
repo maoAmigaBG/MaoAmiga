@@ -23,7 +23,7 @@ class OngRequest extends FormRequest
     {
         return [
             "nome" => ["required"],
-            "subtitulo" => ["nullable","max:20"],
+            "subtitulo" => ["nullable","max:30"],
             "descricao" => ["nullable","max:5000"],
             "cep" => ["required"],
             "endereco" => ["required"],
