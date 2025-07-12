@@ -11,6 +11,14 @@
                     <h1 class="main-title font-bold font-poppins text-purple-800 text-3xl pb-8">Informações Principais
                     </h1>
                     <form class="login-form w-full" enctype="multipart/form-data" @submit.prevent="submit">
+                        <div v-if="Object.keys(errors).length">
+  <ul>
+    <li v-for="(error, key) in errors" :key="key" class="text-red-600">
+      {{ error }}
+    </li>
+  </ul>
+</div>
+
                         <div class="flex flex-col items-center w-full gap-5">
                             <div class="form-group relative w-full">
                                 <input

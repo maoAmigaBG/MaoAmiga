@@ -230,8 +230,8 @@ class OngController extends Controller
             "descricao" => "nullable|max:5000",
             "endereco" => "required",
             "ong_type" => "required",
-            "banner" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            "banner" => ["nullable", 'image', 'mimes:jpg,jpeg,png'],
+            "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png'],
         ]);
 
         // Handle new type creation if needed
@@ -246,7 +246,7 @@ class OngController extends Controller
 
         // Handle banner upload
         if ($request->hasFile("banner")) {
-            $path = $request->file("banner")->store("ongs/banners", "public");
+            $path = $request->file("banner")->store("ongs", "public");
             $request_data["banner"] = $path;
         } else {
             unset($request_data["banner"]);
@@ -254,7 +254,7 @@ class OngController extends Controller
 
         // Handle foto upload
         if ($request->hasFile("foto")) {
-            $path = $request->file("foto")->store("ongs/fotos", "public");
+            $path = $request->file("foto")->store("ongs", "public");
             $request_data["foto"] = $path;
         } else {
             unset($request_data["foto"]);

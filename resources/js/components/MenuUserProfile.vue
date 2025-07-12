@@ -1,5 +1,5 @@
 <template>
-  <div class="w-60 bg-gray-200 p-2 rounded-md">
+  <div class="w-60 bg-slate-50 p-2 rounded-md">
     <ul class="space-y-1">
       <li
         v-for="item in menu"
@@ -7,7 +7,7 @@
         @click="selectItem(item.route)"
         :class="[
           'flex items-center gap-2 px-4 py-2 rounded cursor-pointer transition',
-          selected === item.route ? 'bg-cyan-900 text-white' : 'hover:bg-gray-300'
+          selected === item.route ? 'bg-purple-800 text-white' : 'hover:bg-purple-600 hover:text-white'
         ]"
       >
         <span class="text-xl">{{ item.icon }}</span>
@@ -20,7 +20,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const selected = ref('detalhes')
+const selected = ref('user/profile/')
 
 const menu = [
   { label: 'Detalhes da conta', route: 'user/profile/', icon: '🏠' },

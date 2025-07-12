@@ -3,7 +3,7 @@
         :style="{ backgroundImage: `url('${bgSvg}')` }">
         <div class="login-wrapper absolute top-0 bottom-0 left-0 w-1/2 h-full flex flex-col p-10 bg-transparent">
             <div class="header flex justify-start justify-self-start top-0">
-                <span class="logo text-3xl text-purple-900 font-bold">Logo</span>
+                <img class="logo w-56" src="@/assets/purple_horizontal_logo.png" alt="Logo">
             </div>
             <div class="body flex grow justify-center items-center px-4 py-0">
                 <div class="w-3/5 h-5/6">
@@ -41,12 +41,14 @@
                             <div class="form-group relative w-full">
                                 <input
                                     class="h-[50px] p-2 font-md text-purple-800 bg-purple-50 border-2 border-purple-800 outline-none rounded-md w-full"
-                                    v-model="form.password_confirmation" type="password" id="password_confirmation" name="password_confirmation" required>
+                                    v-model="form.password_confirmation" type="password" id="password_confirmation"
+                                    name="password_confirmation" required>
                                 <label
                                     class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-purple-50 pointer-events-none"
                                     for="password">Confirmar Senha</label>
                             </div>
-                            <button type="submit" class="w-full h-[50px] p-2 font-lg font-bold text-purple-50 bg-purple-800 rounded-md cursor-pointer hover:bg-purple-700 transition">Registrar</button>
+                            <button type="submit"
+                                class="w-full h-[50px] p-2 font-lg font-bold text-purple-50 bg-purple-800 rounded-md cursor-pointer hover:bg-purple-700 transition">Registrar</button>
                         </div>
                     </form>
 
@@ -57,13 +59,16 @@
                     </div>
 
                     <div class="social-btn flex justify-center gap-4">
-                        <button class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
+                        <button
+                            class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
                             <i class="fa-brands fa-instagram text-3xl text-purple-800"></i>
                         </button>
-                        <button class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
+                        <button
+                            class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
                             <i class="fa-brands fa-google text-3xl text-purple-800"></i>
                         </button>
-                        <button class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
+                        <button
+                            class="border-2 border-gray-500 rounded-lg w-28 h-14 flex items-center justify-center cursor-pointer">
                             <i class="fa-brands fa-apple text-3xl text-purple-800"></i>
                         </button>
                     </div>
