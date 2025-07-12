@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col self-center min-h-screen w-1/2 pt-[91px] pb-2">
+    <div class="flex-1 flex flex-col self-center min-h-screen w-1/2 pt-[91px]">
       <slot></slot>
     </div>
 

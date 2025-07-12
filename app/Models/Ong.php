@@ -21,6 +21,10 @@ class Ong extends Model {
         'foto',
         'ong_type_id',
     ];
+
+    public function type() {
+        return $this->belongsTo(Ong_type::class, 'ong_type_id');
+    }
     public function members() {
         return  $this->hasMany(Membro::class);
     }
