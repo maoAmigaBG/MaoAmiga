@@ -31,6 +31,12 @@
         {{ props.user.age }} Anos
       </p>
 
+      <SubNav class="-mx-10" :items="items" :active="activeKey"/>
+
+      <main class="p-6">
+        <slot></slot>
+      </main>
+
       <h3 class="font-poppins font-bold text-2xl text-purple-800 pb-4">Descrição: </h3>
       <p class="font-poppins text-gray-600 text-xl indent-15 pb-6">{{ props.user.descricao }}</p>
     </div>
@@ -40,11 +46,19 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import MenuUserProfile from '../../../components/MenuUserProfile.vue';
+import { usePage } from '@inertiajs/vue3';
+import SubNav from '../../../components/SubNav.vue';
 import defaultUserImg from '@/assets/default_user.jpg';
 
-const props = defineProps({
-  user: Object
-});
+const { props } = usePage()
+const user = props.user
+
+const items = [
+  { key: 'profile', label: 'Detalhes da Conta', to: `/user/profile/${user.id}` },
+  { key: 'manage', label: 'Gerenciar Conta', to: `/user/profile/${user.id}/edit`},
+  { key: 'relations', label: 'ONGs Relacionadas', to: `/user/relations/${user.id}`},
+  { key: 'exit', label: 'Sair da Conta', to: '/user/logout'}
+]
+
+const activeKey = 'profile'
 </script>

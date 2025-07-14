@@ -9,7 +9,7 @@
       <div class="ong-relations-header flex items-center justify-between">
         <h3 class="font-poppins font-bold text-2xl text-purple-800 pb-4">ONGs Relacionadas: </h3>
         <button
-          class="flex items-center gap-2 bg-purple-800 font-bold text-white px-4 py-3 rounded hover:bg-purple-600">
+          class="flex items-center gap-2 bg-purple-800 font-bold text-white px-4 py-3 rounded cursor-pointer hover:bg-purple-600">
           <i class="fa-solid fa-pen-to-square"></i>
           Gerenciar ONGs
         </button>
