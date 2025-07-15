@@ -1,17 +1,16 @@
 <template>
 
-    <!-- <img class="w-60 h-55 rounded-md object-cover border-2 border-purple-800"
+  <!-- <img class="w-60 h-55 rounded-md object-cover border-2 border-purple-800"
           :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg" alt="Foto do usuário" /> -->
-    <!-- Quando arrumarmos as fts -->
-    <!-- :src="props.user.foto ? props.user.foto : 'alguma foto padrao'" alt="Foto do usuário" /> -->
-    <!-- <MenuUserProfile :user=props.user /> -->
+  <!-- Quando arrumarmos as fts -->
+  <!-- :src="props.user.foto ? props.user.foto : 'alguma foto padrao'" alt="Foto do usuário" /> -->
+  <!-- <MenuUserProfile :user=props.user /> -->
 
   <div class="profile-wrapper min-w-full flex flex-col justify-center">
-    <div class="profile-box relative w-full h-50 flex flex-col bg-gradient-to-t from-violet-900 to-purple-500 text-center text-white p-10">
-      <img 
-      class="profile-pic absolute top-[50%] w-48 p-2 bg-purple-50 rounded-full shadow-lg"
-      :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg" 
-      alt="Foto do usuário" />
+    <div
+      class="profile-box relative w-full h-50 flex flex-col bg-gradient-to-t from-violet-900 to-purple-500 text-center text-white p-10">
+      <img class="profile-pic absolute top-[50%] w-48 p-2 bg-purple-50 rounded-full shadow-lg"
+        :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg" alt="Foto do usuário" />
     </div>
     <div class="profile-info pt-30 px-10">
       <h3 class="font-poppins font-bold text-purple-800 text-4xl pb-2">{{ props.user.name }}</h3>
@@ -31,34 +30,46 @@
         {{ props.user.age }} Anos
       </p>
 
-      <SubNav class="-mx-10" :items="items" :active="activeKey"/>
-
-      <main class="p-6">
-        <slot></slot>
-      </main>
-
       <h3 class="font-poppins font-bold text-2xl text-purple-800 pb-4">Descrição: </h3>
       <p class="font-poppins text-gray-600 text-xl indent-15 pb-6">{{ props.user.descricao }}</p>
+
+      <SubNav class="-mx-10" :items="items" v-model:active="activeKey" />
+
+      <main class="p-6">
+        <div class="profile-info" v-if="activeKey === 'profile'">
+          
+        </div>
+
+        <div class="ong-relations" v-else-if="activeKey === 'relations'">
+
+        </div>
+
+        <div class="liked-posts" v-else-if="activeKey === 'likes'">
+
+        </div>
+      </main>
     </div>
   </div>
 
-  
+
 </template>
 
 <script setup>
 import { usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import SubNav from '../../../components/SubNav.vue';
 import defaultUserImg from '@/assets/default_user.jpg';
+
+const activeKey = ref('profile')
 
 const { props } = usePage()
 const user = props.user
 
 const items = [
-  { key: 'profile', label: 'Detalhes da Conta', to: `/user/profile/${user.id}` },
-  { key: 'manage', label: 'Gerenciar Conta', to: `/user/profile/${user.id}/edit`},
-  { key: 'relations', label: 'ONGs Relacionadas', to: `/user/relations/${user.id}`},
-  { key: 'exit', label: 'Sair da Conta', to: '/user/logout'}
+  { key: 'profile', label: 'Posts', to: '#' },
+  { key: 'likes', label: 'Curtidas', to: '#' },
+  { key: 'relations', label: 'ONGs Relacionadas', to: '#' },
 ]
 
-const activeKey = 'profile'
+console.log(activeKey)
 </script>
