@@ -33,11 +33,8 @@ class Post_likeController extends Controller
             "user_id" => Auth::user()->id,
             "post_id" => $post->id,
         ]);
-        return [
-            "like_id" => $like->id,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
-        ];
+        
+        return response()->json([ 'like_id' => $like->id ]);
     }
 
     /**

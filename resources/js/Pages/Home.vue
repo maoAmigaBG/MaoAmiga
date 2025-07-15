@@ -10,6 +10,8 @@
       :time="post.created_at"
       :foto="post.foto"
       :description="post.descricao"
+      :liked="post.liked"
+      :likeId="post.likes?.[0]?.id"
     />
   </Feeds>
 </template>

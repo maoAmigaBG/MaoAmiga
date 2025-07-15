@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin_pedidoController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Post_likeController;
 use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -53,8 +54,8 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::post('/store', [PostController::class, "store"])->name("post.store");
         Route::post('/update', [PostController::class, "update"])->name("post.update");
         Route::get('/delete/{post}', [PostController::class, "destroy"])->name("post.destroy");
-        Route::get('/like/{post}', [PostController::class, "create"])->name("post.like");
-        Route::get('/deslike/{post_like}', [PostController::class, "destroy"])->name("post.deslike");
+        Route::get('/like/{post}', [Post_likeController::class, "create"])->name("post.like");
+        Route::get('/deslike/{post_like}', [Post_likeController::class, "destroy"])->name("post.deslike");
     })->middleware(LoginVerifyer::class);
 
 });
