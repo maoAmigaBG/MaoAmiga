@@ -6,7 +6,7 @@
           v-for="item in items"
           :key="item.key"
           @click="$emit('update:active', item.key)"
-          class="px-4 py-2 font-bold whitespace-nowrap transition"
+          class="px-4 py-2 font-bold whitespace-nowrap cursor-pointer transition"
           :class="isActive(item)
             ? 'bg-purple-800 text-slate-50 border-4 border-purple-600 rounded-full'
             : 'text-purple-800'"
