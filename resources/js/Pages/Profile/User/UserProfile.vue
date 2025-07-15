@@ -1,11 +1,5 @@
 <template>
 
-    <!-- <img class="w-60 h-55 rounded-md object-cover border-2 border-purple-800"
-          :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg" alt="Foto do usuário" /> -->
-    <!-- Quando arrumarmos as fts -->
-    <!-- :src="props.user.foto ? props.user.foto : 'alguma foto padrao'" alt="Foto do usuário" /> -->
-    <!-- <MenuUserProfile :user=props.user /> -->
-
   <div class="profile-wrapper min-w-full flex flex-col justify-center">
     <div class="profile-box relative w-full h-50 flex flex-col bg-gradient-to-t from-violet-900 to-purple-500 text-center text-white p-10">
       <img 

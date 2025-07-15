@@ -16,7 +16,8 @@
                             <i class="fa-solid fa-users"></i> {{ props.members_amount }}
                         </span>
                     </div>
-                    <Link 
+                    
+                    <Link v-if="props.is_adm"
                         :href="`/ong/edit/${props.ong.id}`"
                         class="flex items-center justify-center gap-2 text-white text-2xl hover:text-purple-600"
                     >
@@ -49,5 +50,7 @@ const props = defineProps({
     ong: Object,
     ong_type: Object,
     members_amount: Number,
+    is_adm: Boolean
 });
+
 </script>

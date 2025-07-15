@@ -12,12 +12,12 @@
                     </h1>
                     <form class="login-form w-full" enctype="multipart/form-data" @submit.prevent="submit">
                         <div v-if="Object.keys(errors).length">
-  <ul>
-    <li v-for="(error, key) in errors" :key="key" class="text-red-600">
-      {{ error }}
-    </li>
-  </ul>
-</div>
+                            <ul>
+                                <li v-for="(error, key) in errors" :key="key" class="text-red-600">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div>
 
                         <div class="flex flex-col items-center w-full gap-5">
                             <div class="form-group relative w-full">
@@ -39,8 +39,7 @@
                             <div class="form-group relative w-full">
                                 <textarea
                                     class="h-[100px] p-2 font-md text-purple-800 bg-slate-50 border-2 border-purple-800 outline-none rounded-md w-full"
-                                    v-model="form.descricao" type="descricao" id="descricao" name="descricao"
-                                    ></textarea>
+                                    v-model="form.descricao" type="descricao" id="descricao" name="descricao"></textarea>
                                 <label
                                     class="absolute top-0 left-4 max-h-fit transform -translate-y-1/2 text-purple-800 text-lg px-2 py-0 bg-slate-50 pointer-events-none"
                                     for="descricao">Descrição</label>
@@ -62,16 +61,13 @@
                             </div>
 
                             <div class="form-group relative w-full">
-                                <label
-                                    for="ong_type"
+                                <label for="ong_type"
                                     class="block mb-2 text-purple-800 font-semibold text-lg pointer-events-none">
                                     Tipo
                                 </label>
-                                <select
-                                    v-model="form.ong_type"
+                                <select v-model="form.ong_type"
                                     class="h-[50px] px-2 font-md text-purple-800 bg-slate-50 border-2 border-purple-800 outline-none rounded-md w-full"
-                                    name="ong_type" 
-                                    id="ong_type">
+                                    name="ong_type" id="ong_type">
                                     <option v-for="type in props.ong_types" :key="type.id" :value="type.id">
                                         {{ type.nome }}
                                     </option>
@@ -80,8 +76,8 @@
                             </div>
 
                             <div class="form-group relative w-full">
-                                <input hidden ref="realBannerBtn" @change="updateBannerSpan" type="file"
-                                    accept="image/*" id="banner" name="banner">
+                                <input hidden ref="realBannerBtn" @change="updateBannerSpan" type="file" accept="image/*"
+                                    id="banner" name="banner">
                                 <button type="button" id="custom-banner-btn" @click="bannerSelect"
                                     class="inline-flex items-center gap-4 justify-center min-w-2/5 h-[50px] p-2 font-lg font-bold text-purple-50 bg-purple-800 rounded-md cursor-pointer hover:bg-purple-700 transition">
                                     <i class="fa-solid fa-images text-lg"></i>

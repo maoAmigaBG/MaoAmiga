@@ -201,9 +201,7 @@ class OngController extends Controller
     public function edit(Ong $ong)
     {
         if (Gate::denies("update", $ong)) {
-            return Inertia::render("Profile/Ong/OngProfile")->withErrors([
-                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
-            ]);
+            return Inertia::location("/ong/profile/" . $ong->id);
         }
 
         return Inertia::render("Profile/Ong/EditProfile", [
