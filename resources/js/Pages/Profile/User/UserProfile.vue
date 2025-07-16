@@ -46,6 +46,23 @@
           </Feeds>
         </div>
 
+        <div class="" v-else-if="activeKey === 'main'">
+           <div class="ranking-wrapper min-w-full flex flex-col justify-center">
+            <div class="ranking-header py-3 px-10">
+              <div class="header flex items-center justify-center">
+                <h3 class="inline-block font-poppins font-bold text-2xl text-purple-800">Ranking Atual: </h3>
+                <span class="ranking inline-flex flex-1 justify-center items-center text-4xl text-purple-800">
+                  Top {{ own_rank.position }}
+                </span>
+              </div>
+            </div>
+            <div class="ranking-info-wrapper pt-6 indent-10">
+              <p class="pb-4">textoahahahahah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti voluptates explicabo laborum asperiores. Eaque perspiciatis repudiandae similique laborum? Placeat dolorem ex voluptatem adipisci totam, neque assumenda vel doloribus pariatur.</p>
+              <p>textoahahahahah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti voluptates explicabo laborum asperiores. Eaque perspiciatis repudiandae similique laborum? Placeat dolorem ex voluptatem adipisci totam, neque assumenda vel doloribus pariatur.</p>
+            </div>
+          </div>
+        </div>
+
         <div class="ong-relations" v-else-if="activeKey === 'relations'">
           <div class="ong-relations-wrapper min-w-full flex flex-col justify-center">
             <div class="relations-info py-3 px-10">
@@ -107,6 +124,8 @@ import defaultUserImg from '@/assets/default_user.jpg'
 
 const { props } = usePage()
 
+const own_rank = props.own_rank
+
 const likes = ref([... (props.likes?.data ?? [])])
 const likesNext = computed(() => props.likes?.next_page_url ?? null)
 
@@ -116,6 +135,7 @@ const postsNext = ref(props.postsNext ?? null)
 const ong_relations = ref(props.ong_relations || [])
 
 const items = [
+  { key: 'main', label: 'Ranking', to: '#' },
   { key: 'likes', label: 'Curtidas', to: '#' },
   { key: 'relations', label: 'ONGs Relacionadas', to: '#' },
 ]
@@ -125,6 +145,8 @@ if (props.isAdminOfOng === true) {
     key: 'posts', label: 'Posts', to: '#' ,
   })
 }
+
+console.log(props.own_rank)
 
 const activeKey = ref(items[0].key)
 

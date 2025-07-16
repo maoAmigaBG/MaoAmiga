@@ -113,6 +113,19 @@ class UserController extends Controller
             $postsNext = $postsPaginated->nextPageUrl();
         }
 
+        $ranking = Membro::ranking();
+
+        $own_rank = null;
+        foreach ($ranking as $index => $rankedUser) {
+            if ($rankedUser->user_id == $user->id) {
+                $own_rank = [
+                    'position' => $index + 1,
+                    'donate_amount' => $rankedUser->donate_amount,
+                ];
+                break;
+            }
+        }
+
         $likedPostsPaginated = Post::getWithLikes()
             ->whereHas('likes', fn($q) => $q->where('user_id', $user_id))
             ->paginate(10);
@@ -132,6 +145,7 @@ class UserController extends Controller
         return Inertia::render('Profile/User/UserProfile', [
             "user" => $user,
             "own_profile" => Auth::check() && Auth::user()->id == $user_id,
+            "own_rank" => $own_rank,
             "isAdminOfOng" => $isAdminOfOng,
             "posts" => $posts,
             "postsNext" => $postsNext,
