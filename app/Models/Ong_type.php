@@ -8,4 +8,8 @@ class Ong_type extends Model {
     protected $fillable = [
         'nome',
     ];
+
+    public function ongs() {
+        return $this->hasMany(Ong::class);
+    }
 }

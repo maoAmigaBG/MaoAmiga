@@ -6,7 +6,7 @@
       <div class="flex-1">
         <p class="mb-6 text-lg text-gray-700 leading-relaxed text-justify">
           Nosso site nasceu com um propósito simples e essencial:
-          <strong class="font-semibold text-indigo-600">dar mais visibilidade e apoio às ONGs de Bento
+          <strong class="font-semibold text-purple-800">dar mais visibilidade e apoio às ONGs de Bento
             Gonçalves</strong>.
         </p>
 
@@ -25,7 +25,7 @@
       </div>
       <div class="flex-1 flex flex-col items-center">
         <img src="@/assets/team.jpeg" alt="" class="rounded-md w-2/3">
-        <p class="text-xl font-bold text-gray-800 mb-4">Time do Causa em Foco</p>
+        <p class="text-xl font-bold text-purple-800 mb-4">Time do Causa em Foco</p>
       </div>
     </div>
 

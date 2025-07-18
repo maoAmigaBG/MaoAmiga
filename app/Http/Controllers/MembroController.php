@@ -57,6 +57,8 @@ class MembroController extends Controller
         $membro->update($request->all());
         return redirect()->route("user.relations", [
             "user" => $membro->user_id,
+        ])->with([
+            "Sucesso" => "Membresia editada com sucesso",
         ]);
     }
     public function request_aprove(Membro $membro) {
@@ -72,6 +74,8 @@ class MembroController extends Controller
         ]);
         return redirect()->route("ong.requests", [
             "ong" => $membro->ong_id,
+        ])->with([
+            "Sucesso" => "Pedido aceito com sucesso",
         ]);
     }
     public function destroy(Membro $membro) {
@@ -85,6 +89,8 @@ class MembroController extends Controller
         $membro->delete();
         return redirect()->route("user.relations", [
             "user" => $membro->user_id,
+        ])->with([
+            "Sucesso" => "Membresia excluída com sucesso",
         ]);
     }
     public function restore(Membro $membro) {
@@ -98,6 +104,8 @@ class MembroController extends Controller
         $membro->restore();
         return redirect()->route("user.relations", [
             "user" => $membro->user_id,
+        ])->with([
+            "Sucesso" => "Membresia restaurada com sucesso",
         ]);
     }
     public function trash() {

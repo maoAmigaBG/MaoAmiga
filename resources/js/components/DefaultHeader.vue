@@ -3,7 +3,7 @@
     class="header fixed top-0 left-0 w-full flex items-center justify-between px-[75px] py-[15px] bg-gradient-to-t from-purple-800 to-purple-600 border-b-4 border-purple-800 shadow-[0_0_10px_7px_rgba(0,0,0,0.2)] z-[999] h-[91px]"
   >
     <div
-      :class="['logo flex items-center gap-[20px] transition-all duration-300', { 'header-open': sidebarOpen }]"
+      :class="['logo flex items-center gap-[20px] transition-all duration-300 cursor-pointer', { 'header-open': sidebarOpen }]"
       @click="toggleMenu"
     >
       <div class="menu-icon-wrapper">

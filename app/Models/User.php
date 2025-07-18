@@ -53,6 +53,14 @@ class User extends Authenticatable
         Carbon::setLocale('pt_BR');
         return Carbon::parse($date)->translatedFormat('d \d\e F \d\e Y');
     }
+
+    //verifica se usuário é admin de qualquer ONG, necessário para praticidade no front
+    public function isAdminOfOng()
+    {
+        return Membro::where('user_id', $this->id)->where('admin', true)->exists();
+    }
+
+
     public function likes() {
         return $this->hasMany(Post_like::class);
     }

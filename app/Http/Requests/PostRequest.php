@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OngRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,9 @@ class OngRequest extends FormRequest
     {
         return [
             "nome" => ["required"],
-            "subtitulo" => ["nullable","max:30"],
-            "descricao" => ["nullable","max:5000"],
-            "cep" => ["required"],
-            "endereco" => ["required"],
-            "instituicao" => ["required"],
-            "banner" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            "descricao" => ["required"],
             "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            "ong_type" => ["required"],
-            "ong_new_type" => ["nullable"],
+            "ong_id" => ["required"],
         ];
     }
 }

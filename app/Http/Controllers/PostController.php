@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Ong;
 use App\Models\Post;
 use App\Models\Membro;
@@ -41,7 +42,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         $ong = Ong::where("id", $request["ong_id"])->first();
         if (Gate::denies("create", $ong)) {
@@ -51,15 +52,12 @@ class PostController extends Controller
                 "Acesso negado" => "Você não possui permissão para editar esta ong"
             ]);
         }
-        $request_data = $request->validate([
-            "nome" => ["required"],
-            "descricao" => ["required"],
-            "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            "ong_id" => ["required"],
-        ]);
+        $request_data = $request->validated();
         Post::create($request_data);
         return redirect()->route("ong.posts", [
             "ong" => $ong->id,
+        ])->with([
+            "Sucesso" => "Post inserido com sucesso",
         ]);
     }
 
@@ -74,17 +72,39 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(Post $post) {
+        if (Gate::denies("update", $post)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $post->ong_id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este post"
+            ]);
+        }
+        return [
+            "post" => $post,
+            "ong" => Ong::find($post->ong_id),
+        ];
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(PostRequest $request) {
+        $post = Post::find($request["id"]);
+        if (Gate::denies("update", $post)) {
+            return redirect()->route("ong.profile", [
+                "ong" => $post->ong_id,
+            ])->withErrors([
+                "Acesso negado" => "Você não possui permissão para editar este post"
+            ]);
+        }
+        $request_data = $request->validated();
+        $post->update($request_data);
+        return redirect()->route("ong.profile", [
+            "ong" => $post->ong_id,
+        ])->with([
+            "Sucesso" => "Post editado com sucesso",
+        ]);
     }
 
     /**
@@ -97,7 +117,7 @@ class PostController extends Controller
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
             ])->withErrors([
-                "Acesso negado" => "Você não possui permissão para editar esta ong"
+                "Acesso negado" => "Você não possui permissão para editar este post"
             ]);
         }
         $post->delete();
@@ -105,6 +125,8 @@ class PostController extends Controller
             "ong" => $ong->id,
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+        ])->with([
+            "Sucesso" => "Post excluído com sucesso",
         ]);
     }
 }

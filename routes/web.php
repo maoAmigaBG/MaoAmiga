@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin_pedidoController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Post_likeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -21,12 +23,8 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
         Route::get('/map_location/{lat}/{lng}', [OngController::class, "map_location"])->name("ong.map_location");
-        Route::get('/members/{ong}', [OngController::class, "members"])->name("ong.members");
         Route::get('/profile/{ong}', [OngController::class, "page"])->name("ong.profile");
-        Route::get('/posts/{ong}', [OngController::class, "posts"])->name("ong.posts");
-        Route::get('/campaigns/{ong}', [OngController::class, "campaigns"])->name("ong.campaigns");
         Route::prefix("/contacts")->group(function() {
-            Route::get('/list/{ong}', [OngController::class, "contacts"])->name("ong.contacts");
             Route::get('/create/{ong}', [ContatoController::class, "create"])->name("contacts.create");
             Route::post('/store', [ContatoController::class, "store"])->name("contacts.store");
             Route::get('/delete/{contato}', [ContatoController::class, "destroy"])->name("contacts.destroy");
@@ -36,8 +34,10 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
             Route::get('/create', [OngController::class, "create"])->name("ong.create");
             Route::post('/store', [OngController::class, "store"])->name("ong.store");
             Route::get('/edit/{ong}', [OngController::class, "edit"])->name("ong.edit");
-            Route::post('/update', [OngController::class, "update"])->name("ong.update");
+            Route::put('/update/{ong}', [OngController::class, "update"])->name("ong.update");
             Route::get('/destroy/{ong}', [OngController::class, "destroy"])->name("ong.destroy");
+            Route::get('/report/{ong}', [ReportController::class, "create"])->name("ong.report");
+            Route::post('/report', [ReportController::class, "store"])->name("ong.report.store");
         });
         Route::get('/adress_provider/{cep}', [OngController::class, "adress_provider"])->name("ong.adress_provider");
     });
@@ -45,16 +45,20 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
         Route::middleware(LoginVerifyer::class)->group(function () {
             Route::get('/create/{ong}', [CampaignController::class, "create"])->name("campaign.create");
+            Route::get('/edit/{ong}', [CampaignController::class, "edit"])->name("campaign.edit");
+            Route::post('/update', [CampaignController::class, "update"])->name("campaign.update");
             Route::post('/store', [CampaignController::class, "store"])->name("campaign.store");
             Route::get('/delete/{campanha}', [CampaignController::class, "destroy"])->name("campaign.destroy");
         });
     });
     Route::prefix("/post")->group(function() {
         Route::get('/create/{ong}', [PostController::class, "create"])->name("post.create");
+        Route::get('/edit/{ong}', [PostController::class, "edit"])->name("post.edit");
         Route::post('/store', [PostController::class, "store"])->name("post.store");
+        Route::post('/update', [PostController::class, "update"])->name("post.update");
         Route::get('/delete/{post}', [PostController::class, "destroy"])->name("post.destroy");
-        Route::get('/like/{post}', [PostController::class, "create"])->name("post.like");
-        Route::get('/deslike/{post_like}', [PostController::class, "destroy"])->name("post.deslike");
+        Route::get('/like/{post}', [Post_likeController::class, "create"])->name("post.like");
+        Route::get('/deslike/{post_like}', [Post_likeController::class, "destroy"])->name("post.deslike");
     })->middleware(LoginVerifyer::class);
 
 });

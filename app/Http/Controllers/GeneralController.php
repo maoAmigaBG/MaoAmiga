@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Auth;
 class GeneralController extends Controller {
 
     function index() {
+        $posts = Post::getWithLikes()->paginate(10);
+
         return Inertia::render('Home', [
-            "posts" => Post::getWithLikes()->limit(20)->get(),
+            "posts" => $posts->items(),
+            "nextPageUrl" => $posts->nextPageUrl(),
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);

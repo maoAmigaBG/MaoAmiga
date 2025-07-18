@@ -5,16 +5,26 @@
                 <img class="h-full border-4 border-purple-800 rounded-md object-cover"
                     :src="'/storage/' + props.ong.foto" alt="">
             </div>
-            <div class="ong-info text-shadow-lg h-full flex flex-1 flex-col justify-center">
+            <div class="ong-info text-shadow-lg h-full flex flex-1 flex-col justify-center relative">
                 <h1 class="text-4xl text-white font-bold font-poppins">{{ props.ong.nome }}</h1>
                 <small class="text-xl text-white font-poppins">{{ props.ong.subtitulo }}</small>
-                <div class="info-footer absolute bottom-0 flex gap-8 pb-5">
-                    <span class="type flex gap-2 items-center text-white text-2xl">
-                        <i class="fas fa-hands-helping"></i> {{ props.ong_type.nome }}
-                    </span>
-                    <span class="members flex gap-2 items-center text-white text-2xl">
-                        <i class="fa-solid fa-users"></i> {{ props.members_amount }}
-                    </span>
+                <div class="info-footer absolute bottom-0 left-0 right-0 flex items-center justify-between gap-8 pb-5 px-4">
+                    <div class="flex gap-8">
+                        <span class="type flex gap-2 items-center text-white text-2xl">
+                            <i class="fas fa-hands-helping"></i> {{ props.ong_type.nome }}
+                        </span>
+                        <span class="members flex gap-2 items-center text-white text-2xl">
+                            <i class="fa-solid fa-users"></i> {{ props.members_amount }}
+                        </span>
+                    </div>
+                    
+                    <Link v-if="props.is_adm"
+                        :href="`/ong/edit/${props.ong.id}`"
+                        class="flex items-center justify-center gap-2 text-white text-2xl hover:text-purple-600"
+                    >
+                        <i class="fas fa-edit"></i>
+                        Editar
+                    </Link>
                 </div>
             </div>
         </div>
@@ -83,6 +93,7 @@ const props = defineProps({
     campaigns: Array,
     is_adm: Object,
     members_amount: Number,
+    is_adm: Boolean
 });
 
 const currentTab = ref('sobre');

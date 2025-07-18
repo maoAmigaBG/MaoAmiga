@@ -16,6 +16,10 @@ class Membro extends Model
         'ong_id',
     ];
 
+    public function ong()
+    {
+        return $this->belongsTo(Ong::class, 'ong_id');
+    }
     public static function ranking($ong_id = null)
     {
         if (empty($ong_id)) {

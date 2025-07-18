@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+
+
 module.exports = {
   content: [
     './resources/**/*.blade.php',
@@ -10,7 +12,7 @@ module.exports = {
       fontFamily: {
         poppins: ['Poppins', 'Arial'],
       },
-    },
+    }
   },
   plugins: [
     require('@tailwindcss/line-clamp'),

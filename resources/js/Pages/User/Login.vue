@@ -3,7 +3,7 @@
         :style="{ backgroundImage: `url('${bgSvg}')` }">
         <div class="login-wrapper absolute top-0 bottom-0 left-0 w-1/2 h-full flex flex-col p-10 bg-transparent">
             <div class="header flex justify-start justify-self-start top-0">
-                <span class="logo text-3xl text-purple-900 font-bold">Logo</span>
+                <img class="logo w-56" src="@/assets/purple_horizontal_logo.png" alt="Logo">
             </div>
             <div class="body flex grow justify-center items-center px-4 py-2">
                 <div class="w-3/5 h-3/4">
