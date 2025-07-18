@@ -5,6 +5,7 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Post_likeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,8 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
             Route::get('/edit/{ong}', [OngController::class, "edit"])->name("ong.edit");
             Route::put('/update/{ong}', [OngController::class, "update"])->name("ong.update");
             Route::get('/destroy/{ong}', [OngController::class, "destroy"])->name("ong.destroy");
+            Route::get('/report/{ong}', [ReportController::class, "create"])->name("ong.report");
+            Route::post('/report', [ReportController::class, "store"])->name("ong.report.store");
         });
         Route::get('/adress_provider/{cep}', [OngController::class, "adress_provider"])->name("ong.adress_provider");
     });
