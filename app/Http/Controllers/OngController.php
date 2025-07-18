@@ -11,8 +11,8 @@ use App\Models\Report;
 use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
-use Illuminate\Http\Request;
 use App\Http\Requests\OngRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -86,8 +86,8 @@ class OngController extends Controller
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->get(),
             "ong_campaigns" => Campanha::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
-                ->selectRaw("SUM(doacao) as donation_amount")
-                ->join("membros_doacoes", "membros_doacoes.campanha_id", "=", "campanhas.id")
+                ->selectRaw("SUM(membros_doacoes.doacao) as donation_amount")
+                ->leftJoin("membros_doacoes", "membros_doacoes.campanha_id", "=", "campanhas.id")
                 ->where("campanhas.ong_id", $ong->id)
                 ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
                 ->get(),
@@ -195,8 +195,8 @@ class OngController extends Controller
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
         ])->with([
-                    "Sucesso" => "Ong inserida com sucesso",
-                ]);
+            "Sucesso" => "Ong inserida com sucesso",
+        ]);
     }
     public function edit(Ong $ong)
     {
@@ -217,8 +217,8 @@ class OngController extends Controller
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para alterar esta Ong"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
         }
 
         // Manually validate just the fields present in edit // AQUI QUE TU POE TUA LOGICA NOVA KRL
@@ -277,8 +277,8 @@ class OngController extends Controller
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
         ])->with([
-                    "Sucesso" => "Ong alterada com sucesso",
-                ]);
+            "Sucesso" => "Ong alterada com sucesso",
+        ]);
     }
 
     public function destroy(Ong $ong)
@@ -287,8 +287,8 @@ class OngController extends Controller
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para alterar esta Ong"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
         }
         $ong->delete();
         return redirect()->route("index")->with([
