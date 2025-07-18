@@ -54,9 +54,9 @@
 
         <template v-else-if="currentTab === 'campanhas'">
             <h1 class="text-2xl text-gray-600 font-bold py-2">Campanhas</h1>
-            <template v-for="(campaign, index) in props.campaigns">
-                <CampaignCard :campanha="campaign" />
-            </template>
+            <div class="campaigns-wrapper flex flex-col gap-4">
+                <CampaignCard v-for="(campaign, index) in props.campaigns" :campanha="campaign" />
+            </div>
         </template>
 
         <template v-else-if="currentTab === 'posts'">
