@@ -20,6 +20,7 @@ class GeneralController extends Controller {
         return Inertia::render('Home', [
             "posts" => $posts->items(),
             "nextPageUrl" => $posts->nextPageUrl(),
+            "login_checked" => Auth::check(),
             "ranking" => Membro::ranking(),
             "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
         ]);
