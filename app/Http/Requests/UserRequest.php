@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
         $action_rule = $this->input('is_update', false) ? "required" : "nullable";
         return [
             "name" => ["required", "min:5"],
-            "email" => ["required", "email", Rule::unique("users", "email")],
+            "email" => ["required", "email"],
             "password" => ["required", Password::min(8)->letters()->numbers(), ($this->input('is_update', false) ? "" : "confirmed")],
             "descricao" => ["nullable"],
             "data_nasc" => [$action_rule, "date", "before:today"],
