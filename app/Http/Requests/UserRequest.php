@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 
 class UserRequest extends FormRequest
 {
@@ -21,16 +22,39 @@ class UserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
-        $action_rule = $this->input('is_update', false) ? "required" : "nullable";
+        $isUpdate = $this->input('is_update') ?? false;
+
+        $passwordRules = [];
+
+        if ($isUpdate) {
+            $passwordRules = ['required', 'string'];
+        } else {
+            $passwordRules = ['required', 'min:4', 'confirmed'];
+        }
+
         return [
-            "name" => ["required", "min:5"],
-            "email" => ["required", "email"],
-            "password" => ["required", Password::min(8)->letters()->numbers(), ($this->input('is_update', false) ? "" : "confirmed")],
-            "descricao" => ["nullable"],
-            "data_nasc" => [$action_rule, "date", "before:today"],
-            'foto' => [$action_rule, 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($this->id),
+            ],
+            'data_nasc' => ['nullable', 'date'],
+            'descricao' => ['nullable', 'string'],
+            'anonimo' => ['nullable', 'boolean'],
+            'foto' => [
+                'nullable',
+                'sometimes',
+                'file',
+                'image',
+                'mimes:jpeg,png,jpg,gif,svg',
+                'max:2048',
+            ],
+            'password' => $passwordRules,
         ];
     }
 }

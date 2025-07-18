@@ -4,7 +4,7 @@
       class="profile-box relative w-full h-50 flex flex-col bg-gradient-to-t from-violet-900 to-purple-500 text-center text-white p-10"
     >
       <img
-        class="profile-pic absolute top-[50%] w-48 p-2 bg-purple-50 rounded-full shadow-lg"
+        class="profile-pic absolute top-[50%] w-48 aspect-square object-cover p-2 bg-purple-50 rounded-full shadow-lg"
         :src="props.user.foto ? '/storage/' + props.user.foto : defaultUserImg"
         alt="Foto do usuário"
       />
@@ -57,8 +57,8 @@
               </div>
             </div>
             <div class="ranking-info-wrapper pt-6 indent-10">
-              <p class="pb-4">textoahahahahah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti voluptates explicabo laborum asperiores. Eaque perspiciatis repudiandae similique laborum? Placeat dolorem ex voluptatem adipisci totam, neque assumenda vel doloribus pariatur.</p>
-              <p>textoahahahahah Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti voluptates explicabo laborum asperiores. Eaque perspiciatis repudiandae similique laborum? Placeat dolorem ex voluptatem adipisci totam, neque assumenda vel doloribus pariatur.</p>
+              <p class="pb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti voluptates explicabo laborum asperiores. Eaque perspiciatis repudiandae similique laborum? Placeat dolorem ex voluptatem adipisci totam, neque assumenda vel doloribus pariatur.</p>
+              <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti voluptates explicabo laborum asperiores. Eaque perspiciatis repudiandae similique laborum? Placeat dolorem ex voluptatem adipisci totam, neque assumenda vel doloribus pariatur.</p>
             </div>
           </div>
         </div>
