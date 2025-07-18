@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -38,7 +39,7 @@ class UserController extends Controller
         ]);
         $user = User::where("email", "=", $request_data["email"])->first();
         if (empty($user)) {
-            return redirect()->route("user.login")->withErrors([
+            return redirect()->route("auth.login")->withErrors([
                 "Login" => "Email não encontrado"
             ])->withInput([
                         "email" => $request_data["email"],
@@ -46,7 +47,7 @@ class UserController extends Controller
                     ]);
         }
         if (!Hash::check($request_data["password"], $user["password"])) {
-            return redirect()->route("user.login")->withErrors([
+            return redirect()->route("auth.login")->withErrors([
                 "Senha" => "Senha incorreta"
             ])->withInput([
                         "email" => $request_data["email"],
@@ -174,6 +175,7 @@ class UserController extends Controller
     public function update(UserRequest $request)
     {
         $user = User::find($request->id);
+
         if (Gate::denies("update", $user)) {
             return redirect()->route("user.profile", [
                 "user" => $user->id,
@@ -181,15 +183,51 @@ class UserController extends Controller
                         "Acesso negado" => "Você não possui permissão para editar este perfil"
                     ]);
         }
+
+        // Marca que estamos atualizando
         $request->merge(['is_update' => true]);
+
         $request_data = $request->validated();
+
+        // Verifica a senha preenchida (como autenticação, não atualização)
+        if (!empty($request_data['password'])) {
+            if (!Hash::check($request_data['password'], $user->password)) {
+                return redirect()->route("user.edit", [
+                    "user" => $user->id,
+                ])->withErrors([
+                            "Senha incorreta" => "A senha informada está incorreta",
+                        ]);
+            }
+        } else {
+            return redirect()->route("user.profile", [
+                "user" => $user->id,
+            ])->withErrors([
+                        "Senha obrigatória" => "Informe sua senha atual para salvar as alterações",
+                    ]);
+        }
+
+        unset($request_data['password']);
+
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('profiles', 'public');
+            $request_data['foto'] = $path;
+
+            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+                Storage::disk('public')->delete($user->foto);
+            }
+        } else {
+            $request_data['foto'] = $user->foto;
+        }
+
         $user->update($request_data);
+
         return redirect()->route("user.profile", [
             "user" => $user->id,
         ])->with([
                     "Sucesso" => "Perfil editado com sucesso",
                 ]);
     }
+
     public function destroy(User $user)
     {
         if (Gate::denies("delete", $user)) {

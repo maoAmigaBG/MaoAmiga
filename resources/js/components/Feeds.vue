@@ -22,12 +22,23 @@ const props = defineProps({
 })
 
 const flag = ref(null)
-
 const allPosts = ref([...props.posts])
+const STORAGE_KEY = 'cachedPosts'
 
 watch(
   () => props.posts,
-  newVal => { allPosts.value = [...newVal] }
+  (newVal) => {
+    const existingIds = new Set(allPosts.value.map(p => p.id))
+    const newPosts = newVal.filter(p => !existingIds.has(p.id))
+
+    if (newPosts.length > 0) {
+      allPosts.value.push(...newPosts)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        posts: allPosts.value,
+        timestamp: Date.now()
+      }))
+    }
+  }
 )
 
 const loading = ref(false)
@@ -45,10 +56,28 @@ function loadMore() {
 }
 
 onMounted(() => {
+  const cached = localStorage.getItem(STORAGE_KEY)
+  if (cached) {
+    try {
+      const { posts, timestamp } = JSON.parse(cached)
+      const now = Date.now()
+
+      if (now - timestamp < 3600000) {
+        allPosts.value = posts
+      } else {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+    } catch (e) {
+      console.error('Erro ao parsear cache:', e)
+      localStorage.removeItem(STORAGE_KEY)
+    }
+  }
+
   const observer = new IntersectionObserver(
     ([entry]) => { if (entry.isIntersecting) loadMore() },
     { threshold: 1 }
   )
   if (flag.value) observer.observe(flag.value)
 })
+
 </script>
