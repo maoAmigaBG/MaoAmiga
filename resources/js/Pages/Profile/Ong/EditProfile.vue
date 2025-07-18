@@ -83,7 +83,7 @@
                                 </span>
                             </div>
 
-                            <div class="form-group relative w-full">
+                            <div class="form-group relative w-full flex flex-nowrap items-center">
                                 <input hidden ref="realPhotoBtn" @change="updatePhotoSpan" type="file" accept="image/*"
                                     id="foto" name="foto">
                                 <button type="button" id="custom-photo-btn" @click="photoSelect"
@@ -91,8 +91,7 @@
                                     <i class="fa-solid fa-user text-lg"></i>
                                     Escolher Perfil
                                 </button>
-                                <span class="custom-photo-txt ml-4 font-poppins text-purple-800">{{ customPhotoTxt
-                                }}</span>
+                                <span class="custom-photo-txt ml-4 font-poppins text-purple-800 whitespace-nowrap overflow-hidden truncate">{{ customPhotoTxt}}</span>
                                 <span class="clear-btn ml-2 text-purple-800 cursor-pointer" v-show="isPhotoSelected"
                                     @click="clearPhoto">
                                     <i class="fa-solid fa-xmark"></i>

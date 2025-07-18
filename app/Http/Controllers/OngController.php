@@ -12,10 +12,12 @@ use App\Models\Contato;
 use App\Models\Campanha;
 use App\Models\Ong_type;
 use App\Http\Requests\OngRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class OngController extends Controller
 {
@@ -240,21 +242,26 @@ class OngController extends Controller
             $request_data["ong_type_id"] = $request_data["ong_type"];
         }
 
-        // Handle banner upload
-        if ($request->hasFile("banner")) {
-            $path = $request->file("banner")->store("ongs", "public");
-            $request_data["banner"] = $path;
-        } else {
-            unset($request_data["banner"]);
+        if ($request->hasFile('banner')) {
+            // Deleta a imagem anterior, se existir
+            if ($ong->banner && Storage::disk('public')->exists($ong->banner)) {
+                Storage::disk('public')->delete($ong->banner);
+            }
+
+            $path = $request->file('banner')->store('ongs', 'public');
+            $request_data['banner'] = $path;
         }
 
-        // Handle foto upload
-        if ($request->hasFile("foto")) {
-            $path = $request->file("foto")->store("ongs", "public");
-            $request_data["foto"] = $path;
-        } else {
-            unset($request_data["foto"]);
+
+        if ($request->hasFile('foto')) {
+            if ($ong->foto && Storage::disk('public')->exists($ong->foto)) {
+                Storage::disk('public')->delete($ong->foto);
+            }
+
+            $path = $request->file('foto')->store('ongs', 'public');
+            $request_data['foto'] = $path;
         }
+
 
         // Update  // AQUI TMB
         $ong->update([

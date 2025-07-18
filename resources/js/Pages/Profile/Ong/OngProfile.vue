@@ -82,6 +82,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { Link } from '@inertiajs/vue3';
 import ParallaxBanner from '../../../components/ParallaxBanner.vue';
 import CampaignCard from '../../../components/CampaignCard.vue';
 
