@@ -2,8 +2,7 @@
   <div class="feed relative w-full p-5 font-poppins bg-slate-50 border-b-2 border-[#E5E4E2]">
     <div v-if="isModalOpen" class="fixed inset-0 backdrop-blur-md flex justify-center items-center z-50 p-6"
       @click="fecharModal">
-      <img :src="modalImageUrl" alt="Imagem ampliada" class="w-5/12 object-contain rounded-lg shadow-lg"
-        @click.stop />
+      <img :src="modalImageUrl" alt="Imagem ampliada" class="w-5/12 object-contain rounded-lg shadow-lg" @click.stop />
     </div>
 
     <div class="head flex justify-between p-2.5">
@@ -62,7 +61,10 @@ import { Link } from '@inertiajs/vue3'
 import axios from 'axios'
 
 const emit = defineEmits(['update-likes'])
-const props = defineProps({ post: Object })
+const props = defineProps({
+  post: Object,
+  login_checked: Boolean
+})
 
 const isLiked = ref(props.post.liked)
 const likeId = ref(props.post.likes?.[0]?.id ?? null)
@@ -84,6 +86,12 @@ function animateLike() {
 
 async function toggleLike() {
   const idToRemove = likeId.value || props.post.like_id
+
+  if (!props.login_checked) {
+    window.location.href = '/user/login'
+    return
+  }
+
   if (isLiked.value) {
     if (!idToRemove) return
     await axios.get(`/post/deslike/${idToRemove}`)
