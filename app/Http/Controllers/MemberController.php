@@ -29,7 +29,7 @@ class MemberController extends Controller
         ]);
     }
     public function edit($member_id) {
-        $member = Member::where("id", $member_id)->first();
+        $member = Member::find($member_id);
         if (Gate::denies("update", $member)) {
             return redirect()->route("user.relations", [
                 "user" => Auth::user(),
@@ -40,13 +40,13 @@ class MemberController extends Controller
         return [
             "member" => $member,
             "ong" => Ong::select(["ongs.id","ongs.nome","ongs.subtitulo","ongs.descricao","ongs.lat","ongs.lng","ongs.endereco","ongs.banner","ongs.foto","ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get(),
-            "user" => User::where("id", $member->user_id)->first(),
+            "user" => $member->user()->first(),
             "ranking" => Member::ranking(),
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function update(Request $request) {
-        $member = Member::where("id", $request->id)->first();
+        $member = Member::find($request->id);
         if (Gate::denies("update", $member)) {
             return redirect()->route("user.relations", [
                 "user" => Auth::user(),

@@ -23,10 +23,9 @@ class Admin_requestController extends Controller
                 "Acesso negado" => "Você não possui permissão para acessar esta página",
             ]);
         }
-        $admin_requests = Admin_request::where("ong_id", $ong->id)->get();
         return [
             "ong" => $ong,
-            "pedidos" => $admin_requests,
+            "requests" => $ong->admin_requests()->get(),
         ];
     }
 

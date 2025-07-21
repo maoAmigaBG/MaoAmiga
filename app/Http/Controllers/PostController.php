@@ -112,7 +112,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $ong = Ong::where("id", $post["ong_id"])->first();
+        $ong = $post->ong()->first();
         if (Gate::denies("delete", $ong)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,

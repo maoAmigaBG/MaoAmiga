@@ -21,8 +21,7 @@ use Illuminate\Support\Facades\Storage;
 
 class OngController extends Controller
 {
-    function index()
-    {
+    function index() {
         $ongs = Ong::orderBy("created_at", "asc")
             ->limit(20)
             ->get();
@@ -39,15 +38,13 @@ class OngController extends Controller
         ]);
     }
 
-    function map()
-    {
+    function map() {
         return Inertia::render('Mapa', [
             "ranking" => Member::ranking(),
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
-    function map_location($lat, $lng, $radius = 10, $theme_list = null)
-    {
+    function map_location($lat, $lng, $radius = 10, $theme_list = null) {
         $ongs = Ong::select(["ongs.id", "ongs.nome", "ongs.subtitulo", "ongs.descricao", "ongs.lat", "ongs.lng", "ongs.endereco", "ongs.banner", "ongs.foto", "ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get();
         $possible_locations = [];
         foreach ($ongs as $ong) {
@@ -66,14 +63,13 @@ class OngController extends Controller
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
-    public function page(Ong $ong)
-    {
+    public function page(Ong $ong) {
         return Inertia::render("Profile/Ong/OngProfile", [
             "ong" => $ong,
             "ong_type" => Ong_type::find($ong->ong_type_id),
             "members_amount" => Member::members_amount($ong->id),
-            "contacts" => Contact::where("ong_id", $ong->id)->get(),
-            "reports" => Report::where("ong_id", $ong->id)->get(),
+            "contacts" => $ong->contacts()->get(),
+            "reports" => $ong->reports()->get(),
             "ranking" => Member::ranking(),
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get(),
             "posts" => Post::getWithLikes()->select(["posts.id", "posts.nome", "posts.descricao",])
@@ -101,23 +97,20 @@ class OngController extends Controller
             "is_adm" => Ong::is_adm($ong),
         ]);
     }
-    public function create()
-    {
+    public function create() {
         return [
             "ong_types" => Ong_type::all(),
             "ranking" => Member::ranking(),
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
-    public function adress_provider($cep)
-    {
+    public function adress_provider($cep) {
         $cep = str_replace("-", "", $cep);
         $url = "https://cep.awesomeapi.com.br/json/$cep";
         $response = Http::withOptions(['verify' => false])->get($url);
         return $response->json();
         /*
-        // response example
-        {
+        // response example {
             "cep": "95700206",
             "address_type": "Avenida",
             "address_name": "Osvaldo Aranha",
@@ -130,15 +123,13 @@ class OngController extends Controller
             "city_ibge": "4302105",
             "ddd": "54"
         }
-            ou
-        {
+            ou {
             "code":"not_found",
             "message":"O CEP 95700201 nao foi encontrado"
         }
         */
     }
-    public function coordinates_api($adress, $request_data)
-    {
+    public function coordinates_api($adress, $request_data) {
         $coordinates = [
             "lat" => null,
             "lon" => null,
@@ -174,8 +165,7 @@ class OngController extends Controller
         ];
         return $request_data;
     }
-    public function store(OngRequest $request)
-    {
+    public function store(OngRequest $request) {
         $request_data = $request->validated();
         if ($request_data["ong_type"] == 0) {
             $type = Ong_type::create([
@@ -198,8 +188,7 @@ class OngController extends Controller
             "Sucesso" => "Ong inserida com sucesso",
         ]);
     }
-    public function edit(Ong $ong)
-    {
+    public function edit(Ong $ong) {
         if (Gate::denies("update", $ong)) {
             return Inertia::location("/ong/profile/" . $ong->id);
         }
@@ -211,8 +200,7 @@ class OngController extends Controller
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
-    public function update(Request $request, Ong $ong)
-    {
+    public function update(Request $request, Ong $ong) {
         if (Gate::denies("update", $ong)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
@@ -281,8 +269,7 @@ class OngController extends Controller
         ]);
     }
 
-    public function destroy(Ong $ong)
-    {
+    public function destroy(Ong $ong) {
         if (Gate::denies("delete", $ong)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
