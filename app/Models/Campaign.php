@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Campaign extends Model {
@@ -19,5 +20,8 @@ class Campaign extends Model {
     ];
     public function ong(): BelongsTo {
         return $this->belongsTo(Ong::class);
+    }
+    public function members_donations(): HasMany {
+        return $this->hasMany(Members_donation::class);
     }
 }

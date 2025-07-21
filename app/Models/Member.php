@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Member extends Model
@@ -21,6 +22,12 @@ class Member extends Model
     }
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
+    }
+    public function admin_requests(): HasMany {
+        return $this->hasMany(Admin_request::class);
+    }
+    public function members_donations(): HasMany {
+        return $this->hasMany(Members_donation::class);
     }
     public static function ranking($ong_id = null)
     {
