@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campaign;
+use App\Models\Contact;
+use App\Models\Member;
 use App\Models\Ong;
-use App\Models\Membro;
 use App\Models\Contato;
-use App\Models\Campanha;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
-class ContatoController extends Controller
+class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,7 +33,7 @@ class ContatoController extends Controller
             ]);
         }
         $possible_contacts = ["Telefone","Celular","Email","Website","Facebook","Instagram","Twitter","LinkedIn","WhatsApp","Telegram","Fax","YouTube","TikTok","Outros"];
-        $contacts_list = Contato::where("ong_id", $ong->id)->get();
+        $contacts_list = Contact::where("ong_id", $ong->id)->get();
         foreach ($contacts_list as $contact) {
             $value = array_search($contact["tipo"], $possible_contacts);
             if ($value) {
@@ -43,8 +44,8 @@ class ContatoController extends Controller
         return [
             "contacts_list" => $possible_contacts,
             "ong_id" => $ong->id,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 
@@ -65,7 +66,7 @@ class ContatoController extends Controller
                 "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
         }
-        Contato::create($request_data);
+        Contact::create($request_data);
         return redirect()->route("ong.contacts", [
             "ong" => $ong->id,
         ])->with([
@@ -100,16 +101,16 @@ class ContatoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Contato $contato) {
-        $ong = Ong::where("id", $contato["ong_id"])->first();
-        if (Gate::denies("delete", $contato)) {
+    public function destroy(Contact $contact) {
+        $ong = Ong::where("id", $contact["ong_id"])->first();
+        if (Gate::denies("delete", $contact)) {
             return redirect()->route("ong.contacts", [
                 "ong" => $ong->id,
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para editar este perfil"
             ]);
         }
-        $contato->delete();
+        $contact->delete();
         return redirect()->route("ong.contacts", [
             "ong" => $ong->id,
         ])->with([

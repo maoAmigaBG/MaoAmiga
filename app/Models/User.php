@@ -57,7 +57,7 @@ class User extends Authenticatable
     //verifica se usuário é admin de qualquer ONG, necessário para praticidade no front
     public function isAdminOfOng()
     {
-        return Membro::where('user_id', $this->id)->where('admin', true)->exists();
+        return Member::where('user_id', $this->id)->where('admin', true)->exists();
     }
 
 

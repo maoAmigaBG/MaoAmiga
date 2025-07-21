@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campaign;
+use App\Models\Contact;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\Post;
 use Inertia\Inertia;
-use App\Models\Membro;
+use App\Models\Member;
 use App\Models\Report;
-use App\Models\Contato;
-use App\Models\Campanha;
 use App\Models\Ong_type;
-use App\Http\Requests\OngRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\OngRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -28,22 +28,22 @@ class OngController extends Controller
             ->get();
 
         $ongs->transform(function ($ong) {
-            $ong->membersAmount = Membro::members_amount($ong->id);
+            $ong->membersAmount = Member::members_amount($ong->id);
             return $ong;
         });
 
         return Inertia::render('Ong', [
             "ongs" => $ongs,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
 
     function map()
     {
         return Inertia::render('Mapa', [
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     function map_location($lat, $lng, $radius = 10, $theme_list = null)
@@ -62,8 +62,8 @@ class OngController extends Controller
         }
         return [
             "ongs" => $possible_locations,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function page(Ong $ong)
@@ -71,11 +71,11 @@ class OngController extends Controller
         return Inertia::render("Profile/Ong/OngProfile", [
             "ong" => $ong,
             "ong_type" => Ong_type::find($ong->ong_type_id),
-            "members_amount" => Membro::members_amount($ong->id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get(),
+            "members_amount" => Member::members_amount($ong->id),
+            "contacts" => Contact::where("ong_id", $ong->id)->get(),
             "reports" => Report::where("ong_id", $ong->id)->get(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get(),
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get(),
             "posts" => Post::getWithLikes()->select(["posts.id", "posts.nome", "posts.descricao",])
                 ->selectSub(function ($query) {
                     $query->from('post_likes')
@@ -85,17 +85,17 @@ class OngController extends Controller
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->get(),
-            "ong_campaigns" => Campanha::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
-                ->selectRaw("SUM(membros_doacoes.doacao) as donation_amount")
-                ->leftJoin("membros_doacoes", "membros_doacoes.campanha_id", "=", "campanhas.id")
-                ->where("campanhas.ong_id", $ong->id)
-                ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
+            "ong_campaigns" => Campaign::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
+                ->selectRaw("SUM(members_donations.doacao) as donation_amount")
+                ->leftJoin("members_donations", "members_donations.campaign_id", "=", "campaigns.id")
+                ->where("campaigns.ong_id", $ong->id)
+                ->groupBy("campaigns.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
                 ->get(),
-            "members" => Membro::select(['membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id',])
+            "members" => Member::select(['members.id', 'members.admin', 'members.anonimo', 'members.user_id', 'members.ong_id',])
                 ->selectRaw("SUM(doacao) as donate_amount")
-                ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
-                ->where("membros.ong_id", $ong->id)
-                ->groupBy('membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id')
+                ->join("members_donations", "members_donations.member_id", "=", "members.id")
+                ->where("members.ong_id", $ong->id)
+                ->groupBy('members.id', 'members.admin', 'members.anonimo', 'members.user_id', 'members.ong_id')
                 ->orderByDesc("donate_amount")
                 ->get(),
             "is_adm" => Ong::is_adm($ong),
@@ -105,8 +105,8 @@ class OngController extends Controller
     {
         return [
             "ong_types" => Ong_type::all(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function adress_provider($cep)
@@ -186,7 +186,7 @@ class OngController extends Controller
         $adress = $request["endereco"] . " " . $request["instituicao"] . " " . $request["cep"];
         $request_data = $this->coordinates_api($adress, $request_data);
         $ong = Ong::create($request_data);
-        Membro::create([
+        Member::create([
             "admin" => true,
             "anonimo" => false,
             "user_id" => Auth::user()->id,
@@ -207,8 +207,8 @@ class OngController extends Controller
         return Inertia::render("Profile/Ong/EditProfile", [
             "ong" => $ong,
             "ong_types" => Ong_type::all(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     public function update(Request $request, Ong $ong)

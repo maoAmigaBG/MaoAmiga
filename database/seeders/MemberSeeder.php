@@ -6,13 +6,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class MembroSeeder extends Seeder
+class MemberSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void {
-        DB::table("membros")->insert([
+        DB::table("members")->insert([
             [
                 "admin" => true,
                 "anonimo" => false,

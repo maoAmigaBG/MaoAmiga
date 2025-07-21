@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin_pedidos', function (Blueprint $table) {
+        Schema::create('admin_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId("ong_id")->constrained();
-            $table->foreignId("membro_id")->constrained();
+            $table->foreignId("member_id")->constrained();
             $table->timestamps();
         });
     }

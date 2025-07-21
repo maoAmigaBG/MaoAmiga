@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Membro;
+use App\Models\Member;
 use Illuminate\Auth\Access\Response;
 use App\Models\Ong;
 use App\Models\User;
@@ -37,7 +37,7 @@ class OngPolicy
      * Determine whether the user can update the model.
      */
     public function update(User $user, Ong $ong): bool {
-        $member = Membro::where("user_id", $user->id)->where("ong_id", $ong->id)->first();
+        $member = Member::where("user_id", $user->id)->where("ong_id", $ong->id)->first();
         return !empty($member) && $member->admin;
     }
 
@@ -46,7 +46,7 @@ class OngPolicy
      */
     public function delete(User $user, Ong $ong): bool
     {
-        $member = Membro::where("user_id", $user->id)->where("ong_id", $ong->id)->first();
+        $member = Member::where("user_id", $user->id)->where("ong_id", $ong->id)->first();
         return !empty($member) && $member->admin || $user->admin;
     }
 

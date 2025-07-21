@@ -29,7 +29,7 @@ class Ong extends Model
     }
     public function members()
     {
-        return $this->hasMany(Membro::class);
+        return $this->hasMany(Member::class);
     }
     public static function date_formater($date)
     {
@@ -44,7 +44,7 @@ class Ong extends Model
         
         $user_id = Auth::user()->id;
 
-        $is_admin = Membro::where('user_id', $user_id)
+        $is_admin = Member::where('user_id', $user_id)
             ->where('ong_id', $ong->id)
             ->where('admin', true)
             ->exists();

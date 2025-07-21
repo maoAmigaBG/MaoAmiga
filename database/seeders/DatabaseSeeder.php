@@ -23,13 +23,13 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             Ong_typeSeeder::class,
             OngSeeder::class,
-            ContatoSeeder::class,
+            ContactSeeder::class,
             CampaignSeeder::class,
             PostSeeder::class,
             Post_likeSeeder::class,
-            MembroSeeder::class,
-            Membro_doacaoSeeder::class,
-            Admin_pedidoSeeder::class,
+            MemberSeeder::class,
+            Members_donationSeeder::class,
+            Admin_requestSeeder::class,
         ]);
     }
 }
