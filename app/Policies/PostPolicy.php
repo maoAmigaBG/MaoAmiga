@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
+use App\Models\Member;
 use App\Models\Ong;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\Membro;
 use Illuminate\Auth\Access\Response;
 
 class PostPolicy
@@ -31,7 +31,7 @@ class PostPolicy
      */
     public function create(User $user, Ong $ong): bool
     {
-        $member = Membro::where("ong_id", $ong->id)->where("user_id", $user->id)->where("admin", true);
+        $member = Member::where("ong_id", $ong->id)->where("user_id", $user->id)->where("admin", true);
         return !empty($member);
     }
 
@@ -39,7 +39,7 @@ class PostPolicy
      * Determine whether the user can update the model.
      */
     public function update(User $user, Post $post): bool {
-        $member = Membro::where("ong_id", $post->ong_id)->where("user_id", $user->id)->where("admin", true);
+        $member = Member::where("ong_id", $post->ong_id)->where("user_id", $user->id)->where("admin", true);
         return !empty($member);
     }
 
@@ -47,7 +47,7 @@ class PostPolicy
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Post $post): bool {
-        $member = Membro::where("ong_id", $post["ong_id"])->where("user_id", $user->id)->where("admin", true);
+        $member = Member::where("ong_id", $post["ong_id"])->where("user_id", $user->id)->where("admin", true);
         return !empty($member);
     }
 

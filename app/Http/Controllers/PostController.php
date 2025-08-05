@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Campaign;
+use App\Models\Member;
 use App\Models\Ong;
 use App\Models\Post;
-use App\Models\Membro;
-use App\Models\Campanha;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -34,8 +34,8 @@ class PostController extends Controller
         }
         return [
             "ong_id" => $ong->id,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
 
@@ -112,7 +112,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $ong = Ong::where("id", $post["ong_id"])->first();
+        $ong = $post->ong()->first();
         if (Gate::denies("delete", $ong)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
@@ -123,8 +123,8 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route("ong.posts", [
             "ong" => $ong->id,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ])->with([
             "Sucesso" => "Post excluído com sucesso",
         ]);

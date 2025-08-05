@@ -1,5 +1,10 @@
 <template>
   <div class="feed relative w-full p-5 font-poppins bg-slate-50 border-b-2 border-[#E5E4E2]">
+    <div v-if="isModalOpen" class="fixed inset-0 backdrop-blur-md flex justify-center items-center z-50 p-6"
+      @click="fecharModal">
+      <img :src="modalImageUrl" alt="Imagem ampliada" class="w-5/12 object-contain rounded-lg shadow-lg" @click.stop />
+    </div>
+
     <div class="head flex justify-between p-2.5">
       <Link :href="`/ong/profile/${post.ong.id}`" class="user flex items-center gap-2.5 no-underline">
       <div class="profile-img">
@@ -12,14 +17,14 @@
         <small v-if="post.created_at">{{ formattedTime }}</small>
       </div>
       </Link>
-
       <span class="edit flex items-center text-[28px]">
         <i class="fa-solid fa-ellipsis"></i>
       </span>
     </div>
 
     <template v-if="post.foto">
-      <div class="photo my-4 rounded-[7px_40px_7px_92px] overflow-hidden">
+      <div class="photo my-4 rounded-[7px_40px_7px_92px] overflow-hidden cursor-pointer"
+        @click="abrirModalComImagem('/storage/' + post.foto)">
         <img :src="'/storage/' + post.foto" alt="" class="w-full h-[400px] object-cover object-center" />
       </div>
 
@@ -56,7 +61,10 @@ import { Link } from '@inertiajs/vue3'
 import axios from 'axios'
 
 const emit = defineEmits(['update-likes'])
-const props = defineProps({ post: Object })
+const props = defineProps({
+  post: Object,
+  login_checked: Boolean
+})
 
 const isLiked = ref(props.post.liked)
 const likeId = ref(props.post.likes?.[0]?.id ?? null)
@@ -78,6 +86,12 @@ function animateLike() {
 
 async function toggleLike() {
   const idToRemove = likeId.value || props.post.like_id
+
+  if (!props.login_checked) {
+    window.location.href = '/user/login'
+    return
+  }
+
   if (isLiked.value) {
     if (!idToRemove) return
     await axios.get(`/post/deslike/${idToRemove}`)
@@ -101,6 +115,18 @@ async function toggleLike() {
     }
   }
 }
+
+const isModalOpen = ref(false)
+const modalImageUrl = ref('')
+
+function abrirModalComImagem(url) {
+  modalImageUrl.value = url
+  isModalOpen.value = true
+}
+
+function fecharModal() {
+  isModalOpen.value = false
+}
 </script>
 
 <style scoped>
@@ -123,5 +149,9 @@ async function toggleLike() {
 
 .pop-animation {
   animation: pop 0.5s ease-out forwards;
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
 }
 </style>

@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin_pedidoController;
+use App\Http\Controllers\Admin_requestController;
 use App\Http\Controllers\CampaignController;
-use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Post_likeController;
 use App\Http\Controllers\ReportController;
@@ -11,7 +11,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OngController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\MembroController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Middleware\HandleInertiaRequests;
 
@@ -25,12 +25,12 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/map_location/{lat}/{lng}', [OngController::class, "map_location"])->name("ong.map_location");
         Route::get('/profile/{ong}', [OngController::class, "page"])->name("ong.profile");
         Route::prefix("/contacts")->group(function() {
-            Route::get('/create/{ong}', [ContatoController::class, "create"])->name("contacts.create");
-            Route::post('/store', [ContatoController::class, "store"])->name("contacts.store");
-            Route::get('/delete/{contato}', [ContatoController::class, "destroy"])->name("contacts.destroy");
+            Route::get('/create/{ong}', [ContactController::class, "create"])->name("contacts.create");
+            Route::post('/store', [ContactController::class, "store"])->name("contacts.store");
+            Route::get('/delete/{contato}', [ContactController::class, "destroy"])->name("contacts.destroy");
         });
         Route::middleware(LoginVerifyer::class)->group(function () {
-            Route::get('/requests/{ong}', [Admin_pedidoController::class, "index"])->name("ong.requests");
+            Route::get('/requests/{ong}', [Admin_requestController::class, "index"])->name("ong.requests");
             Route::get('/create', [OngController::class, "create"])->name("ong.create");
             Route::post('/store', [OngController::class, "store"])->name("ong.store");
             Route::get('/edit/{ong}', [OngController::class, "edit"])->name("ong.edit");
@@ -70,20 +70,20 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
         Route::post("/update", [UserController::class, "update"])->name("user.update");
         Route::get("/delete/{user}", [UserController::class, "destroy"])->name("user.delete");
         Route::prefix("/relations")->group(function() {
-            Route::get("/edit/{user}", [MembroController::class, "edit"])->name("relations.edit");
-            Route::post("/update", [MembroController::class, "update"])->name("relations.update");
-            Route::get("/request_aprove/{user}", [MembroController::class, "request_aprove"])->name("relations.request_aprove");
-            Route::get("/destroy/{user}", [MembroController::class, "destroy"])->name("relations.destroy");
-            Route::get("/restore/{user}", [MembroController::class, "restore"])->name("relations.restore");
-            Route::get("/request/create/{ong}", [Admin_pedidoController::class, "create"])->name("relations.create");
-            Route::get("/request/destroy/{admin_pedido}", [Admin_pedidoController::class, "destroy"])->name("relations.destroy");
+            Route::get("/edit/{user}", [MemberController::class, "edit"])->name("relations.edit");
+            Route::post("/update", [MemberController::class, "update"])->name("relations.update");
+            Route::get("/request_aprove/{user}", [MemberController::class, "request_aprove"])->name("relations.request_aprove");
+            Route::get("/destroy/{user}", [MemberController::class, "destroy"])->name("relations.destroy");
+            Route::get("/restore/{user}", [MemberController::class, "restore"])->name("relations.restore");
+            Route::get("/request/create/{ong}", [Admin_requestController::class, "create"])->name("relations.create");
+            Route::get("/request/destroy/{admin_pedido}", [Admin_requestController::class, "destroy"])->name("relations.destroy");
         });
     });
     Route::get("/login/{redirect?}/{data_list?}", [UserController::class, "login"])->name("login");
     Route::get("/logon", [UserController::class, "logon"])->name("logon");
     Route::get("/profile/{user}", [UserController::class, "profile"])->name("user.profile");
-    Route::get("/relations/{user}", [MembroController::class, "ong_relations"])->name("user.relations");
-    Route::get("/relations/trash", [MembroController::class, "trash"])->name("relations.trash");
+    Route::get("/relations/{user}", [MemberController::class, "ong_relations"])->name("user.relations");
+    Route::get("/relations/trash", [MemberController::class, "trash"])->name("relations.trash");
 });
 
 Route::prefix("/auth")->group(function() {

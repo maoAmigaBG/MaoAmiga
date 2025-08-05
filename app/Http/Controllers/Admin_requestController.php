@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ong;
-use App\Models\Membro;
-use App\Models\Admin_pedido;
+use App\Models\Member;
+use App\Models\Admin_request;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
-class Admin_pedidoController extends Controller
+class Admin_requestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,10 +23,9 @@ class Admin_pedidoController extends Controller
                 "Acesso negado" => "Você não possui permissão para acessar esta página",
             ]);
         }
-        $admin_pedidos = Admin_pedido::where("ong_id", $ong->id)->get();
         return [
             "ong" => $ong,
-            "pedidos" => $admin_pedidos,
+            "requests" => $ong->admin_requests()->get(),
         ];
     }
 
@@ -41,8 +40,8 @@ class Admin_pedidoController extends Controller
                 "Acesso negado" => "Você não possui permissão para realizar esta ação",
             ]);
         }
-        $member = Membro::where("ong_id", $ong->id)->where("user_id", Auth::user()->id)->first();
-        Admin_pedido::create([
+        $member = Member::where("ong_id", $ong->id)->where("user_id", Auth::user()->id)->first();
+        Admin_request::create([
             "ong_id" => $ong->id,
             "membro_id" => $member->id,
         ]);
@@ -88,16 +87,16 @@ class Admin_pedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Admin_pedido $admin_pedido) {
-        $ong = Ong::where("id", $admin_pedido["ong_id"]);
-        if (Gate::denies("delete", $admin_pedido)) {
+    public function destroy(Admin_request $admin_request) {
+        $ong = Ong::where("id", $admin_request["ong_id"]);
+        if (Gate::denies("delete", $admin_request)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para realizar esta ação",
             ]);
         }
-        $admin_pedido->delete();
+        $admin_request->delete();
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
         ]);

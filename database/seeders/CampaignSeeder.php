@@ -12,7 +12,7 @@ class CampaignSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void {
-        DB::table("campanhas")->insert([
+        DB::table("campaigns")->insert([
             [
                 "nome" => "Ajude winston a viajar",
                 "tipo" => "doacao",

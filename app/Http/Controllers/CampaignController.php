@@ -3,22 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CampaignRequest;
+use App\Models\Member;
+use App\Models\Members_donation;
 use App\Models\Ong;
-use App\Models\Membro;
-use App\Models\Campanha;
+use App\Models\Campaign;
 use Illuminate\Http\Request;
-use App\Models\Membros_doacoe;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 
 class CampaignController extends Controller {
-    public function index(Campanha $campanha) {
+    public function index(Campaign $campaign) {
         return [
-            "campaign" => $campanha,
-            "ong" => Ong::where("id", $campanha->ong_id)->get(),
-            "donate_amount" => Membros_doacoe::selectRaw("SUM(doacao) as donation_amount")->where("campanha_id", $campanha->id)->get(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "campaign" => $campaign,
+            "ong" => Ong::where("id", $campaign->ong_id)->get(),
+            "donate_amount" => Members_donation::selectRaw("SUM(doacao) as donation_amount")->where("campaign_id", $campaign->id)->get(),
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function create(Ong $ong) {
@@ -31,8 +31,8 @@ class CampaignController extends Controller {
         }
         return [
             "ong_id" => $ong->id,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
     public function store(CampaignRequest $request) {
@@ -45,11 +45,11 @@ class CampaignController extends Controller {
             ]);
         }
         $request_data = $request->validated();
-        $ong = Campanha::create($request_data);
+        $ong = Campaign::create($request_data);
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ])->with([
             "Sucesso" => "Campanha inserida com sucesso",
         ]);
@@ -57,47 +57,47 @@ class CampaignController extends Controller {
     public function show(string $id) {
         //
     }
-    public function edit(Campanha $campanha) {
-        if (Gate::denies("update", $campanha)) {
+    public function edit(Campaign $campaign) {
+        if (Gate::denies("update", $campaign)) {
             return redirect()->route("campaign.index", [
-                "campanha" => $campanha->id,
+                "campaign" => $campaign->id,
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para alterar esta campanha"
             ]);
         }
         return [
-            "ong" => Ong::find($campanha->id),
-            "campanha" => $campanha,
+            "ong" => Ong::find($campaign->id),
+            "campaign" => $campaign,
         ];
     }
     public function update(CampaignRequest $request) {
-        $campanha = Campanha::find($request["id"]);
-        if (Gate::denies("update", $campanha)) {
+        $campaign = Campaign::find($request["id"]);
+        if (Gate::denies("update", $campaign)) {
             return redirect()->route("campaign.index", [
-                "campanha" => $campanha->id,
+                "campaign" => $campaign->id,
             ])->withErrors([
                 "Acesso negado" => "Você não possui permissão para alterar esta campanha"
             ]);
         }
         $request_data = $request->validated();
-        $campanha->update($request_data);
+        $campaign->update($request_data);
         return redirect()->route("campaign.index", [
-            "campanha" => $campanha->id,
+            "campaign" => $campaign->id,
         ])->with([
             "Sucesso" => "Campanha editada com sucesso",
         ]);
     }
     public function destroy(string $id) {
-        $campanha = Campanha::where("id", $id)->first();
-        if (Gate::denies("delete", $campanha)) {
+        $campaign = Campaign::where("id", $id)->first();
+        if (Gate::denies("delete", $campaign)) {
             return redirect()->route("campaign.index", [
-                "campanha" => $campanha->id,
+                "campaign" => $campaign->id,
             ])->withErrors([
-                "Acesso negado" => "Você não possui permissão para editar esta campanha"
+                "Acesso negado" => "Você não possui permissão para editar esta campaign"
             ]);
         }
-        $ong_id = $campanha["ong_id"];
-        $campanha->delete();
+        $ong_id = $campaign["ong_id"];
+        $campaign->delete();
         return redirect()->route("ong.profile", [
             "ong" => $ong_id,
         ])->with([

@@ -1,6 +1,6 @@
 <template>
   <Feeds :posts="posts" :nextPageUrl="nextPageUrl" v-slot="{post}">
-    <Feed :post="post" />
+    <Feed :post="post" :login_checked="login_checked" />
   </Feeds>
 </template>
 
@@ -11,6 +11,7 @@ import Feed  from '../components/Feed.vue'
 
 const props = defineProps({ 
   posts: Array,
-  nextPageUrl: String
+  nextPageUrl: String,
+  login_checked: Boolean
  })
 </script>

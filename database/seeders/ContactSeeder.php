@@ -6,13 +6,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class ContatoSeeder extends Seeder
+class ContactSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void {
-        DB::table("contatos")->insert([
+        DB::table("contacts")->insert([
             [
                 "nome" => "https://www.instagram.com/ivanpra/?utm_source=ig_web_button_share_sheet",
                 "tipo" => "Instagram",

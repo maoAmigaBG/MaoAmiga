@@ -15,16 +15,13 @@ class Post extends Model
         'foto',
         'ong_id',
     ];
-    public function ong(): BelongsTo
-    {
+    public function ong(): BelongsTo {
         return $this->belongsTo(Ong::class);
     }
-    public function likes(): HasMany
-    {
+    public function likes(): HasMany {
         return $this->hasMany(Post_like::class);
     }
-    static public function getWithLikes()
-    {
+    static public function getWithLikes() {
         $user_id = Auth::check() ? Auth::user()->id : 0;
         return self::with([
             'ong',
@@ -34,8 +31,7 @@ class Post extends Model
                 ])->orderBy("created_at", "desc");
     }
 
-    public static function getPostsOfAdminOngs()
-    {
+    public static function getPostsOfAdminOngs() {
         $user_id = Auth::check() ? Auth::user()->id : 0;
 
         return self::whereHas('ong.members', function ($query) use ($user_id) {

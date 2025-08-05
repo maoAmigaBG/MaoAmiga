@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('membros_doacoes', function (Blueprint $table) {
+        Schema::create('members_donations', function (Blueprint $table) {
             $table->id();
             $table->decimal("doacao", 8, 2);
-            $table->foreignId("membro_id")->constrained();
-            $table->foreignId("campanha_id")->constrained();
+            $table->foreignId("member_id")->constrained();
+            $table->foreignId("campaign_id")->constrained();
             $table->timestamps();
         });
     }

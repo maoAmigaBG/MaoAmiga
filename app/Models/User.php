@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -42,8 +43,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
@@ -55,13 +55,16 @@ class User extends Authenticatable
     }
 
     //verifica se usuário é admin de qualquer ONG, necessário para praticidade no front
-    public function isAdminOfOng()
-    {
-        return Membro::where('user_id', $this->id)->where('admin', true)->exists();
+    public function isAdminOfOng() {
+        return Member::where('user_id', $this->id)->where('admin', true)->exists();
     }
-
-
-    public function likes() {
+    public function members(): HasMany {
+        return $this->hasMany(Member::class);
+    }
+    public function likes(): HasMany {
         return $this->hasMany(Post_like::class);
+    }
+    public function reports(): HasMany {
+        return $this->hasMany(Report::class);
     }
 }

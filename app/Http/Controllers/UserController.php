@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campaign;
+use App\Models\Member;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Post;
-use App\Models\Post_like;
 use Inertia\Inertia;
-use App\Models\Membro;
-use App\Models\Campanha;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRequest;
@@ -114,7 +113,7 @@ class UserController extends Controller
             $postsNext = $postsPaginated->nextPageUrl();
         }
 
-        $ranking = Membro::ranking();
+        $ranking = Member::ranking();
 
         $own_rank = null;
         foreach ($ranking as $index => $rankedUser) {
@@ -131,14 +130,14 @@ class UserController extends Controller
             ->whereHas('likes', fn($q) => $q->where('user_id', $user_id))
             ->paginate(10);
 
-        $ong_relations = Membro::select([
+        $ong_relations = Member::select([
             'ongs.id',
             'ongs.nome',
             'ong_types.nome as type',
             'ongs.foto',
-            'membros.created_at'
+            'members.created_at'
         ])
-            ->join('ongs', 'ongs.id', '=', 'membros.ong_id')
+            ->join('ongs', 'ongs.id', '=', 'members.ong_id')
             ->join('ong_types', 'ong_types.id', '=', 'ongs.ong_type_id')
             ->where('user_id', $user_id)
             ->get();
@@ -153,8 +152,8 @@ class UserController extends Controller
             "likes" => $likedPostsPaginated,
             "likesNext" => $likedPostsPaginated->nextPageUrl(),
             "ong_relations" => $ong_relations,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get(),
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get(),
         ]);
     }
     public function edit_profile(User $user)
@@ -168,8 +167,8 @@ class UserController extends Controller
         }
         return Inertia::render('Profile/User/EditProfile', [
             "user" => $user,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
     public function update(UserRequest $request)

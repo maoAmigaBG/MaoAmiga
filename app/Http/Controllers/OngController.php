@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campaign;
+use App\Models\Contact;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\Post;
 use Inertia\Inertia;
-use App\Models\Membro;
+use App\Models\Member;
 use App\Models\Report;
-use App\Models\Contato;
-use App\Models\Campanha;
 use App\Models\Ong_type;
 use Illuminate\Http\Request;
 use App\Http\Requests\OngRequest;
@@ -21,33 +21,30 @@ use Illuminate\Support\Facades\Storage;
 
 class OngController extends Controller
 {
-    function index()
-    {
+    function index() {
         $ongs = Ong::orderBy("created_at", "asc")
             ->limit(20)
             ->get();
 
         $ongs->transform(function ($ong) {
-            $ong->membersAmount = Membro::members_amount($ong->id);
+            $ong->membersAmount = Member::members_amount($ong->id);
             return $ong;
         });
 
         return Inertia::render('Ong', [
             "ongs" => $ongs,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
 
-    function map()
-    {
+    function map() {
         return Inertia::render('Mapa', [
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
-    function map_location($lat, $lng, $radius = 10, $theme_list = null)
-    {
+    function map_location($lat, $lng, $radius = 10, $theme_list = null) {
         $ongs = Ong::select(["ongs.id", "ongs.nome", "ongs.subtitulo", "ongs.descricao", "ongs.lat", "ongs.lng", "ongs.endereco", "ongs.banner", "ongs.foto", "ong_types.nome as type"])->join("ong_types", "ong_types.id", "=", "ongs.ong_type_id")->get();
         $possible_locations = [];
         foreach ($ongs as $ong) {
@@ -62,20 +59,19 @@ class OngController extends Controller
         }
         return [
             "ongs" => $possible_locations,
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
-    public function page(Ong $ong)
-    {
+    public function page(Ong $ong) {
         return Inertia::render("Profile/Ong/OngProfile", [
             "ong" => $ong,
             "ong_type" => Ong_type::find($ong->ong_type_id),
-            "members_amount" => Membro::members_amount($ong->id),
-            "contacts" => Contato::where("ong_id", $ong->id)->get(),
-            "reports" => Report::where("ong_id", $ong->id)->get(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get(),
+            "members_amount" => Member::members_amount($ong->id),
+            "contacts" => $ong->contacts()->get(),
+            "reports" => $ong->reports()->get(),
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get(),
             "posts" => Post::getWithLikes()->select(["posts.id", "posts.nome", "posts.descricao",])
                 ->selectSub(function ($query) {
                     $query->from('post_likes')
@@ -85,39 +81,36 @@ class OngController extends Controller
                 ->where("posts.ong_id", $ong->id)
                 ->groupBy("posts.id", "posts.nome", "posts.descricao")
                 ->get(),
-            "ong_campaigns" => Campanha::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
-                ->selectRaw("SUM(doacao) as donation_amount")
-                ->join("membros_doacoes", "membros_doacoes.campanha_id", "=", "campanhas.id")
-                ->where("campanhas.ong_id", $ong->id)
-                ->groupBy("campanhas.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
+            "ong_campaigns" => Campaign::select(["nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id"])
+                ->selectRaw("SUM(members_donations.doacao) as donation_amount")
+                ->leftJoin("members_donations", "members_donations.campaign_id", "=", "campaigns.id")
+                ->where("campaigns.ong_id", $ong->id)
+                ->groupBy("campaigns.id", "nome", "tipo", "descricao", "materiais", "meta", "foto", "ong_id")
                 ->get(),
-            "members" => Membro::select(['membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id',])
+            "members" => Member::select(['members.id', 'members.admin', 'members.anonimo', 'members.user_id', 'members.ong_id',])
                 ->selectRaw("SUM(doacao) as donate_amount")
-                ->join("membros_doacoes", "membros_doacoes.membro_id", "=", "membros.id")
-                ->where("membros.ong_id", $ong->id)
-                ->groupBy('membros.id', 'membros.admin', 'membros.anonimo', 'membros.user_id', 'membros.ong_id')
+                ->join("members_donations", "members_donations.member_id", "=", "members.id")
+                ->where("members.ong_id", $ong->id)
+                ->groupBy('members.id', 'members.admin', 'members.anonimo', 'members.user_id', 'members.ong_id')
                 ->orderByDesc("donate_amount")
                 ->get(),
             "is_adm" => Ong::is_adm($ong),
         ]);
     }
-    public function create()
-    {
+    public function create() {
         return [
             "ong_types" => Ong_type::all(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ];
     }
-    public function adress_provider($cep)
-    {
+    public function adress_provider($cep) {
         $cep = str_replace("-", "", $cep);
         $url = "https://cep.awesomeapi.com.br/json/$cep";
         $response = Http::withOptions(['verify' => false])->get($url);
         return $response->json();
         /*
-        // response example
-        {
+        // response example {
             "cep": "95700206",
             "address_type": "Avenida",
             "address_name": "Osvaldo Aranha",
@@ -130,15 +123,13 @@ class OngController extends Controller
             "city_ibge": "4302105",
             "ddd": "54"
         }
-            ou
-        {
+            ou {
             "code":"not_found",
             "message":"O CEP 95700201 nao foi encontrado"
         }
         */
     }
-    public function coordinates_api($adress, $request_data)
-    {
+    public function coordinates_api($adress, $request_data) {
         $coordinates = [
             "lat" => null,
             "lon" => null,
@@ -174,8 +165,7 @@ class OngController extends Controller
         ];
         return $request_data;
     }
-    public function store(OngRequest $request)
-    {
+    public function store(OngRequest $request) {
         $request_data = $request->validated();
         if ($request_data["ong_type"] == 0) {
             $type = Ong_type::create([
@@ -186,7 +176,7 @@ class OngController extends Controller
         $adress = $request["endereco"] . " " . $request["instituicao"] . " " . $request["cep"];
         $request_data = $this->coordinates_api($adress, $request_data);
         $ong = Ong::create($request_data);
-        Membro::create([
+        Member::create([
             "admin" => true,
             "anonimo" => false,
             "user_id" => Auth::user()->id,
@@ -195,11 +185,10 @@ class OngController extends Controller
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
         ])->with([
-                    "Sucesso" => "Ong inserida com sucesso",
-                ]);
+            "Sucesso" => "Ong inserida com sucesso",
+        ]);
     }
-    public function edit(Ong $ong)
-    {
+    public function edit(Ong $ong) {
         if (Gate::denies("update", $ong)) {
             return Inertia::location("/ong/profile/" . $ong->id);
         }
@@ -207,18 +196,17 @@ class OngController extends Controller
         return Inertia::render("Profile/Ong/EditProfile", [
             "ong" => $ong,
             "ong_types" => Ong_type::all(),
-            "ranking" => Membro::ranking(),
-            "campaigns" => Campanha::orderByDesc('created_at')->limit(5)->get()
+            "ranking" => Member::ranking(),
+            "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
-    public function update(Request $request, Ong $ong)
-    {
+    public function update(Request $request, Ong $ong) {
         if (Gate::denies("update", $ong)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para alterar esta Ong"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
         }
 
         // Manually validate just the fields present in edit // AQUI QUE TU POE TUA LOGICA NOVA KRL
@@ -277,18 +265,17 @@ class OngController extends Controller
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
         ])->with([
-                    "Sucesso" => "Ong alterada com sucesso",
-                ]);
+            "Sucesso" => "Ong alterada com sucesso",
+        ]);
     }
 
-    public function destroy(Ong $ong)
-    {
+    public function destroy(Ong $ong) {
         if (Gate::denies("delete", $ong)) {
             return redirect()->route("ong.profile", [
                 "ong" => $ong->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para alterar esta Ong"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para alterar esta Ong"
+            ]);
         }
         $ong->delete();
         return redirect()->route("index")->with([
