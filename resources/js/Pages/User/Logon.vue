@@ -12,7 +12,7 @@
                     <h1 class="main-title font-bold font-poppins text-purple-800 text-3xl pb-8">Crie Uma Conta!
                     </h1>
 
-                    <form class="login-form w-full" @submit.prevent="submit">
+                    <form class="login-form w-full" @submit.prevent="submit" method="POST">
                         <div class="flex flex-col items-center w-full gap-5">
                             <div class="form-group relative w-full">
                                 <input
