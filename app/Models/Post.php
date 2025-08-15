@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Post extends Model
-{
+class Post extends Model {
     protected $fillable = [
         'nome',
         'descricao',
@@ -20,6 +20,9 @@ class Post extends Model
     }
     public function likes(): HasMany {
         return $this->hasMany(Post_like::class);
+    }
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class);
     }
     static public function getWithLikes() {
         $user_id = Auth::check() ? Auth::user()->id : 0;
