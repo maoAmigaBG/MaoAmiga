@@ -274,6 +274,8 @@ class OngController extends Controller
                 "Acesso negado" => "Você não possui permissão para alterar esta Ong"
             ]);
         }
+        Storage::disk('public')->delete($ong->foto);
+        Storage::disk('public')->delete($ong->banner);
         $ong->delete();
         return redirect()->route("index")->with([
             "Sucesso" => "Ong excluída",

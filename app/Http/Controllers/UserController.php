@@ -41,17 +41,17 @@ class UserController extends Controller
             return redirect()->route("auth.login")->withErrors([
                 "Login" => "Email não encontrado"
             ])->withInput([
-                        "email" => $request_data["email"],
-                        "password" => $request_data["password"],
-                    ]);
+                "email" => $request_data["email"],
+                "password" => $request_data["password"],
+            ]);
         }
         if (!Hash::check($request_data["password"], $user["password"])) {
             return redirect()->route("auth.login")->withErrors([
                 "Senha" => "Senha incorreta"
             ])->withInput([
-                        "email" => $request_data["email"],
-                        "password" => $request_data["password"],
-                    ]);
+                "email" => $request_data["email"],
+                "password" => $request_data["password"],
+            ]);
         }
         if (Auth::attempt(["email" => $request_data["email"], "password" => $request_data["password"]])) {
             $request->session()->regenerate();
@@ -162,8 +162,8 @@ class UserController extends Controller
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para editar este perfil"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
         }
         return Inertia::render('Profile/User/EditProfile', [
             "user" => $user,
@@ -187,23 +187,23 @@ class UserController extends Controller
         if (!empty($request_data['password'])) {
             if (!Hash::check($request_data['password'], $user->password)) {
                 return redirect()->route("user.edit", [
-                    "user" => $user->id,
+            "user" => $user->id,
                 ])->withErrors([
-                            "Senha incorreta" => "A senha informada está incorreta",
-                        ]);
+                    "Senha incorreta" => "A senha informada está incorreta",
+                ]);
             }
         } else {
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Senha obrigatória" => "Informe sua senha atual para salvar as alterações",
-                    ]);
+                "Senha obrigatória" => "Informe sua senha atual para salvar as alterações",
+            ]);
         }
 
         unset($request_data['password']);
 
         if ($request->hasFile('foto')) {
-            if (Storage::disk('public')->exists($user->foto)) {
+            if (Storage::disk('public')->exists($user->foto) && $user->foto != "profiles/default_user.jpg") {
                 Storage::disk('public')->delete($user->foto);
             }
             $path = $request->file('foto')->store('profiles', 'public');
@@ -217,8 +217,8 @@ class UserController extends Controller
         return redirect()->route("user.profile", [
             "user" => $user->id,
         ])->with([
-                    "Sucesso" => "Perfil editado com sucesso",
-                ]);
+            "Sucesso" => "Perfil editado com sucesso",
+        ]);
     }
 
     public function destroy(User $user)
@@ -227,13 +227,16 @@ class UserController extends Controller
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para editar este perfil"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
         }
         if (Auth::user()->id == $user->id) {
             Auth::logout();
         }
+        if ($user->foto != "profiles/default_user.jpg") {
+            Storage::disk('public')->delete($user->foto);
+        }
         $user->delete();
-        return Auth::user()->id == $user->id ? redirect()->route("logout") : redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);
+        return redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);
     }
 }
