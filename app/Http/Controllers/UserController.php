@@ -179,16 +179,11 @@ class UserController extends Controller
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para editar este perfil"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
         }
-
-        // Marca que estamos atualizando
         $request->merge(['is_update' => true]);
-
         $request_data = $request->validated();
-
-        // Verifica a senha preenchida (como autenticação, não atualização)
         if (!empty($request_data['password'])) {
             if (!Hash::check($request_data['password'], $user->password)) {
                 return redirect()->route("user.edit", [
@@ -208,12 +203,11 @@ class UserController extends Controller
         unset($request_data['password']);
 
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('profiles', 'public');
-            $request_data['foto'] = $path;
-
-            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+            if (Storage::disk('public')->exists($user->foto)) {
                 Storage::disk('public')->delete($user->foto);
             }
+            $path = $request->file('foto')->store('profiles', 'public');
+            $request_data['foto'] = $path;
         } else {
             $request_data['foto'] = $user->foto;
         }

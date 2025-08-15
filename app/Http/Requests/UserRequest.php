@@ -37,23 +37,11 @@ class UserRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($this->id),
-            ],
+            'email' => ['required','email','max:255',Rule::unique('users')->ignore($this->id)],
             'data_nasc' => ['nullable', 'date'],
             'descricao' => ['nullable', 'string'],
             'anonimo' => ['nullable', 'boolean'],
-            'foto' => [
-                'nullable',
-                'sometimes',
-                'file',
-                'image',
-                'mimes:jpeg,png,jpg,gif,svg',
-                'max:2048',
-            ],
+            'foto' => ['nullable','sometimes','file','image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
             'password' => $passwordRules,
         ];
     }
