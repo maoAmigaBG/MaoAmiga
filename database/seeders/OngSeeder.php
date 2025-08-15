@@ -20,8 +20,8 @@ class OngSeeder extends Seeder
                 "lat" => "-29.1652079",
                 "lng" => "-51.559487",
                 "endereco" => "R. Livramento, 48 - Bairro Juventude, Bento Gonçalves",
-                "banner" => "posts/turtle_eye.jpg",
-                "foto" => "ongs/turtle_profile.jpg",
+                "banner" => "posts/turtles_post.png",
+                "foto" => "ongs/AqAwFg6rgfzSGLprkYPAyoJlUHYrzgLAsy3h91KL.png",
                 "ong_type_id" => 1,
             ],
             [
