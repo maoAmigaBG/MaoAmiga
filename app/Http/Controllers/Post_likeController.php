@@ -29,12 +29,17 @@ class Post_likeController extends Controller
                 "like_id" => 0,
             ];
         }
-        $like = Post_like::create([
-            "user_id" => Auth::user()->id,
-            "post_id" => $post->id,
-        ]);
+        $like = Post_like::where("post_id", $post->id)->where("user_id", Auth::user()->id)->first();
+        if (empty($like)) {
+            $like = Post_like::create([
+                "user_id" => Auth::user()->id,
+                "post_id" => $post->id,
+            ]);
+        } else {
+            $like->delete();
+        }
         
-        return response()->json([ 'like_id' => $like->id ]);
+        return;
     }
 
     /**

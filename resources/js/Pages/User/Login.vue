@@ -12,7 +12,7 @@
                     <h1 class="main-title font-bold font-poppins text-purple-800 text-3xl pb-8">Entre na Causa em Foco
                     </h1>
 
-                    <form class="login-form w-full" @submit.prevent="submit" method="POST">
+                    <form class="login-form w-full" @submit.prevent="submit" method="post">
                     <input type="hidden" id="redirect" name="redirect" :value="form.redirect">
                     <input type="hidden" id="data_list" name="data_list" :value="form.data_list">
                         <div class="flex flex-col items-center w-full gap-8">
