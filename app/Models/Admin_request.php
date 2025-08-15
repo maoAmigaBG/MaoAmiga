@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Admin_request extends Model {
     protected $fillable = [
         "ong_id",
-        "membro_id",
+        "member_id",
     ];
     public function ong(): BelongsTo {
         return $this->belongsTo(Ong::class);

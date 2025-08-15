@@ -1,9 +1,9 @@
 <template>
-    <ParallaxBanner :bg="'/storage/' + props.ong.banner" class="pt-0!">
+    <ParallaxBanner :bg="'http://localhost:8000/storage/' + props.ong.banner" class="pt-0!">
         <div class="h-full w-full flex gap-4 items-end p-4 shadow-[inset_0_-35px_16px_-25px_rgba(0,0,0,0.8)]">
             <div class="ong-image-wrapper max-w-1/3 aspect-square">
                 <img class="h-full border-4 border-purple-800 rounded-md object-cover"
-                    :src="'/storage/' + props.ong.foto" alt="">
+                    :src="'http://localhost:8000/storage/' + props.ong.foto" alt="">
             </div>
             <div class="ong-info text-shadow-lg h-full flex flex-1 flex-col justify-center relative">
                 <h1 class="text-4xl text-white font-bold font-poppins">{{ props.ong.nome }}</h1>
