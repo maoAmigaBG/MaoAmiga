@@ -3,9 +3,11 @@
 use App\Http\Controllers\Admin_requestController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Post_likeController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\LoginVerifyer;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +63,11 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::get('/deslike/{post_like}', [Post_likeController::class, "destroy"])->name("post.deslike");
     })->middleware(LoginVerifyer::class);
 
+    Route::prefix("/donation")->middleware(LoginVerifyer::class)->group(function() {
+        Route::post('/store', [DonationController::class, "store"])->name("donation.store"); //store the payment
+        Route::get('/status/{stripe_payment_intent_id}', [DonationController::class, "status"])->name("donation.status"); //check from frontend to see when the payment has the status "succeeded"
+    });
+    Route::post('stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 });
 
 

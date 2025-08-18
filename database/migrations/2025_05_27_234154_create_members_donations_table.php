@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('members_donations', function (Blueprint $table) {
             $table->id();
-            $table->decimal("doacao", 8, 2);
+            $table->string("stripe_payment_intent_id")->unique()->nullable();
+            $table->integer("doacao")->default(0);//store the amount in cents
+            $table->string("moeda");
+            $table->string("status")->default("pending");
             $table->foreignId("member_id")->constrained();
             $table->foreignId("campaign_id")->constrained();
             $table->timestamps();
