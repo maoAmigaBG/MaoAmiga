@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pix Payment with Stripe</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body { font-family: system-ui, sans-serif; display: grid; place-content: center; min-height: 100vh; margin: 0; background-color: #f8f9fa; }
+        .container { text-align: center; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        #pay-button { font-size: 1.2rem; padding: 12px 24px; cursor: pointer; border-radius: 8px; border: none; background-color: #635bff; color: white; transition: background-color 0.3s; }
+        #pay-button:disabled { background-color: #a5a2ff; cursor: not-allowed; }
+        #payment-status { margin-top: 20px; font-weight: bold; color: #555; }
+        #confirmation-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+        .modal-content h2 { color: #22c55e; }
+        #close-modal-button { margin-top: 20px; font-size: 1rem; padding: 10px 20px; cursor: pointer; border-radius: 8px; border: 1px solid #ddd; background-color: #f8f8f8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stripe Pix Sandbox</h1>
+        <button id="pay-button">Pay R$10,99 with Pix</button>
+        <div id="payment-status"></div>
+    </div>
+
+    <!-- Simple confirmation modal -->
+    <div id="confirmation-modal">
+        <div class="modal-content">
+            <h2>Payment Successful!</h2>
+            <p>Your payment has been confirmed. Thank you!</p>
+            <button id="close-modal-button">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const stripe = Stripe("{{ config('services.stripe.key') }}");
+        const payButton = document.getElementById('pay-button');
+        const paymentStatus = document.getElementById('payment-status');
+        const confirmationModal = document.getElementById('confirmation-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+
+        let pollingInterval;
+
+        payButton.addEventListener('click', async () => {
+            paymentStatus.textContent = 'Creating payment...';
+            payButton.disabled = true;
+
+            const response = await fetch('/pay', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            });
+
+            const { clientSecret, paymentIntentId, error } = await response.json();
+
+            if (error) {
+                paymentStatus.textContent = `Error: ${error}`;
+                payButton.disabled = false;
+                return;
+            }
+
+            const { error: confirmError } = await stripe.confirmPixPayment(clientSecret);
+
+            if (confirmError) {
+                paymentStatus.textContent = `Payment failed: ${confirmError.message}`;
+                payButton.disabled = false;
+            } else {
+                paymentStatus.textContent = `QR code generated. Waiting for payment...`;
+                pollPaymentStatus(paymentIntentId);
+            }
+        });
+
+        function pollPaymentStatus(paymentIntentId) {
+            // Clear any existing polling
+            if (pollingInterval) clearInterval(pollingInterval);
+
+            pollingInterval = setInterval(async () => {
+                try {
+                    const statusResponse = await fetch(`/payment/status/${paymentIntentId}`);
+                    if (!statusResponse.ok) return; // Don't stop polling on server errors
+
+                    const data = await statusResponse.json();
+
+                    if (data.status === 'succeeded') {
+                        clearInterval(pollingInterval);
+                        paymentStatus.textContent = 'Payment successful! Thank you.';
+                        confirmationModal.style.display = 'flex';
+                    } else if (data.status === 'failed') {
+                        clearInterval(pollingInterval);
+                        paymentStatus.textContent = 'Payment failed. Please try again.';
+                        payButton.disabled = false;
+                    }
+                } catch (e) {
+                    console.error("Polling error:", e);
+                }
+            }, 2000); // Poll every 2 seconds
+        }
+
+        closeModalButton.addEventListener('click', () => {
+            confirmationModal.style.display = 'none';
+            payButton.disabled = false;
+            paymentStatus.textContent = '';
+        });
+    </script>
+</body>
+</html>
