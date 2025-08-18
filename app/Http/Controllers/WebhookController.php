@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Members_donation;
 use Stripe;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Members_donation;
+use App\Mail\DonationConfirmation;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Exception\SignatureVerificationException;
 
 class WebhookController extends Controller {
@@ -32,6 +34,7 @@ class WebhookController extends Controller {
                     $payment->status = 'succeeded';
                     $payment->save();
                 }
+                Mail::to($payment->member->user)->send(new DonationConfirmation($payment));
                 break;
             
             case 'payment_intent.payment_failed':
@@ -41,6 +44,7 @@ class WebhookController extends Controller {
                     $payment->status = 'failed';
                     $payment->save();
                 }
+                Mail::to($payment->member->user)->send(new DonationConfirmation($payment));
                 break;
         }
 

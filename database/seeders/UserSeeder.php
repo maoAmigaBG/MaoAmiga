@@ -33,6 +33,15 @@ class UserSeeder extends Seeder
                 "created_at" => "2025-05-25"
             ],
             [
+                "name" => "Estevan",
+                "email" => "estevan.zimermann@gmail.com",
+                "password" => Hash::make("opaodavida"),
+                "admin" => false,
+                "descricao" => "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloremque labore laborum dolor ex id, inventore iusto ipsam, error veniam, odit expedita? Corporis quod quaerat sunt impedit eaque, laboriosam obcaecati reiciendis!",
+                "data_nasc" => "2008-02-26",
+                "created_at" => "2025-05-25"
+            ],
+            [
                 "name" => "user3",
                 "email" => "user3@gmail.com",
                 "password" => Hash::make("user3"),

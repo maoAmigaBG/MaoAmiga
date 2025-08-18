@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Stripe;
+use App\Models\User;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use App\Models\Members_donation;
+use App\Mail\DonationConfirmation;
 use App\Http\Controllers\Controller;
-use Stripe;
+use Illuminate\Support\Facades\Mail;
 
 class DonationController extends Controller {
     public function store(Request $request) {
@@ -35,5 +39,10 @@ class DonationController extends Controller {
             return response()->json(["status" => "not_found"], 404);
         }
         return response()->json(["status" => $payment->status]);// can be pending, succeeded or failed
+    }
+    public function mail_test() {
+        $user = User::find(3);
+        $donation = Members_donation::find(1);
+        Mail::to($user->email)->send(new DonationConfirmation($donation));
     }
 }

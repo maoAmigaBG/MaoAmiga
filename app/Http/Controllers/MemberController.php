@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin_request;
-use App\Models\Campaign;
-use App\Models\Member;
+use App\Mail\DonationConfirmation;
 use Carbon\Carbon;
 use App\Models\Ong;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Member;
+use App\Models\Campaign;
 use Illuminate\Http\Request;
+use App\Models\Admin_request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class MemberController extends Controller
 {

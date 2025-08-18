@@ -66,6 +66,7 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
     Route::prefix("/donation")->middleware(LoginVerifyer::class)->group(function() {
         Route::post('/store', [DonationController::class, "store"])->name("donation.store"); //store the payment
         Route::get('/status/{stripe_payment_intent_id}', [DonationController::class, "status"])->name("donation.status"); //check from frontend to see when the payment has the status "succeeded"
+        Route::get('/mail', [DonationController::class, "mail_test"])->name("donation.status"); //check from frontend to see when the payment has the status "succeeded"
     });
     Route::post('stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 });
