@@ -1,7 +1,7 @@
 <template>
   <div class="feeds flex flex-col self-center gap-2.5 min-h-screen w-full">
     <template v-for="p in allPosts" :key="p.id">
-      <slot :post="p" />
+      <slot :post="p" @update-likes="handleLikeUpdate" />
     </template>
 
     <div class="end-flag h-2" ref="flag"></div>
@@ -11,7 +11,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
@@ -23,31 +22,50 @@ const props = defineProps({
 
 const flag = ref(null)
 const allPosts = ref([...props.posts])
+const nextPageUrl = ref(props.nextPageUrl)
 const STORAGE_KEY = 'cachedPosts'
 
 watch(
   () => props.posts,
   (newVal) => {
-    const existingIds = new Set(allPosts.value.map(p => p.id))
-    const newPosts = newVal.filter(p => !existingIds.has(p.id))
+    // This is the main change. We'll now merge the new posts with the old ones.
+    // This ensures that updates to existing posts (like the 'liked' status) are reflected.
+    const newPosts = newVal.reduce((acc, currentPost) => {
+      // Find if the post already exists in the accumulator
+      const existingPostIndex = acc.findIndex(p => p.id === currentPost.id);
+      if (existingPostIndex > -1) {
+        // If it exists, replace it with the updated post
+        acc[existingPostIndex] = currentPost;
+      } else {
+        // If it's a new post, add it to the list
+        acc.push(currentPost);
+      }
+      return acc;
+    }, [...allPosts.value]);
 
-    if (newPosts.length > 0) {
-      allPosts.value.push(...newPosts)
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        posts: allPosts.value,
-        timestamp: Date.now()
-      }))
-    }
+    allPosts.value = newPosts;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      posts: allPosts.value,
+      timestamp: Date.now()
+    }));
+  }
+)
+
+watch(
+  () => props.nextPageUrl,
+  (newUrl) => {
+    nextPageUrl.value = newUrl
   }
 )
 
 const loading = ref(false)
 
 function loadMore() {
-  if (!props.nextPageUrl || loading.value) return
+  if (!nextPageUrl.value || loading.value) return
   loading.value = true
 
-  router.get(props.nextPageUrl, {}, {
+  router.get(nextPageUrl.value, {}, {
     preserveState: true,
     preserveScroll: true,
     only: ['posts', 'nextPageUrl'],
@@ -79,5 +97,4 @@ onMounted(() => {
   )
   if (flag.value) observer.observe(flag.value)
 })
-
 </script>

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin_requestController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\Comment_likeController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Post_likeController;
@@ -57,8 +59,15 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::post('/store', [PostController::class, "store"])->name("post.store");
         Route::post('/update', [PostController::class, "update"])->name("post.update");
         Route::get('/delete/{post}', [PostController::class, "destroy"])->name("post.destroy");
-        Route::get('/like/{post}', [Post_likeController::class, "create"])->name("post.like");
-        Route::get('/deslike/{post_like}', [Post_likeController::class, "destroy"])->name("post.deslike");
+        Route::post('/like/{post}', [Post_likeController::class, "create"])->name("post.like");
+        Route::delete('/deslike/{post_like}', [Post_likeController::class, "destroy"])->name("post.deslike");
+    })->middleware(LoginVerifyer::class);
+
+    Route::prefix('/comment')->group(function() {
+        Route::post('/store', [CommentController::class, "store"])->name('comment.store');
+        Route::post('/update', [CommentController::class, "update"])->name('comment.update');
+        Route::get('/delete/{comment}', [CommentController::class, "destroy"])->name('comment.delete');
+        Route::get('/toggle_like/{comment}', [Comment_likeController::class, "toggle"])->name('comment.toggle');
     })->middleware(LoginVerifyer::class);
 
 });

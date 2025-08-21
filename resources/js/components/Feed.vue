@@ -1,10 +1,5 @@
 <template>
   <div class="feed relative w-full p-5 font-poppins bg-slate-50 border-b-2 border-[#E5E4E2]">
-    <div v-if="isModalOpen" class="fixed inset-0 backdrop-blur-md flex justify-center items-center z-50 p-6"
-      @click="fecharModal">
-      <img :src="modalImageUrl" alt="Imagem ampliada" class="w-5/12 object-contain rounded-lg shadow-lg" @click.stop />
-    </div>
-
     <div class="head flex justify-between p-2.5">
       <Link :href="`/ong/profile/${post.ong.id}`" class="user flex items-center gap-2.5 no-underline">
       <div class="profile-img">
@@ -23,8 +18,7 @@
     </div>
 
     <template v-if="post.foto">
-      <div class="photo my-4 rounded-[7px_40px_7px_92px] overflow-hidden cursor-pointer"
-        @click="abrirModalComImagem('/storage/' + post.foto)">
+      <div class="photo my-4 rounded-[7px_40px_7px_92px] overflow-hidden cursor-pointer" @click="openModal">
         <img :src="'/storage/' + post.foto" alt="" class="w-full h-[400px] object-cover object-center" />
       </div>
 
@@ -34,98 +28,221 @@
           animating ? 'pop-animation' : '',
           isLiked ? 'fa-solid fa-heart text-red-800' : 'fa-regular fa-heart'
         ]"></i>
-        <i class="fa-regular fa-comments"></i>
+        <i class="fa-regular fa-comments cursor-pointer" @click="openModal"></i>
         <i class="fa-regular fa-share-from-square"></i>
       </div>
     </template>
 
-    <div class="caption mb-2">
+    <div class="caption mb-2" @click="openModal">
       <b>{{ post.ong.nome }}</b> {{ post.descricao }}
     </div>
-
-    <div v-if="!post.foto" class="action-buttons w-1/3 flex justify-between items-center text-[28px] my-4">
-      <i @click="toggleLike" :class="[
-        'cursor-pointer',
-        animating ? 'text-red-800 animate-pop' : '',
-        isLiked ? 'fa-solid fa-heart text-red-800' : 'fa-regular fa-heart'
-      ]"></i>
-      <i class="fa-regular fa-comments"></i>
-      <i class="fa-regular fa-share-from-square"></i>
-    </div>
+    <template v-if="!post.foto">
+      <div class="action-buttons w-1/3 flex justify-between items-center text-[28px] my-4">
+        <i @click="toggleLike" :class="[
+          'cursor-pointer',
+          animating ? 'pop-animation' : '',
+          isLiked ? 'fa-solid fa-heart text-red-800' : 'fa-regular fa-heart'
+        ]"></i>
+        <i class="fa-regular fa-comments" @click="openModal"></i>
+        <i class="fa-regular fa-share-from-square"></i>
+      </div>
+    </template>
   </div>
+
+  <template v-if="isModalOpen">
+    <div class="fixed top-[91px] flex items-center justify-center inset-0 bg-[rgba(0,0,0,0.7)] backdrop-blur z-10 p-6"
+      @click="closeModal">
+      <div class="post-modal w-1/2 h-[95%] flex bg-slate-50 rounded-lg" @click.stop>
+        <div class="w-1/2 h-full flex items-center justify-center bg-black rounded-tl-lg rounded-bl-lg">
+          <img v-if="post.foto" :src="'/storage/' + post.foto" alt=""
+            class="w-full h-auto max-h-full object-contain bg-black" />
+        </div>
+        <div class="relative w-1/2 flex-col justify-end">
+          <div
+            class="header absolute top-0 w-full h-20 flex items-center justify-between px-6 border-b-2 border-[#E5E4E2]">
+            <div class="profile-wrapper flex items-center gap-4">
+              <div class="profile-img-wrapper w-14 h-14 p-[2px] border-2 border-purple-800 rounded-full">
+                <img :src="'/storage/' + post.ong.foto" :alt="'Perfil da Ong ' + post.ong.nome"
+                  class="aspect-square object-cover w-full rounded-full">
+              </div>
+              <div class="profile-info py-2" :class="post.descricao ? '' : 'shadow-md'">
+                <span class="profile-name block text-purple-800 font-poppins font-bold">{{ post.ong.nome }}</span>
+                <div class="location-hour text-xs text-gray-600 flex items-center">
+                  <span class="inline-block max-w-[120px] truncate">{{ post.ong.endereco }}</span>
+                  <span class="ml-1">- {{ formattedTime }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="actions">
+              <i class="fa-solid fa-ellipsis-vertical text-purple-800 text-xl cursor-pointer"></i>
+            </div>
+          </div>
+          <div class="comments mt-20 pt-2 pb-4 flex-col flex-grow overflow-y-auto">
+            <template v-if="post.comments">
+              <div v-if="post.descricao" class="post-content px-4 py-2 border-b-2 border-[#E5E4E2] shadow-md">
+                <p class="text-sm indent-4">
+                  {{ post.descricao }}
+                </p>
+              </div>
+              <div v-for="comment in post.comments" :key="comment.id"
+                class="comment flex-col px-4 py-2 border-b-2 border-[#E5E4E2]">
+                <div class="header w-full flex justify-start items-center gap-2">
+                  <div class="profile-img-wrapper inline-block w-8 h-8 border-4 border-[#E5E4E2] rounded-full">
+                    <img :src="'/storage/' + auth.user.foto" :alt="'Perfil da Ong ' + post.ong.nome"
+                      class="aspect-square object-cover w-full mx-auto my-auto rounded-full">
+                  </div>
+                  <span class="username inline-block text-purple-800 font-bold">{{ comment.user.name }}</span>
+                </div>
+                <p class="content text-gray-600 text-sm indent-4">
+                  {{ comment.content }}
+                </p>
+              </div>
+            </template>
+          </div>
+          <div
+            class="footer absolute bottom-0 h-28 w-full px-4 border-t-2 border-[#E5E4E2] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+            <div class="action-buttons w-full flex items-center gap-4 text-3xl mt-2 mb-4">
+              <i @click="toggleLike" :class="[
+                'cursor-pointer',
+                animating ? 'pop-animation' : '',
+                isLiked ? 'fa-solid fa-heart text-red-800' : 'fa-regular fa-heart'
+              ]"></i>
+              <i class="fa-regular fa-comments cursor-pointer" @click="() => { commentInput.focus(); }"></i>
+              <i class="fa-regular fa-share-from-square ml-auto"></i>
+            </div>
+            <div class="comment-input-wrapper flex items-center gap-2">
+              <div class="profile-img-wrapper inline-block w-10 border-4 border-[#E5E4E2] rounded-full">
+                <img :src="'/storage/' + auth.user.foto" :alt="'Perfil da Ong ' + post.ong.nome"
+                  class="aspect-square object-cover rounded-full">
+              </div>
+              <input type="text" placeholder="Adicionar um comentário..."
+                class="w-full h-10 p-4 text-sm border-2 border-[#E5E4E2] rounded-full" v-model="newComment"
+                ref="commentInput" @keydown.enter="addComment">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { Link } from '@inertiajs/vue3'
-import axios from 'axios'
+import { ref, computed, onMounted } from 'vue'
+import { Link, router } from '@inertiajs/vue3'
 
-const emit = defineEmits(['update-likes'])
 const props = defineProps({
+  auth: Object,
   post: Object,
   login_checked: Boolean
 })
 
-const isLiked = ref(props.post.liked)
-const likeId = ref(props.post.likes?.[0]?.id ?? null)
-const animating = ref(false)
-
-watch(() => props.post.liked, (v) => (isLiked.value = v))
-watch(() => props.post.likes, (v) => (likeId.value = v?.[0]?.id ?? null))
-
-const formattedTime = computed(() => {
-  return props.post.created_at
-    ? new Date(props.post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    : ''
+const isLiked = computed(() => {
+  return props.post.liked;
 })
 
-function animateLike() {
-  animating.value = true
-  setTimeout(() => (animating.value = false), 500)
-}
+const animating = ref(false)
 
-async function toggleLike() {
-  const idToRemove = likeId.value || props.post.like_id
+const formattedTime = computed(() => {
+  if (!props.post.created_at) return '';
+  const date = new Date(props.post.created_at);
+  const now = new Date();
+  const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInHours / 24);
 
-  if (!props.login_checked) {
-    window.location.href = '/user/login'
-    return
-  }
-
-  if (isLiked.value) {
-    if (!idToRemove) return
-    await axios.get(`/post/deslike/${idToRemove}`)
-
-    isLiked.value = false
-    likeId.value = null
-    props.post.liked = false
-    props.post.like_id = null
-
-    emit('update-likes', { action: 'remove', postId: props.post.id })
+  if (diffInHours < 24) {
+    return `${diffInHours}h atrás`;
+  } else if (diffInDays < 7) {
+    return `${diffInDays}d atrás`;
   } else {
-    animateLike()
-    const { data } = await axios.get(`/post/like/${props.post.id}`)
-    if (data.like_id) {
-      isLiked.value = true
-      likeId.value = data.like_id
-      props.post.like_id = data.like_id
-      props.post.liked = true
-
-      emit('update-likes', { action: 'add', post: props.post })
-    }
+    return date.toLocaleDateString();
   }
-}
+});
 
 const isModalOpen = ref(false)
-const modalImageUrl = ref('')
 
-function abrirModalComImagem(url) {
-  modalImageUrl.value = url
+function openModal() {
   isModalOpen.value = true
 }
 
-function fecharModal() {
+function closeModal() {
   isModalOpen.value = false
+}
+
+const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+async function toggleLike() {
+  if (!props.login_checked) {
+    router.get('/user/login');
+    return;
+  }
+
+  if (props.post.liked) {
+    const likeId = props.post.likes?.[0]?.id;
+    await fetch(`/post/deslike/${likeId}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    });
+
+    router.reload({ only: ['posts'] });
+  } else {
+    const response = await fetch(`/post/like/${props.post.id}`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    });
+    const data = await response.json();
+    if (data.like) {
+      router.reload({ only: ['posts'] });
+    }
+
+    animating.value = false;
+    setTimeout(() => {
+      animating.value = true;
+      setTimeout(() => animating.value = false, 500);
+    }, 10);
+  }
+}
+
+const commentInput = ref(null);
+const newComment = ref('');
+
+async function addComment() {
+  if (!props.login_checked) {
+    router.get('/user/login');
+    return;
+  }
+
+  if (!newComment.value.trim()) return;
+
+  try {
+    const response = await fetch('/comment/store', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        post_id: props.post.id,
+        content: newComment.value
+      })
+    });
+
+    if (response.ok) {
+      router.reload({ only: ['posts'] });
+      newComment.value = ''
+    }
+  } catch (err) {
+    console.log("Erro adicionando comentário: " + err);
+  }
 }
 </script>
 

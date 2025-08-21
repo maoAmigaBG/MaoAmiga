@@ -40,7 +40,6 @@ import RankCard from '../components/RankCard.vue';
 import Toast from '../components/ToastModal.vue';
 
 const { ranking, campaigns } = defineProps({
-  posts: Array,
   ranking: Array,
   campaigns: Array
 })
