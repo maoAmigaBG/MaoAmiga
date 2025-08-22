@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('admin')->default(false);
             $table->text('descricao')->nullable();
             $table->date('data_nasc')->nullable();
-            $table->string('foto')->nullable();
+            $table->string('foto')->default("profiles/default_user.jpg");
             $table->rememberToken();
             $table->timestamps();
         });

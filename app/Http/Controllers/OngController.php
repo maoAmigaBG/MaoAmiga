@@ -209,7 +209,6 @@ class OngController extends Controller
             ]);
         }
 
-        // Manually validate just the fields present in edit // AQUI QUE TU POE TUA LOGICA NOVA KRL
         $request_data = $request->validate([
             "nome" => "required",
             "subtitulo" => "nullable|max:20",
@@ -220,7 +219,6 @@ class OngController extends Controller
             "foto" => ["nullable", 'image', 'mimes:jpg,jpeg,png'],
         ]);
 
-        // Handle new type creation if needed
         if ($request_data["ong_type"] == 0 && $request->filled("ong_new_type")) {
             $type = Ong_type::create([
                 "nome" => $request->input("ong_new_type"),
@@ -231,35 +229,34 @@ class OngController extends Controller
         }
 
         if ($request->hasFile('banner')) {
-            // Deleta a imagem anterior, se existir
-            if ($ong->banner && Storage::disk('public')->exists($ong->banner)) {
+            if (Storage::disk('public')->exists($ong->banner)) {
                 Storage::disk('public')->delete($ong->banner);
             }
-
             $path = $request->file('banner')->store('ongs', 'public');
             $request_data['banner'] = $path;
+        } else {
+            $request_data['banner'] = $ong->banner;
         }
 
 
         if ($request->hasFile('foto')) {
-            if ($ong->foto && Storage::disk('public')->exists($ong->foto)) {
+            if (Storage::disk('public')->exists($ong->foto)) {
                 Storage::disk('public')->delete($ong->foto);
             }
-
             $path = $request->file('foto')->store('ongs', 'public');
             $request_data['foto'] = $path;
+        } else {
+            $request_data['foto'] = $ong->foto;
         }
 
-
-        // Update  // AQUI TMB
         $ong->update([
             'nome' => $request_data['nome'],
             'subtitulo' => $request_data['subtitulo'],
             'descricao' => $request_data['descricao'],
             'endereco' => $request_data['endereco'],
             'ong_type_id' => $request_data['ong_type_id'],
-            'banner' => $request_data['banner'] ?? $ong->banner,
-            'foto' => $request_data['foto'] ?? $ong->foto,
+            'banner' => $request_data['banner'],
+            'foto' => $request_data['foto'],
         ]);
 
         return redirect()->route("ong.profile", [
@@ -277,6 +274,8 @@ class OngController extends Controller
                 "Acesso negado" => "Você não possui permissão para alterar esta Ong"
             ]);
         }
+        Storage::disk('public')->delete($ong->foto);
+        Storage::disk('public')->delete($ong->banner);
         $ong->delete();
         return redirect()->route("index")->with([
             "Sucesso" => "Ong excluída",

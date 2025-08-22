@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostRequest;
-use App\Models\Campaign;
-use App\Models\Member;
 use App\Models\Ong;
 use App\Models\Post;
+use App\Models\Member;
+use App\Models\Campaign;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -53,6 +54,7 @@ class PostController extends Controller
             ]);
         }
         $request_data = $request->validated();
+        $request_data["foto"] = $request->file('foto')->store('posts', 'public');
         Post::create($request_data);
         return redirect()->route("ong.posts", [
             "ong" => $ong->id,
@@ -99,6 +101,15 @@ class PostController extends Controller
             ]);
         }
         $request_data = $request->validated();
+        if ($request->hasFile('foto')) {
+            if (Storage::disk('public')->exists($post->foto)) {
+                Storage::disk('public')->delete($post->foto);
+            }
+            $path = $request->file('foto')->store('ongs', 'public');
+            $request_data['foto'] = $path;
+        } else {
+            $request_data['foto'] = $post->foto;
+        }
         $post->update($request_data);
         return redirect()->route("ong.profile", [
             "ong" => $post->ong_id,
@@ -120,6 +131,7 @@ class PostController extends Controller
                 "Acesso negado" => "Você não possui permissão para editar este post"
             ]);
         }
+        Storage::disk('public')->delete($post->foto);
         $post->delete();
         return redirect()->route("ong.posts", [
             "ong" => $ong->id,

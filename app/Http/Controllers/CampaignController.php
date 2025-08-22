@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CampaignRequest;
-use App\Models\Member;
-use App\Models\Members_donation;
 use App\Models\Ong;
+use App\Models\Member;
 use App\Models\Campaign;
 use Illuminate\Http\Request;
+use App\Models\Members_donation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CampaignRequest;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignController extends Controller {
     public function index(Campaign $campaign) {
@@ -46,6 +47,7 @@ class CampaignController extends Controller {
         }
         $request_data = $request->validated();
         $ong = Campaign::create($request_data);
+        $request_data["foto"] = $request->file('foto')->store('campaigns', 'public');
         return redirect()->route("ong.profile", [
             "ong" => $ong->id,
             "ranking" => Member::ranking(),
@@ -80,6 +82,15 @@ class CampaignController extends Controller {
             ]);
         }
         $request_data = $request->validated();
+        if ($request->hasFile('foto')) {
+            if (Storage::disk('public')->exists($campaign->foto)) {
+                Storage::disk('public')->delete($campaign->foto);
+            }
+            $path = $request->file('foto')->store('ongs', 'public');
+            $request_data['foto'] = $path;
+        } else {
+            $request_data['foto'] = $campaign->foto;
+        }
         $campaign->update($request_data);
         return redirect()->route("campaign.index", [
             "campaign" => $campaign->id,
@@ -97,6 +108,7 @@ class CampaignController extends Controller {
             ]);
         }
         $ong_id = $campaign["ong_id"];
+        Storage::disk('public')->delete($campaign->foto);
         $campaign->delete();
         return redirect()->route("ong.profile", [
             "ong" => $ong_id,

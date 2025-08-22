@@ -19,19 +19,16 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function login($redirect = null, $data_list = null)
-    {
+    public function login($redirect = null, $data_list = null) {
         return Inertia::render('User/Login', [
             "redirect" => $redirect,
             "data_list" => $data_list,
         ]);
     }
-    public function logon()
-    {
+    public function logon() {
         return Inertia::render('User/Logon');
     }
-    public function auth_login(Request $request)
-    {
+    public function auth_login(Request $request) {
         $request_data = $request->validate([
             "email" => ["required", "email"],
             "password" => ["required"],
@@ -41,29 +38,29 @@ class UserController extends Controller
             return redirect()->route("auth.login")->withErrors([
                 "Login" => "Email não encontrado"
             ])->withInput([
-                        "email" => $request_data["email"],
-                        "password" => $request_data["password"],
-                    ]);
+                "email" => $request_data["email"],
+                "password" => $request_data["password"],
+            ]);
         }
         if (!Hash::check($request_data["password"], $user["password"])) {
             return redirect()->route("auth.login")->withErrors([
                 "Senha" => "Senha incorreta"
             ])->withInput([
-                        "email" => $request_data["email"],
-                        "password" => $request_data["password"],
-                    ]);
+                "email" => $request_data["email"],
+                "password" => $request_data["password"],
+            ]);
         }
         if (Auth::attempt(["email" => $request_data["email"], "password" => $request_data["password"]])) {
             $request->session()->regenerate();
         }
+        Auth::login($user);
         if ($request["redirect"]) {
             $data_list = json_decode(urldecode($request["data_list"]), true);
             return $data_list ? redirect()->route($request["redirect"], $data_list) : redirect()->route($request["redirect"]);
         }
         return redirect()->route("index");
     }
-    public function auth_logon(UserRequest $request)
-    {
+    public function auth_logon(UserRequest $request) {
         $request->merge(['is_update' => false]);
         $request_data = $request->validated();
         if ($request->hasFile("foto")) {
@@ -78,13 +75,11 @@ class UserController extends Controller
             "Sucesso" => "Perfil criado com sucesso, bem vindo!",
         ]);
     }
-    public function logout()
-    {
+    public function logout() {
         Auth::logout();
         return Inertia::location(route('login'));
     }
-    public function profile(User $user)
-    {
+    public function profile(User $user) {
         Carbon::setLocale('pt_BR');
         $user["format_data"] = isset($user["created_at"]) ? Carbon::parse($user["created_at"])->translatedFormat('d \d\e F \d\e Y') : null;
         $user["age"] = isset($user["data_nasc"]) ? Carbon::parse($user["data_nasc"])->age : null;
@@ -156,14 +151,13 @@ class UserController extends Controller
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get(),
         ]);
     }
-    public function edit_profile(User $user)
-    {
+    public function edit_profile(User $user) {
         if (Gate::denies("update", $user)) {
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para editar este perfil"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
         }
         return Inertia::render('Profile/User/EditProfile', [
             "user" => $user,
@@ -171,49 +165,42 @@ class UserController extends Controller
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
         ]);
     }
-    public function update(UserRequest $request)
-    {
+    public function update(UserRequest $request) {
         $user = User::find($request->id);
 
         if (Gate::denies("update", $user)) {
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para editar este perfil"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
         }
-
-        // Marca que estamos atualizando
         $request->merge(['is_update' => true]);
-
         $request_data = $request->validated();
-
-        // Verifica a senha preenchida (como autenticação, não atualização)
         if (!empty($request_data['password'])) {
             if (!Hash::check($request_data['password'], $user->password)) {
                 return redirect()->route("user.edit", [
-                    "user" => $user->id,
+            "user" => $user->id,
                 ])->withErrors([
-                            "Senha incorreta" => "A senha informada está incorreta",
-                        ]);
+                    "Senha incorreta" => "A senha informada está incorreta",
+                ]);
             }
         } else {
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Senha obrigatória" => "Informe sua senha atual para salvar as alterações",
-                    ]);
+                "Senha obrigatória" => "Informe sua senha atual para salvar as alterações",
+            ]);
         }
 
         unset($request_data['password']);
 
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('profiles', 'public');
-            $request_data['foto'] = $path;
-
-            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+            if (Storage::disk('public')->exists($user->foto) && $user->foto != "profiles/default_user.jpg") {
                 Storage::disk('public')->delete($user->foto);
             }
+            $path = $request->file('foto')->store('profiles', 'public');
+            $request_data['foto'] = $path;
         } else {
             $request_data['foto'] = $user->foto;
         }
@@ -223,23 +210,25 @@ class UserController extends Controller
         return redirect()->route("user.profile", [
             "user" => $user->id,
         ])->with([
-                    "Sucesso" => "Perfil editado com sucesso",
-                ]);
+            "Sucesso" => "Perfil editado com sucesso",
+        ]);
     }
 
-    public function destroy(User $user)
-    {
+    public function destroy(User $user) {
         if (Gate::denies("delete", $user)) {
             return redirect()->route("user.profile", [
                 "user" => $user->id,
             ])->withErrors([
-                        "Acesso negado" => "Você não possui permissão para editar este perfil"
-                    ]);
+                "Acesso negado" => "Você não possui permissão para editar este perfil"
+            ]);
         }
         if (Auth::user()->id == $user->id) {
             Auth::logout();
         }
+        if ($user->foto != "profiles/default_user.jpg") {
+            Storage::disk('public')->delete($user->foto);
+        }
         $user->delete();
-        return Auth::user()->id == $user->id ? redirect()->route("logout") : redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);
+        return redirect()->route("index")->with(["Sucesso" => "Perfil deletado com sucesso"]);
     }
 }
