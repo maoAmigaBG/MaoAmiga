@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Post extends Model {
+class Post extends Model
+{
     protected $fillable = [
         'nome',
         'descricao',
@@ -29,16 +30,29 @@ class Post extends Model {
         return $this->hasMany(Comment::class);
     }
 
-    static public function getWithCommentsLikes()
+    static public function getWithCommentsLikes($query)
     {
         $user_id = Auth::check() ? Auth::user()->id : 0;
-        return self::with([
+
+        return $query->with([
             'ong',
-            'likes' => fn($q) => $q->where('user_id', $user_id),
-            'comments.user:id,name,foto'
-        ])->withExists([
-                    'likes as liked' => fn($q) => $q->where('user_id', $user_id)
-                ])->orderBy("created_at", "desc");
+            'likes' => function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            },
+            'comments' => function ($query) use ($user_id) {
+                $query->with([
+                    'user:id,name,foto',
+                    'likes' => function ($query) use ($user_id) {
+                        $query->where('user_id', $user_id);
+                    }
+                ])->withCount('likes');
+            },
+        ])
+            ->withCount('likes', 'comments')
+            ->withExists([
+                'likes as liked' => fn($q) => $q->where('user_id', $user_id)
+            ])
+            ->latest();
     }
 
     static public function getWithLikes()

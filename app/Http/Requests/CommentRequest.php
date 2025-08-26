@@ -23,7 +23,7 @@ class CommentRequest extends FormRequest
     {
         return [
             'post_id' => ['required', 'exists:posts,id'],
-            'content' => ['required', 'string', 'max:500']
+            'comment_content' => ['required', 'string', 'max:500']
         ];
     }
 }

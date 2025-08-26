@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
             MemberSeeder::class,
             Members_donationSeeder::class,
             Admin_requestSeeder::class,
-            CommentSeeder::class,
         ]);
     }
 }

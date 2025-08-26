@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CommentRequest;
 use App\Models\Post;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 
@@ -14,12 +15,17 @@ class CommentController extends Controller
 
     public function store(CommentRequest $request)
     {
-        $post = Post::find($request->post_id);
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'You must be logged in to comment.'], 401);
+        }
+
+        $post = Post::findOrFail($request->post_id);
 
         $commentData = [
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'post_id' => $post->id,
-            'content' => $request->content
+            'comment_content' => $request->comment_content
         ];
 
         $post->comments()->create($commentData);

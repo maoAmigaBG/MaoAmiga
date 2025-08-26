@@ -94,7 +94,7 @@
                   <span class="username inline-block text-purple-800 font-bold">{{ comment.user.name }}</span>
                 </div>
                 <p class="content text-gray-600 text-sm indent-4">
-                  {{ comment.content }}
+                  {{ comment.comment_content }}
                 </p>
               </div>
             </template>
@@ -188,8 +188,9 @@ async function toggleLike() {
     });
 
     router.reload({ only: ['posts'] });
+
   } else {
-    const response = await fetch(`/post/like/${props.post.id}`, {
+    await fetch(`/post/like/${props.post.id}`, {
       method: 'POST',
       headers: {
         'X-CSRF-TOKEN': token,
@@ -197,10 +198,8 @@ async function toggleLike() {
         'Accept': 'application/json'
       }
     });
-    const data = await response.json();
-    if (data.like) {
-      router.reload({ only: ['posts'] });
-    }
+
+    router.reload({ only: ['posts'] });
 
     animating.value = false;
     setTimeout(() => {
@@ -232,7 +231,7 @@ async function addComment() {
       },
       body: JSON.stringify({
         post_id: props.post.id,
-        content: newComment.value
+        comment_content: newComment.value
       })
     });
 
