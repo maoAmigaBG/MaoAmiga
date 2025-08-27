@@ -11,16 +11,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\CampaignRequest;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class CampaignController extends Controller {
     public function index(Campaign $campaign) {
-        return [
+        return Inertia::render('Campaign/Index', [
             "campaign" => $campaign,
             "ong" => Ong::where("id", $campaign->ong_id)->get(),
             "donate_amount" => Members_donation::selectRaw("SUM(doacao) as donation_amount")->where("campaign_id", $campaign->id)->get(),
             "ranking" => Member::ranking(),
             "campaigns" => Campaign::orderByDesc('created_at')->limit(5)->get()
-        ];
+        ]);
     }
     public function create(Ong $ong) {
         if (Gate::denies("create", $ong)) {

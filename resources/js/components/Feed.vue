@@ -85,17 +85,30 @@
                 </p>
               </div>
               <div v-for="comment in post.comments" :key="comment.id"
-                class="comment flex-col px-4 py-2 border-b-2 border-[#E5E4E2]">
-                <div class="header w-full flex justify-start items-center gap-2">
-                  <div class="profile-img-wrapper inline-block w-8 h-8 border-4 border-[#E5E4E2] rounded-full">
-                    <img :src="'/storage/' + auth.user.foto" :alt="'Perfil da Ong ' + post.ong.nome"
-                      class="aspect-square object-cover w-full mx-auto my-auto rounded-full">
+                class="comment flex pl-4 pr-6 py-2 border-b-2 border-[#E5E4E2] items-center">
+                <div class="left flex-start flex-grow flex-col">
+                  <div class="header w-full flex justify-start items-center gap-2">
+                    <div class="profile-img-wrapper inline-block w-8 h-8 border-4 border-[#E5E4E2] rounded-full">
+                      <img :src="'storage/' + comment.user.foto" :alt="'Perfil da Ong ' + post.ong.nome"
+                        class="aspect-square object-cover w-full mx-auto my-auto rounded-full">
+                    </div>
+                    <span class="username inline-block text-purple-800 font-bold">{{ comment.user.name }}</span>
                   </div>
-                  <span class="username inline-block text-purple-800 font-bold">{{ comment.user.name }}</span>
+                  <p class="content text-gray-600 text-sm indent-4">
+                    {{ comment.comment_content }}
+                  </p>
                 </div>
-                <p class="content text-gray-600 text-sm indent-4">
-                  {{ comment.comment_content }}
-                </p>
+                <div class="right">
+                  <i v-if="auth.user?.name !== comment.user?.name || auth.user?.name === null"
+                    @click="toggleCommentLike(comment.id)" :class="[
+                      'cursor-pointer',
+                      'text-base',
+                      isCommentLiked(comment) ? 'fa-solid fa-heart text-red-800' : 'fa-regular fa-heart'
+                    ]"></i>
+
+                  <i v-else @click="deleteComment(comment.id)"
+                    class="fa-solid fa-trash-can text-base text-red-800 cursor-pointer"></i>
+                </div>
               </div>
             </template>
           </div>
@@ -112,8 +125,8 @@
             </div>
             <div class="comment-input-wrapper flex items-center gap-2">
               <div class="profile-img-wrapper inline-block w-10 border-4 border-[#E5E4E2] rounded-full">
-                <img :src="'/storage/' + auth.user.foto" :alt="'Perfil da Ong ' + post.ong.nome"
-                  class="aspect-square object-cover rounded-full">
+                <img :src="(auth.user?.foto ? ('/storage/' + auth.user.foto) : defaultUserImg)"
+                  :alt="'Perfil da Ong ' + post.ong.nome" class="aspect-square object-cover rounded-full">
               </div>
               <input type="text" placeholder="Adicionar um comentário..."
                 class="w-full h-10 p-4 text-sm border-2 border-[#E5E4E2] rounded-full" v-model="newComment"
@@ -129,12 +142,15 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
+import defaultUserImg from '@/assets/default_user.jpg'
 
 const props = defineProps({
   auth: Object,
   post: Object,
   login_checked: Boolean
 })
+
+
 
 const isLiked = computed(() => {
   return props.post.liked;
@@ -243,6 +259,65 @@ async function addComment() {
     console.log("Erro adicionando comentário: " + err);
   }
 }
+
+async function toggleCommentLike(commentId) {
+  if (!props.login_checked) {
+    router.get('/user/login');
+    return;
+  }
+
+  const commentLike = commentId.likes?.find(like => like.user_id === props.auth.user.id);
+
+  if (commentLike) {
+    await fetch(`/comment/toggle_like/${commentId}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    });
+  } else {
+    await fetch(`/comment/toggle_like/${commentId}`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    });
+  }
+
+  router.reload({ only: ['posts'] });
+}
+
+function isCommentLiked(comment) {
+  if (props.auth?.user) {
+    return comment.likes?.some(like => like.user_id === props.auth?.user.id);
+  } else {
+    return false;
+  }
+}
+
+async function deleteComment(commentId) {
+  try {
+    const response = await fetch(`/comment/delete/${commentId}`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': token,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      router.reload({ only: ['posts'] });
+    }
+  } catch(err) {
+      console.log('Error reading post' + err);
+  }
+}  
+
 </script>
 
 <style scoped>

@@ -106,6 +106,6 @@ const form = useForm({
 })
 
 function submit() {
-    form.post('/auth/logon')
+    form.post('/auth/logon');
 }
 </script>

@@ -20,15 +20,15 @@ use App\Http\Controllers\GeneralController;
 use App\Http\Middleware\HandleInertiaRequests;
 
 Route::middleware(HandleInertiaRequests::class)->group(function () {
-    Route::get('/', [GeneralController::class,'index'])->name('index');
+    Route::get('/', [GeneralController::class, 'index'])->name('index');
     Route::get('/sobre', [GeneralController::class, "about"])->name("about");
 
-    Route::prefix("/ong")->group(function() {
+    Route::prefix("/ong")->group(function () {
         Route::get('/list', [OngController::class, "index"])->name("ong.index");
         Route::get('/map', [OngController::class, "map"])->name("ong.map");
         Route::get('/map_location/{lat}/{lng}', [OngController::class, "map_location"])->name("ong.map_location");
         Route::get('/profile/{ong}', [OngController::class, "page"])->name("ong.profile");
-        Route::prefix("/contacts")->group(function() {
+        Route::prefix("/contacts")->group(function () {
             Route::get('/create/{ong}', [ContactController::class, "create"])->name("contacts.create");
             Route::post('/store', [ContactController::class, "store"])->name("contacts.store");
             Route::get('/delete/{contato}', [ContactController::class, "destroy"])->name("contacts.destroy");
@@ -45,17 +45,19 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         });
         Route::get('/adress_provider/{cep}', [OngController::class, "adress_provider"])->name("ong.adress_provider");
     });
-    Route::prefix("/campaign")->group(function() {
-        Route::get('/page/{campanha}', [CampaignController::class, "index"])->name("campaign.index");
+
+    Route::prefix("/campaign")->group(function () {
+        Route::get('/{campaign}', [CampaignController::class, "index"])->name("campaign.index");
         Route::middleware(LoginVerifyer::class)->group(function () {
             Route::get('/create/{ong}', [CampaignController::class, "create"])->name("campaign.create");
+            Route::post('/store', [CampaignController::class, "store"])->name("campaign.store");
             Route::get('/edit/{ong}', [CampaignController::class, "edit"])->name("campaign.edit");
             Route::post('/update', [CampaignController::class, "update"])->name("campaign.update");
-            Route::post('/store', [CampaignController::class, "store"])->name("campaign.store");
             Route::get('/delete/{campanha}', [CampaignController::class, "destroy"])->name("campaign.destroy");
         });
     });
-    Route::prefix("/post")->group(function() {
+
+    Route::prefix("/post")->group(function () {
         Route::get('/create/{ong}', [PostController::class, "create"])->name("post.create");
         Route::get('/edit/{ong}', [PostController::class, "edit"])->name("post.edit");
         Route::post('/store', [PostController::class, "store"])->name("post.store");
@@ -65,14 +67,14 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
         Route::delete('/deslike/{post_like}', [Post_likeController::class, "destroy"])->name("post.deslike");
     })->middleware(LoginVerifyer::class);
 
-    Route::prefix('/comment')->group(function() {
+    Route::prefix('/comment')->group(function () {
         Route::post('/store', [CommentController::class, "store"])->name('comment.store');
-        Route::post('/update', [CommentController::class, "update"])->name('comment.update');
-        Route::get('/delete/{comment}', [CommentController::class, "destroy"])->name('comment.delete');
-        Route::get('/toggle_like/{comment}', [Comment_likeController::class, "toggle"])->name('comment.toggle');
+        Route::post('/delete/{comment}', [CommentController::class, "destroy"])->name('comment.delete');
+        Route::post('/toggle_like/{comment}', [Comment_likeController::class, "toggle"])->name('comment.like');
+        Route::delete('/toggle_like/{comment_like}', [Comment_likeController::class, "unlike"])->name('comment.unlike');
     })->middleware(LoginVerifyer::class);
 
-    Route::prefix("/donation")->middleware(LoginVerifyer::class)->group(function() {
+    Route::prefix("/donation")->middleware(LoginVerifyer::class)->group(function () {
         Route::post('/store', [DonationController::class, "store"])->name("donation.store"); //store the payment
         Route::get('/status/{stripe_payment_intent_id}', [DonationController::class, "status"])->name("donation.status"); //check from frontend to see when the payment has the status "succeeded"
         Route::get('/mail', [DonationController::class, "mail_test"])->name("donation.status"); //check from frontend to see when the payment has the status "succeeded"
@@ -81,12 +83,12 @@ Route::middleware(HandleInertiaRequests::class)->group(function () {
 });
 
 
-Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function() {
-    Route::middleware(LoginVerifyer::class)->group(function() {
+Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function () {
+    Route::middleware(LoginVerifyer::class)->group(function () {
         Route::get("/profile/{user}/edit", [UserController::class, "edit_profile"])->name("user.editprofile");
         Route::post("/update", [UserController::class, "update"])->name("user.update");
         Route::get("/delete/{user}", [UserController::class, "destroy"])->name("user.delete");
-        Route::prefix("/relations")->group(function() {
+        Route::prefix("/relations")->group(function () {
             Route::get("/edit/{user}", [MemberController::class, "edit"])->name("relations.edit");
             Route::post("/update", [MemberController::class, "update"])->name("relations.update");
             Route::get("/request_aprove/{user}", [MemberController::class, "request_aprove"])->name("relations.request_aprove");
@@ -103,7 +105,7 @@ Route::middleware(HandleInertiaRequests::class)->prefix("/user")->group(function
     Route::get("/relations/trash", [MemberController::class, "trash"])->name("relations.trash");
 });
 
-Route::prefix("/auth")->group(function() {
+Route::prefix("/auth")->group(function () {
     Route::post("/login", [UserController::class, "auth_login"])->name("auth.login");
     Route::post("/logon", [UserController::class, "auth_logon"])->name("auth.logon");
     Route::get("/logout", [UserController::class, "logout"])->name("auth.logout");

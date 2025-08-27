@@ -32,15 +32,6 @@ class CommentController extends Controller
 
         return redirect()->back(); 
     }
-
-    public function update (CommentRequest $request, Comment $comment) {
-        $this->authorize('update', $comment);
-
-        $comment->update($request->validated());
-
-        return redirect()->back()->with('sucesso', 'Comentário alterado com sucesso.');
-    }
-
     public function destroy(Comment $comment) {
         $this->authorize('delete', $comment);
 

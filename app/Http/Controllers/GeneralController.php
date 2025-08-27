@@ -51,7 +51,6 @@ class GeneralController extends Controller
         $posts->getCollection()->transform(function ($post) {
             $post->comments->transform(function ($comment) {
                 $comment->liked = $comment->likes->isNotEmpty();
-                unset($comment->likes);
                 return $comment;
             });
             return $post;

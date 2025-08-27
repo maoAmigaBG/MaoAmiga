@@ -35,7 +35,7 @@ class UserController extends Controller
         ]);
         $user = User::where("email", "=", $request_data["email"])->first();
         if (empty($user)) {
-            return redirect()->route("auth.login")->withErrors([
+            return redirect()->route("login")->withErrors([
                 "Login" => "Email não encontrado"
             ])->withInput([
                 "email" => $request_data["email"],
@@ -43,7 +43,7 @@ class UserController extends Controller
             ]);
         }
         if (!Hash::check($request_data["password"], $user["password"])) {
-            return redirect()->route("auth.login")->withErrors([
+            return redirect()->route("login")->withErrors([
                 "Senha" => "Senha incorreta"
             ])->withInput([
                 "email" => $request_data["email"],
@@ -58,7 +58,8 @@ class UserController extends Controller
             $data_list = json_decode(urldecode($request["data_list"]), true);
             return $data_list ? redirect()->route($request["redirect"], $data_list) : redirect()->route($request["redirect"]);
         }
-        return redirect()->route("index");
+
+        return Inertia::location(route("index"));
     }
     public function auth_logon(UserRequest $request) {
         $request->merge(['is_update' => false]);
