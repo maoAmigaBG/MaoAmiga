@@ -18,6 +18,11 @@ class Campaign extends Model {
         'foto',
         'ong_id',
     ];
+
+    protected $casts = [
+        'materiais' => 'array',
+    ];
+
     public function ong(): BelongsTo {
         return $this->belongsTo(Ong::class);
     }

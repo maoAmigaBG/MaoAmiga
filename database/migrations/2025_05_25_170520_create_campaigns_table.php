@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string("nome");
             $table->enum("tipo", ["doacao", "informacao"]);
             $table->text("descricao");
-            $table->text("materiais");
+            $table->json("materiais");
             $table->decimal("meta", 8, 2)->nullable();
             $table->string("foto");
             $table->foreignId("ong_id")->constrained();
