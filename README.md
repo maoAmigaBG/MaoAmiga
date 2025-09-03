@@ -1,90 +1,24 @@
-# General Notes
+# Projeto Mão Amiga
 
-## about the view files
+O seguinte sistema trata-se de um trabalho desenvolvido em grupo para a matéria de Desenvolvimento de Sistemas do curso de Informática para Internet integrado ao ensino médio no Institudo Federal de Educação, Ciência e Tecnologia Rio Grande do Sul Campus Bento Gonçalves.
 
-Every file endpoint in views must have its name ending with ".blade.php" to allow it to be founded by the laravel routes
+Sumáriamente, este projeto, desenvolvido por Estevan Zimermann De Carli, Alessandro Frozza e Luiz Eduardo Carneiro, diz respeito a um site comunitário sobre doações.
 
-## laravel crud
+## Conceito
 
-### important commands
+Tendo como prisma, sobretudo, a problemática -- em âmbito econômico e social -- local da cidade de Bento Gonçalves, bem como de todo o estado do Rio Grande do Sul oriunda dos eventos catastróficos torrenciais dos últimos anos é que originou-se a ideia de desenvolvimento desta *webApp*. Tal possui como objetivo substancial construir um abiente público, de fácil acesso e interação que promova tanto a divulgação como contribuição para com campanhas beneficentes de ONGs.
 
-#### start server
-    php artisan serve
+### Integrantes
 
-#### create or refresh the database
-    php artisan migrate
-    php artisan migrate:fresh
-    php artisan migrate:rollback //retorna à ultima alteração de banco
-    php artisan make:migration add_alert_to_notes_table //alter the table addin fields
-
-#### install all the dependecies
-    composer install
-
-#### create new project (it only works on empty dir) (already done)
-    composer create-project laravel/laravel .
-
-#### create table, controller, models
-    php artisan make:migration create_(table_name - needs to be lowerCase and in plural)_table
-    php artisan make:controller PostController //any name you want
-    php artisan make:model Post //it will only work if the table name match to the rules right above
-    php artisan make:model Product -cm //will create model, controller and migration based on this name (needs to be singual and and camel_case)
-
-#### how to manually insert data in a table
-##### user laravel tinker
-    php artisan tinker
-
-##### with the tinker opened, use the common commands
-    use App\Models\{model_name};
-    Ong_type::create([
-        "field_name" => "field_value"
-    ]) //used to single inserts
-    Ong_type::insert([
-        ["field_name" => "field_value"],
-        ["field_name" => "field_value"],
-        ["field_name" => "field_value"],
-        ["field_name" => "field_value"],
-    ]) //used to insert in series
-
-### Seeder
-
-    php artisan make:seeder NoteSeeder //cria uma seeder da tabela
-    php artisan db:seed //seed the db with the seeders data (before making the steps rith bellow)
-    php artisan migrate:fresh --seed //restart the db data from scratch and auto seed
-
-#### Seeder data
-
-    public function run(): void {
-        DB::table("notes")->insert([
-            [
-                "title" => "teste",
-                "texto" => "teste",
-            ],
-            [
-                "title" => "teste1",
-                "texto" => "teste1",
-            ]
-        ]);
-    }
-
-### change laravel error lang
-
-    composer require laravel-lang/lang --dev
-    php artisan lang:add pt
-
-### change lang
-
-    composer require lucascudo/laravel-pt-br-localization --dev
-    php artisan lang:publish //extract lang from vendor
-    php artisan vendor:publish --tag=laravel-pt-br-localization
+Alessandro Frozza: Desenvolvedor Front-End
+Estevan Zimermann De Carli: Desenvolvedor Back-End
+Luiz Eduardo Carneiro: Desenvolvedor Front-End e Product Owner
 
 
-### breeze
+## Anexos
 
-it is a authentication laravel library
+Vídeo de apresentação do projeto:
+> https://youtu.be/6NfQX-6YbS8?si=KlRHAZIUcXEbyWWJ
 
-    composer require laravel/breeze --dev
-    php artisan breeze:install
-
-### policy
-
-    php artisan make:policy MembroPolicy --model=Membro //should be true as default
+Formulário de Avaliação do projeto:
+> https://forms.gle/jA6UXUn5HE9i2Jyj7
