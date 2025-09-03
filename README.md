@@ -1,12 +1,12 @@
 # Projeto Mão Amiga
 
-O seguinte sistema trata-se de um trabalho desenvolvido em grupo para a matéria de Desenvolvimento de Sistemas do curso de Informática para Internet integrado ao ensino médio no Institudo Federal de Educação, Ciência e Tecnologia Rio Grande do Sul Campus Bento Gonçalves.
+O seguinte sistema trata-se de um trabalho desenvolvido em grupo para a matéria de Desenvolvimento de Sistemas do curso de Informática para Internet integrado ao ensino médio no Instituto Federal de Educação, Ciência e Tecnologia Rio Grande do Sul, Campus Bento Gonçalves.
 
-Sumáriamente, este projeto, desenvolvido por Estevan Zimermann De Carli, Alessandro Frozza e Luiz Eduardo Carneiro, diz respeito a um site comunitário sobre doações.
+Sumariamente, este projeto, desenvolvido por Estevan Zimermann De Carli, Alessandro Frozza e Luiz Eduardo Carneiro, diz respeito a um site comunitário sobre doações.
 
 ## Conceito
 
-Tendo como prisma, sobretudo, a problemática -- em âmbito econômico e social -- local da cidade de Bento Gonçalves, bem como de todo o estado do Rio Grande do Sul oriunda dos eventos catastróficos torrenciais dos últimos anos é que originou-se a ideia de desenvolvimento desta *webApp*. Tal possui como objetivo substancial construir um abiente público, de fácil acesso e interação que promova tanto a divulgação como contribuição para com campanhas beneficentes de ONGs.
+Tendo como prisma, sobretudo, a problemática -- em âmbito econômico e social -- local da cidade de Bento Gonçalves, bem como de todo o estado do Rio Grande do Sul, oriunda dos eventos catastróficos torrenciais dos últimos anos, é que originou-se a ideia de desenvolvimento desta *webApp*. Tal possui como objetivo substancial construir um ambiente público, de fácil acesso e interação, que promova tanto a divulgação como contribuição para com campanhas beneficentes de ONGs.
 
 ### Integrantes
 
@@ -22,3 +22,4 @@ Vídeo de apresentação do projeto:
 
 Formulário de Avaliação do projeto:
 > https://forms.gle/jA6UXUn5HE9i2Jyj7
+
